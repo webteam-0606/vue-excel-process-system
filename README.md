@@ -1,4 +1,37 @@
 # demo1
+> 子组件封装
+```
+1、el-table的表格需要data，动态绑定了dataSet
+
+:data="dataSet" 
+
+2、子组件props
+props: {
+    dataSet:{
+        type:Array,
+        default:[]
+    }
+```
+> 父组件拿到子组件
+```
+1、给占位符，写法是-
+<data-preview :dataSet="listTable"></data-preview>
+
+2、引入
+import dataPreview from "./dataPreview.vue";
+
+3、加入子组件名字
+components: {
+    dataPreview,
+  },
+```
+
+>改 element-ui 组件样式
+
+1、找到 element-ui 给的类名，以及最近的自己编写的他的父亲类名，中间加/deep/ 样式穿透
+```
+.upload-demo /deep/ .el-upload-dragger
+```
 
 > vue project
 

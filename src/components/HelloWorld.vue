@@ -27,13 +27,13 @@
       <el-container>
         <el-aside width="30%">
           <div>
-            <el-input placeholder="请输入内容" v-model="input1">
+            <el-input placeholder="请输入内容" v-model="SearchContent">
               <i slot="prefix" class="el-input-search"></i>
             </el-input>
-            <el-radio-group v-model="SearchContent">
-              <el-radio label="FullText">Full Text</el-radio>
-              <el-radio label="ById">By ID</el-radio>
-            </el-radio-group>
+          </div>
+          <div>
+            <el-radio label="FullText">Full Text</el-radio>
+            <el-radio label="ById">By ID</el-radio>
             <div v-for="filename in fileNameList">{{ filename }}</div>
           </div>
           <!--  excel表格上传  -->
@@ -62,18 +62,7 @@
           <el-main>
             Main
             <!--  上传的excel表格预览  -->
-            <div class="preview-excel">
-              <el-table
-                class="listTable_ele"
-                :data="listTable"
-                stripe
-                height="500px"
-                style="width:100%"
-              >
-                <el-table-column prop="id" label="id" width="200" align="center"></el-table-column>
-                <el-table-column prop="Headline" label="Headline" width="200" align="center"></el-table-column>
-              </el-table>
-            </div>
+            <data-preview :dataSet="listTable"></data-preview>
           </el-main>
           <el-footer>Footer222</el-footer>
         </el-container>
@@ -84,8 +73,12 @@
 
 <script>
 import XLSX from "xlsx";
+import dataPreview from "./dataPreview.vue";
 export default {
   name: "HelloWorld",
+  components: {
+    dataPreview
+  },
   data() {
     return {
       fileNameList: [],
@@ -94,7 +87,7 @@ export default {
       activeIndex: "1",
       SearchContent: "",
       //Aside的search框内容
-      input1: ""
+      SearchContent: ""
     };
   },
   methods: {
@@ -190,8 +183,15 @@ a {
   background-color: #d3dce6;
   color: #333;
   text-align: center;
-  line-height: 200px;
+  /* line-height: 200px; */
   width: 30%;
+}
+.el-aside /deep/ .el-input--prefix .el-input__inner {
+  padding-left: 15px;
+}
+.upload-demo /deep/ .el-upload-dragger {
+  width: auto;
+  height: auto;
 }
 
 .el-main {
