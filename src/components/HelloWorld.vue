@@ -1,11 +1,15 @@
 <template>
-
-
   <div>
     <el-container>
       <el-header>
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color="#E4E7ED"
-          text-color="#black" @select="handleSelect">
+        <el-menu
+          :default-active="activeIndex"
+          class="el-menu-demo"
+          mode="horizontal"
+          background-color="#E4E7ED"
+          text-color="#black"
+          @select="handleSelect"
+        >
           <el-submenu index="1">
             <template slot="title">Menu</template>
             <el-menu-item index="1-1">选项1</el-menu-item>
@@ -18,9 +22,7 @@
             <el-menu-item index="2-1">选项1</el-menu-item>
             <el-menu-item index="2-2">选项2</el-menu-item>
           </el-submenu>
-
         </el-menu>
-
       </el-header>
       <el-container>
         <el-aside width="30%">
@@ -32,11 +34,21 @@
               <el-radio label="FullText">Full Text</el-radio>
               <el-radio label="ById">By ID</el-radio>
             </el-radio-group>
+            <div v-for="filename in fileNameList">{{ filename }}</div>
           </div>
           <!--  excel表格上传  -->
           <div>
-            <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple
-              accept=".xlsx" :on-exceed="exceed" :limit="2" :on-remove="remove" :http-request="uploadFile">
+            <el-upload
+              class="upload-demo"
+              drag
+              action="https://jsonplaceholder.typicode.com/posts/"
+              multiple
+              accept=".xlsx"
+              :on-exceed="exceed"
+              :limit="2"
+              :on-remove="remove"
+              :http-request="uploadFile"
+            >
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">
                 将文件拖到此处，或
@@ -47,10 +59,17 @@
           </div>
         </el-aside>
         <el-container>
-          <el-main>Main
+          <el-main>
+            Main
             <!--  上传的excel表格预览  -->
             <div class="preview-excel">
-              <el-table class="listTable_ele" :data="listTable" stripe height="500px" style="width:100%">
+              <el-table
+                class="listTable_ele"
+                :data="listTable"
+                stripe
+                height="500px"
+                style="width:100%"
+              >
                 <el-table-column prop="id" label="id" width="200" align="center"></el-table-column>
                 <el-table-column prop="Headline" label="Headline" width="200" align="center"></el-table-column>
               </el-table>
@@ -60,24 +79,23 @@
         </el-container>
       </el-container>
     </el-container>
-
-
   </div>
 </template>
 
 <script>
-import XLSX from 'xlsx'
+import XLSX from "xlsx";
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   data() {
     return {
+      fileNameList: [],
       listTable: [],
       // Header的menu
-      activeIndex: '1',
-      SearchContent: '',
+      activeIndex: "1",
+      SearchContent: "",
       //Aside的search框内容
-      input1: '',
-    }
+      input1: ""
+    };
   },
   methods: {
     //header的menu
@@ -87,12 +105,15 @@ export default {
     //解析excel
     async uploadFile(params) {
       const _file = params.file;
+      this.fileNameList.push(_file.name);
+      console.log("_file", _file);
       const fileReader = new FileReader();
-      fileReader.onload = (ev) => {
+      fileReader.onload = ev => {
         try {
           const data = ev.target.result;
+          console.log("ev.target", ev.target);
           const workbook = XLSX.read(data, {
-            type: 'binary'
+            type: "binary"
           });
           for (let sheet in workbook.Sheets) {
             //循环读取每个文件
@@ -109,26 +130,25 @@ export default {
               //sheetArray的属性名与上传的表格的列名一致
               rowTable.id = sheetArray[item].id;
               rowTable.Headline = sheetArray[item].Headline;
-              this.listTable.push(rowTable)
+              this.listTable.push(rowTable);
             }
           }
         } catch (e) {
-          this.$message.warning('文件类型不正确！');
+          this.$message.warning("文件类型不正确！");
         }
       };
       fileReader.readAsBinaryString(_file);
     },
     //上传1个以上文件时弹窗提示错误
-    exceed: function () {
+    exceed: function() {
       this.$message.error("最多只能上传1个xls文件");
     },
     //删除文件
     remove() {
       this.listTable = [];
     }
-
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -153,13 +173,13 @@ a {
 }
 
 .el-footer {
-  background-color: #B3C0D1;
+  background-color: #b3c0d1;
   text-align: center;
   line-height: 40px;
 }
 
 .el-header {
-  background-color: #B3C0D1;
+  background-color: #b3c0d1;
   text-align: center;
   line-height: 40px;
   padding: 0;
@@ -167,7 +187,7 @@ a {
 }
 
 .el-aside {
-  background-color: #D3DCE6;
+  background-color: #d3dce6;
   color: #333;
   text-align: center;
   line-height: 200px;
@@ -175,13 +195,13 @@ a {
 }
 
 .el-main {
-  background-color: #E9EEF3;
+  background-color: #e9eef3;
   color: #333;
   text-align: center;
   line-height: 160px;
 }
 
-body>.el-container {
+body > .el-container {
   margin-bottom: 40px;
 }
 </style>
