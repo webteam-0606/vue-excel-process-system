@@ -37,10 +37,14 @@
               >Search</el-button>
             </div>
             <div class="search-select">
-              <el-radio-group v-model="radio">
-                <el-radio label="1">Full Text</el-radio>
-                <el-radio label="2">By ID</el-radio>
-              </el-radio-group>
+              <!-- <el-radio-group v-model="radio">
+                <el-radio type="radio" name="status" id="status" label="1" value="full-text">Full Text</el-radio>
+                <el-radio type="radio" name="status" id="status" label="2" value="by-id">By ID</el-radio>
+              </el-radio-group>-->
+              <input type="radio" name="status" id="status" value="0" />
+              Full Text
+              <input type="radio" name="status" id="status" value="1" />
+              By ID
             </div>
           </div>
           <div class="full-upload-file-box">
@@ -87,11 +91,24 @@
           <el-main>
             <div class="product-defect">Product Defect :</div>
             <!--  上传的excel表格预览  -->
-            <el-table :data="listTable">
+            <!-- <el-table :data="listTable">
               <el-table-column prop="id" label="id" width="200" />
               <el-table-column prop="Headline" label="Headline" />
-            </el-table>
+            </el-table> -->
             <data-preview :dataSet="listTable"></data-preview>
+            <!-- 分页实现 -->
+            <div class="block">
+              <span class="demonstration">分页功能</span>
+              <el-pagination :data="listTable.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[100, 200, 300, 400]"
+                :page-size="100"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="listTable.length"
+              ></el-pagination>
+            </div>
           </el-main>
           <el-footer>Footer222</el-footer>
         </el-container>
@@ -99,6 +116,8 @@
     </el-container>
   </div>
 </template>
+
+
 
 <script>
 import XLSX from "xlsx";
@@ -122,9 +141,13 @@ export default {
       //选择全文搜索/ID搜索
       radio: 2,
       //目前文件的选择按钮
-      value: true
+      value: true,
+      //分页
+      currentPage: 1,
+      pagesize: 10,
     };
   },
+
   //监听search框输入的搜索内容
   watch: {
     //监听：如果为空，显示所有数据
@@ -133,6 +156,13 @@ export default {
         this.listTable = this.showTable;
       }
     }
+    // inputId: function(val) {
+    //   if (val == "") {
+    //     this.studentsNewList = this.studentsList;
+    //   } else {
+    //     this.studentsNewList = this.searchId(val);
+    //   }
+    // },
   },
   //页面渲染时，显示所有的数据
   mounted() {
@@ -190,7 +220,32 @@ export default {
     remove() {
       this.listTable = [];
     },
-    //search框输入的搜索内容
+    //search框输入的搜索内容--全文搜索
+    // search() {
+    //   const Search_List = [];
+    //   let res1 = this.inputVal;
+    //   const res = res1.replace(/\s/gi, "");
+    //   console.log("res", res);
+    //   let searchArr = this.showTable;
+    //   console.log("searchArr", searchArr);
+    //   searchArr.forEach(e => {
+    //     //绑定的table prop
+    //     let id = e.id;
+    //     let Headline = e.Headline;
+    //     if (id.toString().includes(res)) {
+    //       if (Search_List.indexOf(e) == "-1") {
+    //         Search_List.push(e);
+    //       }
+    //     }
+    //     if (Headline.toString().includes(res)) {
+    //       if (Search_List.indexOf(e) == "-1") {
+    //         Search_List.push(e);
+    //       }
+    //     }
+    //   });
+    //   this.listTable = Search_List;
+    // },
+
     search() {
       const Search_List = [];
       let res1 = this.inputVal;
@@ -201,20 +256,28 @@ export default {
       searchArr.forEach(e => {
         //绑定的table prop
         let id = e.id;
-        let Headline = e.Headline;
         if (id.toString().includes(res)) {
-          if (Search_List.indexOf(e) == "-1") {
-            Search_List.push(e);
-          }
-        }
-        if (Headline.toString().includes(res)) {
           if (Search_List.indexOf(e) == "-1") {
             Search_List.push(e);
           }
         }
       });
       this.listTable = Search_List;
-    }
+    },
+
+    // searchId(keywords) {
+    //   return this.listTable.filter(item => {
+    //     if (item.id == keywords) {
+    //       return item;
+    //     }
+    //   });
+    //实现表格分页
+    handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      }
   }
 };
 </script>
