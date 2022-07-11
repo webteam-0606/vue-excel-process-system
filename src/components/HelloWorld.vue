@@ -28,10 +28,13 @@
         <el-aside width="30%">
           <div class="full-search-box">
             <div class="input-search-box">
-              <el-input placeholder="请输入内容" v-model="SearchContent">
-                <!-- <i slot="prefix" class="el-input-search"></i> -->
-              </el-input>
-              <el-button class="search-button" type="primary" icon="el-icon-search">Search</el-button>
+              <el-input placeholder="请输入要搜索的内容" v-model="inputVal" clearable></el-input>
+              <el-button
+                class="search-button"
+                type="primary"
+                icon="el-icon-search"
+                @click="search()"
+              >Search</el-button>
             </div>
             <div class="search-select">
               <el-radio-group v-model="radio">
@@ -44,12 +47,13 @@
             <div class="recent-file">Recent Flies</div>
             <div>
               <div class="upload-filename-list" v-for="filename in fileNameList">
+                <i class="el-icon-document"></i>
                 {{ filename }}
                 <el-switch
                   class="file-switch"
                   v-model="value"
                   active-color="#13ce66"
-                  inactive-color="#ff4949"
+                  inactive-color="#e6e6e6"
                 ></el-switch>
               </div>
             </div>
@@ -83,6 +87,10 @@
           <el-main>
             <div class="product-defect">Product Defect :</div>
             <!--  上传的excel表格预览  -->
+            <el-table :data="listTable">
+              <el-table-column prop="id" label="id" width="200" />
+              <el-table-column prop="Headline" label="Headline" />
+            </el-table>
             <data-preview :dataSet="listTable"></data-preview>
           </el-main>
           <el-footer>Footer222</el-footer>
@@ -103,17 +111,32 @@ export default {
   data() {
     return {
       fileNameList: [],
-      listTable: [],
+
       // Header的menu
       activeIndex: "1",
-      SearchContent: "",
-      //Aside的search框内容
-      SearchContent: "",
+      //Aside的请输入搜索的内容
+      inputVal: "",
+      // search框搜索出来的值
+      showTable: [],
+      listTable: [], // tableData: [],
       //选择全文搜索/ID搜索
       radio: 2,
       //目前文件的选择按钮
       value: true
     };
+  },
+  //监听search框输入的搜索内容
+  watch: {
+    //监听：如果为空，显示所有数据
+    inputVal(item1) {
+      if (item1 == "") {
+        this.listTable = this.showTable;
+      }
+    }
+  },
+  //页面渲染时，显示所有的数据
+  mounted() {
+    this.showTable = this.listTable;
   },
   methods: {
     //header的menu
@@ -166,6 +189,31 @@ export default {
     //删除文件
     remove() {
       this.listTable = [];
+    },
+    //search框输入的搜索内容
+    search() {
+      const Search_List = [];
+      let res1 = this.inputVal;
+      const res = res1.replace(/\s/gi, "");
+      console.log("res", res);
+      let searchArr = this.showTable;
+      console.log("searchArr", searchArr);
+      searchArr.forEach(e => {
+        //绑定的table prop
+        let id = e.id;
+        let Headline = e.Headline;
+        if (id.toString().includes(res)) {
+          if (Search_List.indexOf(e) == "-1") {
+            Search_List.push(e);
+          }
+        }
+        if (Headline.toString().includes(res)) {
+          if (Search_List.indexOf(e) == "-1") {
+            Search_List.push(e);
+          }
+        }
+      });
+      this.listTable = Search_List;
     }
   }
 };
