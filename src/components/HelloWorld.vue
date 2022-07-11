@@ -38,8 +38,8 @@
             </div>
             <div class="search-select">
               <el-radio-group>
-                <el-radio v-model="radio" label="1">Full Text</el-radio>
-                <el-radio v-model="radio" label="2">By ID</el-radio>
+                <el-radio v-model="radio" label="1" @click="searchFullText()">Full Text</el-radio>
+                <el-radio v-model="radio" label="2" @click="searchID()">By ID</el-radio>
               </el-radio-group>
 
               <!-- <input type="radio" name="status" id="status" value="0" />
@@ -185,7 +185,6 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
-    //选择全文搜索/ID搜索
 
     //解析excel
     async uploadFile(params) {
@@ -240,6 +239,7 @@ export default {
       let searchArr = this.showTable;
       console.log("searchArr", searchArr);
       const myValue = $("input[type='radio']:checked").val();
+      console.log("myValue",myValue);
       if (myValue == 1) {
         //search框输入的搜索内容--全文搜索
         searchArr.forEach(e => {
@@ -269,7 +269,59 @@ export default {
           }
         });
         this.listTable = Search_List;
+      }else{
+        console.log("myValue", myValue);
       }
+    },
+    //id
+    // searchID() {
+    //   const Search_List = [];
+    //   let res1 = this.inputVal;
+    //   const res = res1.replace(/\s/gi, "");
+    //   console.log("res", res);
+    //   let searchArr = this.showTable;
+    //   console.log("searchArr", searchArr);
+    //   const myValue = $("input[type='radio']:checked").val();
+    //   console.log("myValue",myValue);
+    //     searchArr.forEach(e => {
+    //       //绑定的table prop
+    //       let id = e.id;
+    //       if (id.toString().includes(res)) {
+    //         if (Search_List.indexOf(e) == "-1") {
+    //           Search_List.push(e);
+    //         }
+    //       }
+    //     });
+    //     this.listTable = Search_List;
+    // },
+
+    //full text
+searchFullText() {
+      const Search_List = [];
+      let res1 = this.inputVal;
+      const res = res1.replace(/\s/gi, "");
+      console.log("res", res);
+      let searchArr = this.showTable;
+      console.log("searchArr", searchArr);
+      const myValue = $("input[type='radio']:checked").val();
+      console.log("myValue",myValue);
+        //search框输入的搜索内容--全文搜索
+        searchArr.forEach(e => {
+          //绑定的table prop
+          let id = e.id;
+          let Headline = e.Headline;
+          if (id.toString().includes(res)) {
+            if (Search_List.indexOf(e) == "-1") {
+              Search_List.push(e);
+            }
+          }
+          if (Headline.toString().includes(res)) {
+            if (Search_List.indexOf(e) == "-1") {
+              Search_List.push(e);
+            }
+          }
+        });
+        this.listTable = Search_List;
     },
 
     // searchId(keywords) {
