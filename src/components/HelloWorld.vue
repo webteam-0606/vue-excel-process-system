@@ -37,14 +37,15 @@
               >Search</el-button>
             </div>
             <div class="search-select">
-              <!-- <el-radio-group v-model="radio">
-                <el-radio type="radio" name="status" id="status" label="1" value="full-text">Full Text</el-radio>
-                <el-radio type="radio" name="status" id="status" label="2" value="by-id">By ID</el-radio>
-              </el-radio-group>-->
-              <input type="radio" name="status" id="status" value="0" />
+              <el-radio-group>
+                <el-radio v-model="radio" label="1">Full Text</el-radio>
+                <el-radio v-model="radio" label="2">By ID</el-radio>
+              </el-radio-group>
+
+              <!-- <input type="radio" name="status" id="status" value="0" />
               Full Text
               <input type="radio" name="status" id="status" value="1" />
-              By ID
+              By ID-->
             </div>
           </div>
           <div class="full-upload-file-box">
@@ -94,12 +95,13 @@
             <!-- <el-table :data="listTable">
               <el-table-column prop="id" label="id" width="200" />
               <el-table-column prop="Headline" label="Headline" />
-            </el-table> -->
+            </el-table>-->
             <data-preview :dataSet="listTable"></data-preview>
             <!-- 分页实现 -->
             <div class="block">
               <span class="demonstration">分页功能</span>
-              <el-pagination :data="listTable.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
+              <el-pagination
+                :data="listTable.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -118,7 +120,7 @@
 </template>
 
 
-
+<script src="jQuery.js"></script>
 <script>
 import XLSX from "xlsx";
 import dataPreview from "./dataPreview.vue";
@@ -127,6 +129,16 @@ export default {
   components: {
     dataPreview
   },
+
+  //   $('input[type=radio][name=sex]').change(function(){
+  // console.log(this.value)
+  // if(this.value == 1){
+  // //自己销售
+  // }else if(this.value == 2){
+  // //直销模式
+  // }
+  // }),
+
   data() {
     return {
       fileNameList: [],
@@ -139,12 +151,12 @@ export default {
       showTable: [],
       listTable: [], // tableData: [],
       //选择全文搜索/ID搜索
-      radio: 2,
+      radio: "1",
       //目前文件的选择按钮
       value: true,
       //分页
       currentPage: 1,
-      pagesize: 10,
+      pagesize: 10
     };
   },
 
@@ -220,32 +232,6 @@ export default {
     remove() {
       this.listTable = [];
     },
-    //search框输入的搜索内容--全文搜索
-    // search() {
-    //   const Search_List = [];
-    //   let res1 = this.inputVal;
-    //   const res = res1.replace(/\s/gi, "");
-    //   console.log("res", res);
-    //   let searchArr = this.showTable;
-    //   console.log("searchArr", searchArr);
-    //   searchArr.forEach(e => {
-    //     //绑定的table prop
-    //     let id = e.id;
-    //     let Headline = e.Headline;
-    //     if (id.toString().includes(res)) {
-    //       if (Search_List.indexOf(e) == "-1") {
-    //         Search_List.push(e);
-    //       }
-    //     }
-    //     if (Headline.toString().includes(res)) {
-    //       if (Search_List.indexOf(e) == "-1") {
-    //         Search_List.push(e);
-    //       }
-    //     }
-    //   });
-    //   this.listTable = Search_List;
-    // },
-
     search() {
       const Search_List = [];
       let res1 = this.inputVal;
@@ -253,16 +239,37 @@ export default {
       console.log("res", res);
       let searchArr = this.showTable;
       console.log("searchArr", searchArr);
-      searchArr.forEach(e => {
-        //绑定的table prop
-        let id = e.id;
-        if (id.toString().includes(res)) {
-          if (Search_List.indexOf(e) == "-1") {
-            Search_List.push(e);
+      const myValue = $("input[type='radio']:checked").val();
+      if (myValue == 1) {
+        //search框输入的搜索内容--全文搜索
+        searchArr.forEach(e => {
+          //绑定的table prop
+          let id = e.id;
+          let Headline = e.Headline;
+          if (id.toString().includes(res)) {
+            if (Search_List.indexOf(e) == "-1") {
+              Search_List.push(e);
+            }
           }
-        }
-      });
-      this.listTable = Search_List;
+          if (Headline.toString().includes(res)) {
+            if (Search_List.indexOf(e) == "-1") {
+              Search_List.push(e);
+            }
+          }
+        });
+        this.listTable = Search_List;
+      } else if (myValue == 2) {
+        searchArr.forEach(e => {
+          //绑定的table prop
+          let id = e.id;
+          if (id.toString().includes(res)) {
+            if (Search_List.indexOf(e) == "-1") {
+              Search_List.push(e);
+            }
+          }
+        });
+        this.listTable = Search_List;
+      }
     },
 
     // searchId(keywords) {
@@ -273,11 +280,11 @@ export default {
     //   });
     //实现表格分页
     handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    }
   }
 };
 </script>
@@ -343,10 +350,12 @@ a {
 }
 .full-search-box .search-select {
   text-align: left;
+  padding: 5px 5px 5px 5px;
 }
 .el-aside .UploadFileNameList {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  /* padding-top: 10px;
+  padding-bottom: 10px; */
+  padding: 10px 0px 10px 0px;
 }
 .el-aside /deep/ .el-input--prefix .el-input__inner {
   padding-left: 15px;
@@ -358,14 +367,15 @@ a {
 .full-upload-file-box .recent-file {
   width: 100%;
   text-align-last: left;
-  border: 1px solid rgb(228, 231, 237);
+  border: 1px solid rgb(202, 205, 210);
   background-color: #e6e6e6;
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 10px;
-  padding-left: 5px;
+  /* padding-left: 5px;
   padding-top: 5px;
-  padding-bottom: 5px;
+  padding-bottom: 5px; */
+  padding: 5px 5px 5px 5px;
 }
 
 .full-upload-file-box {
@@ -374,9 +384,9 @@ a {
 .full-upload-file-box .upload-filename-list {
   text-align: left;
   border: 1px solid rgb(228, 231, 237);
-  margin-top: 5px;
-  padding-left: 10px;
-  font-size: 14px;
+  margin-top: 2px;
+  padding: 5px 0px 5px 10px;
+  font-size: 13px;
   border-right: 20px;
 }
 .full-upload-file-box .file-switch {
@@ -389,14 +399,12 @@ a {
 .full-upload-files .upload-file {
   width: 100%;
   text-align-last: left;
-  border: 1px solid rgb(228, 231, 237);
+  border: 1px solid rgb(202, 205, 210);
   background-color: #e6e6e6;
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 10px;
-  padding-left: 5px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px 5px 5px 5px;
 }
 .upload-demo /deep/ .el-upload-dragger {
   width: auto;
@@ -415,14 +423,12 @@ a {
 .el-main .product-defect {
   width: 99%;
   text-align-last: left;
-  border: 1px solid rgb(228, 231, 237);
+  border: 1px solid rgb(202, 205, 210);
   background-color: #b3c0d1;
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 10px;
-  padding-left: 5px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px 5px 5px 5px;
 }
 
 body > .el-container {
