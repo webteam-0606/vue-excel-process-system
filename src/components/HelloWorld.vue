@@ -55,8 +55,10 @@
             </div>
           </div>
           <!--  excel表格上传  -->
-          <div>
-            <el-upload
+          <div class="full-upload-files">
+            <div class="upload-file">Upload Flies</div>
+            <div>
+              <el-upload
               class="upload-demo"
               drag
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -74,6 +76,7 @@
               </div>
               <div class="el-upload__tip" slot="tip">1次只能上传1个xls文件，最多上传2个</div>
             </el-upload>
+            </div>
           </div>
         </el-aside>
         <el-container>
@@ -158,7 +161,7 @@ export default {
     },
     //上传1个以上文件时弹窗提示错误
     exceed: function() {
-      this.$message.error("最多只能上传1个xls文件");
+      this.$message.error("最多只能上传2个xls文件");
     },
     //删除文件
     remove() {
@@ -251,7 +254,7 @@ a {
   margin-bottom: 10px;
 }
 
-.full-upload-file-box .full-upload-file-box {
+.full-upload-file-box {
   width: 100%;
 }
 .full-upload-file-box .upload-filename-list {
@@ -265,13 +268,28 @@ a {
 .full-upload-file-box .file-switch {
   text-align: right;
 }
+
+.full-upload-files {
+  margin-top: 20px;
+}
+.full-upload-files .upload-file {
+  width: 100%;
+  text-align-last: left;
+  border: 1px solid rgb(228, 231, 237);
+  background-color: #e6e6e6;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 .upload-demo /deep/ .el-upload-dragger {
   width: auto;
   height: auto;
 }
-.upload-demo {
+/* .upload-demo {
   padding-top: 10px;
-}
+} */
+
+
 
 .el-main {
   background-color: #e9eef3;
