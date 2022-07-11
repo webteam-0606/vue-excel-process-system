@@ -26,15 +26,33 @@
       </el-header>
       <el-container>
         <el-aside width="30%">
-          <div>
-            <el-input placeholder="请输入内容" v-model="SearchContent">
-              <i slot="prefix" class="el-input-search"></i>
-            </el-input>
+          <div class="full-search-box">
+            <div class="input-search-box">
+              <el-input placeholder="请输入内容" v-model="SearchContent">
+                <!-- <i slot="prefix" class="el-input-search"></i> -->
+              </el-input>
+              <el-button class="search-button" type="primary" icon="el-icon-search">Search</el-button>
+            </div>
+            <div class="search-select">
+              <el-radio-group v-model="radio">
+                <el-radio label="1">Full Text</el-radio>
+                <el-radio label="2">By ID</el-radio>
+              </el-radio-group>
+            </div>
           </div>
-          <div>
-            <el-radio label="FullText">Full Text</el-radio>
-            <el-radio label="ById">By ID</el-radio>
-            <div v-for="filename in fileNameList">{{ filename }}</div>
+          <div class="full-upload-file-box">
+            <div class="recent-file">Recent Flies</div>
+            <div>
+              <div class="upload-filename-list" v-for="filename in fileNameList">
+                {{ filename }}
+                <el-switch
+                  class="file-switch"
+                  v-model="value"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                ></el-switch>
+              </div>
+            </div>
           </div>
           <!--  excel表格上传  -->
           <div>
@@ -52,7 +70,7 @@
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">
                 将文件拖到此处，或
-                <em>点击上传-</em>
+                <em>点击上传</em>
               </div>
               <div class="el-upload__tip" slot="tip">1次只能上传1个xls文件，最多上传2个</div>
             </el-upload>
@@ -87,7 +105,11 @@ export default {
       activeIndex: "1",
       SearchContent: "",
       //Aside的search框内容
-      SearchContent: ""
+      SearchContent: "",
+      //选择全文搜索/ID搜索
+      radio: 2,
+      //目前文件的选择按钮
+      value: true
     };
   },
   methods: {
@@ -95,6 +117,8 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
+    //选择全文搜索/ID搜索
+
     //解析excel
     async uploadFile(params) {
       const _file = params.file;
@@ -186,12 +210,67 @@ a {
   /* line-height: 200px; */
   width: 30%;
 }
+.el-aside .full-search-box {
+  border: 1px solid #909399;
+  margin-top: 5px;
+}
+.el-aside .input-search-box .el-input {
+  width: 70%;
+  padding-top: 5px;
+}
+.el-aside .input-search-box .el-button {
+  font-size: 12px;
+}
+.input-search-box /deep/ .el-input__inner {
+  padding-right: 2px;
+}
+.full-search-box .input-search-box .search-button {
+  padding-left: 5px;
+}
+.full-search-box .search-select {
+  text-align: left;
+}
+.el-aside .UploadFileNameList {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .el-aside /deep/ .el-input--prefix .el-input__inner {
   padding-left: 15px;
+}
+.full-upload-file-box .full-upload-file-box {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.full-upload-file-box .recent-file {
+  width: 100%;
+  text-align-last: left;
+  border: 1px solid rgb(228, 231, 237);
+  background-color: #e6e6e6;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.full-upload-file-box .full-upload-file-box {
+  width: 100%;
+}
+.full-upload-file-box .upload-filename-list {
+  text-align: left;
+  border: 1px solid rgb(228, 231, 237);
+  margin-top: 5px;
+  padding-left: 10px;
+  font-size: 14px;
+  border-right: 20px;
+}
+.full-upload-file-box .file-switch {
+  text-align: right;
 }
 .upload-demo /deep/ .el-upload-dragger {
   width: auto;
   height: auto;
+}
+.upload-demo {
+  padding-top: 10px;
 }
 
 .el-main {
