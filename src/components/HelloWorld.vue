@@ -37,9 +37,9 @@
               >Search</el-button>
             </div>
             <div class="search-select">
-              <el-radio-group>
-                <el-radio v-model="radio" label="1" @click="searchFullText()">Full Text</el-radio>
-                <el-radio v-model="radio" label="2" @click="searchID()">By ID</el-radio>
+              <el-radio-group v-model='selectRadio' @change="handleRadioSelectChange">
+                <el-radio label="1">Full Text</el-radio>
+                <el-radio label="2">By ID</el-radio>
               </el-radio-group>
 
               <!-- <input type="radio" name="status" id="status" value="0" />
@@ -50,15 +50,17 @@
           </div>
           <div class="full-upload-file-box">
             <div class="recent-file">Recent Flies</div>
-            <div>
-              <div class="upload-filename-list" v-for="filename in fileNameList">
-                <i class="el-icon-document"></i>
-                {{ filename }}
+            <div class="upload-filename-list">
+              <div class="upload-filename-item" v-for="(filename,index) in fileNameList">
+              <div class='upload-filename'><i class="el-icon-document"></i>
+                {{ filename }}</div>
+                
                 <el-switch
                   class="file-switch"
-                  v-model="value"
+                  v-model="activedFile[index]"
                   active-color="#13ce66"
                   inactive-color="#e6e6e6"
+                  @change="handleSwitchFile"
                 ></el-switch>
               </div>
             </div>
@@ -74,7 +76,7 @@
                 multiple
                 accept=".xlsx"
                 :on-exceed="exceed"
-                :limit="2"
+                :limit="20"
                 :on-remove="remove"
                 :http-request="uploadFile"
               >
@@ -96,17 +98,16 @@
               <el-table-column prop="id" label="id" width="200" />
               <el-table-column prop="Headline" label="Headline" />
             </el-table>-->
-            <data-preview :dataSet="listTable"></data-preview>
+            <data-preview :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)"></data-preview>
             <!-- 分页实现 -->
             <div class="block">
               <span class="demonstration">分页功能</span>
               <el-pagination
-                :data="listTable.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[10, 20, 30, 40]"
+                :page-size="pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="listTable.length"
               ></el-pagination>
@@ -129,20 +130,9 @@ export default {
   components: {
     dataPreview
   },
-
-  //   $('input[type=radio][name=sex]').change(function(){
-  // console.log(this.value)
-  // if(this.value == 1){
-  // //自己销售
-  // }else if(this.value == 2){
-  // //直销模式
-  // }
-  // }),
-
   data() {
     return {
       fileNameList: [],
-
       // Header的menu
       activeIndex: "1",
       //Aside的请输入搜索的内容
@@ -153,10 +143,12 @@ export default {
       //选择全文搜索/ID搜索
       radio: "1",
       //目前文件的选择按钮
-      value: true,
+      activedFile: [],
       //分页
       currentPage: 1,
-      pagesize: 10
+      pageSize: 10,
+      selectRadio:0
+      
     };
   },
 
@@ -238,9 +230,9 @@ export default {
       console.log("res", res);
       let searchArr = this.showTable;
       console.log("searchArr", searchArr);
-      const myValue = $("input[type='radio']:checked").val();
-      console.log("myValue",myValue);
-      if (myValue == 1) {
+      // const myValue = $("input[type='radio']:checked").val();
+      console.log("selectRadio",this.selectRadio);
+      if (this.selectRadio == 1) {
         //search框输入的搜索内容--全文搜索
         searchArr.forEach(e => {
           //绑定的table prop
@@ -258,7 +250,7 @@ export default {
           }
         });
         this.listTable = Search_List;
-      } else if (myValue == 2) {
+      } else if (this.selectRadio == 2) {
         searchArr.forEach(e => {
           //绑定的table prop
           let id = e.id;
@@ -269,59 +261,11 @@ export default {
           }
         });
         this.listTable = Search_List;
+        console.log('搜索结果',this.listTable);
+        this.currentPage=1
       }else{
-        console.log("myValue", myValue);
+        console.log("this.selectRadio", this.selectRadio);
       }
-    },
-    //id
-    // searchID() {
-    //   const Search_List = [];
-    //   let res1 = this.inputVal;
-    //   const res = res1.replace(/\s/gi, "");
-    //   console.log("res", res);
-    //   let searchArr = this.showTable;
-    //   console.log("searchArr", searchArr);
-    //   const myValue = $("input[type='radio']:checked").val();
-    //   console.log("myValue",myValue);
-    //     searchArr.forEach(e => {
-    //       //绑定的table prop
-    //       let id = e.id;
-    //       if (id.toString().includes(res)) {
-    //         if (Search_List.indexOf(e) == "-1") {
-    //           Search_List.push(e);
-    //         }
-    //       }
-    //     });
-    //     this.listTable = Search_List;
-    // },
-
-    //full text
-searchFullText() {
-      const Search_List = [];
-      let res1 = this.inputVal;
-      const res = res1.replace(/\s/gi, "");
-      console.log("res", res);
-      let searchArr = this.showTable;
-      console.log("searchArr", searchArr);
-      const myValue = $("input[type='radio']:checked").val();
-      console.log("myValue",myValue);
-        //search框输入的搜索内容--全文搜索
-        searchArr.forEach(e => {
-          //绑定的table prop
-          let id = e.id;
-          let Headline = e.Headline;
-          if (id.toString().includes(res)) {
-            if (Search_List.indexOf(e) == "-1") {
-              Search_List.push(e);
-            }
-          }
-          if (Headline.toString().includes(res)) {
-            if (Search_List.indexOf(e) == "-1") {
-              Search_List.push(e);
-            }
-          }
-        });
-        this.listTable = Search_List;
     },
 
     // searchId(keywords) {
@@ -333,9 +277,18 @@ searchFullText() {
     //实现表格分页
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
+      this.pageSize=val
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      this.currentPage=val
+      console.log('当前页数据',this.listTable.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize));
+    },
+    handleRadioSelectChange(val){
+      console.log('radio变更',val);
+    },
+    handleSwitchFile(val){
+
     }
   }
 };
@@ -382,6 +335,7 @@ a {
   text-align: center;
   /* line-height: 200px; */
   width: 30%;
+  overflow:hidden
 }
 .el-aside .full-search-box {
   border: 1px solid #909399;
@@ -433,18 +387,29 @@ a {
 .full-upload-file-box {
   width: 100%;
 }
-.full-upload-file-box .upload-filename-list {
+.upload-filename-list{
+  height:400px;
+  overflow:auto
+}
+.full-upload-file-box .upload-filename-item {
   text-align: left;
   border: 1px solid rgb(228, 231, 237);
   margin-top: 2px;
   padding: 5px 0px 5px 10px;
   font-size: 13px;
   border-right: 20px;
+  display: flex;
+    justify-content: space-between;
 }
 .full-upload-file-box .file-switch {
   text-align: right;
 }
-
+.upload-filename{
+  width:80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .full-upload-files {
   margin-top: 20px;
 }
