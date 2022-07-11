@@ -59,29 +59,29 @@
             <div class="upload-file">Upload Flies</div>
             <div>
               <el-upload
-              class="upload-demo"
-              drag
-              action="https://jsonplaceholder.typicode.com/posts/"
-              multiple
-              accept=".xlsx"
-              :on-exceed="exceed"
-              :limit="2"
-              :on-remove="remove"
-              :http-request="uploadFile"
-            >
-              <i class="el-icon-upload"></i>
-              <div class="el-upload__text">
-                将文件拖到此处，或
-                <em>点击上传</em>
-              </div>
-              <div class="el-upload__tip" slot="tip">1次只能上传1个xls文件，最多上传2个</div>
-            </el-upload>
+                class="upload-demo"
+                drag
+                action="https://jsonplaceholder.typicode.com/posts/"
+                multiple
+                accept=".xlsx"
+                :on-exceed="exceed"
+                :limit="2"
+                :on-remove="remove"
+                :http-request="uploadFile"
+              >
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">
+                  将文件拖到此处，或
+                  <em>点击上传</em>
+                </div>
+                <div class="el-upload__tip" slot="tip">1次只能上传1个xls文件，最多上传2个</div>
+              </el-upload>
             </div>
           </div>
         </el-aside>
         <el-container>
           <el-main>
-            Main
+            <div class="product-defect">Product Defect :</div>
             <!--  上传的excel表格预览  -->
             <data-preview :dataSet="listTable"></data-preview>
           </el-main>
@@ -252,6 +252,9 @@ a {
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 10px;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .full-upload-file-box {
@@ -280,6 +283,9 @@ a {
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 10px;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 .upload-demo /deep/ .el-upload-dragger {
   width: auto;
@@ -289,13 +295,23 @@ a {
   padding-top: 10px;
 } */
 
-
-
 .el-main {
   background-color: #e9eef3;
   color: #333;
   text-align: center;
-  line-height: 160px;
+  /* line-height: 160px; */
+}
+.el-main .product-defect {
+  width: 99%;
+  text-align-last: left;
+  border: 1px solid rgb(228, 231, 237);
+  background-color: #b3c0d1;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 body > .el-container {
