@@ -37,7 +37,7 @@
               >Search</el-button>
             </div>
             <div class="search-select">
-              <el-radio-group v-model='selectRadio' @change="handleRadioSelectChange">
+              <el-radio-group v-model="selectRadio" @change="handleRadioSelectChange">
                 <el-radio label="1">Full Text</el-radio>
                 <el-radio label="2">By ID</el-radio>
               </el-radio-group>
@@ -49,12 +49,23 @@
             </div>
           </div>
           <div class="full-upload-file-box">
-            <div class="recent-file">Recent Flies</div>
+            <div class="recent-file">
+              Recent Flies
+              <el-checkbox
+                class="file-check-all"
+                :indeterminate="isIndeterminate"
+                v-model="checkAll"
+                @change="handleCheckAllChange"
+              >全选</el-checkbox>
+            </div>
+
             <div class="upload-filename-list">
               <div class="upload-filename-item" v-for="(filename,index) in fileNameList">
-              <div class='upload-filename'><i class="el-icon-document"></i>
-                {{ filename }}</div>
-                
+                <div class="upload-filename">
+                  <i class="el-icon-document"></i>
+                  {{ filename }}
+                </div>
+
                 <el-switch
                   class="file-switch"
                   v-model="activedFile[index]"
@@ -76,7 +87,7 @@
                 multiple
                 accept=".xlsx"
                 :on-exceed="exceed"
-                :limit="20"
+                :limit="50"
                 :on-remove="remove"
                 :http-request="uploadFile"
               >
@@ -85,7 +96,7 @@
                   将文件拖到此处，或
                   <em>点击上传</em>
                 </div>
-                <div class="el-upload__tip" slot="tip">1次只能上传1个xls文件，最多上传2个</div>
+                <div class="el-upload__tip" slot="tip">1次只能上传1个xls文件，最多上传50个</div>
               </el-upload>
             </div>
           </div>
@@ -94,14 +105,12 @@
           <el-main>
             <div class="product-defect">Product Defect :</div>
             <!--  上传的excel表格预览  -->
-            <!-- <el-table :data="listTable">
-              <el-table-column prop="id" label="id" width="200" />
-              <el-table-column prop="Headline" label="Headline" />
-            </el-table>-->
-            <data-preview :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)"></data-preview>
+            <data-preview
+              :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+            ></data-preview>
             <!-- 分页实现 -->
             <div class="block">
-              <span class="demonstration">分页功能</span>
+              <span class="demonstration"></span>
               <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -137,6 +146,9 @@ export default {
       activeIndex: "1",
       //Aside的请输入搜索的内容
       inputVal: "",
+      //Recent file的全选按钮
+      checkAll: false,
+      isIndeterminate: true,
       // search框搜索出来的值
       showTable: [],
       listTable: [], // tableData: [],
@@ -147,8 +159,7 @@ export default {
       //分页
       currentPage: 1,
       pageSize: 10,
-      selectRadio:0
-      
+      selectRadio: 0
     };
   },
 
@@ -160,13 +171,6 @@ export default {
         this.listTable = this.showTable;
       }
     }
-    // inputId: function(val) {
-    //   if (val == "") {
-    //     this.studentsNewList = this.studentsList;
-    //   } else {
-    //     this.studentsNewList = this.searchId(val);
-    //   }
-    // },
   },
   //页面渲染时，显示所有的数据
   mounted() {
@@ -176,6 +180,11 @@ export default {
     //header的menu
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    // Recent File 的全选按钮
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? this.fileNameList : [];
+      this.isIndeterminate = false;
     },
 
     //解析excel
@@ -231,7 +240,7 @@ export default {
       let searchArr = this.showTable;
       console.log("searchArr", searchArr);
       // const myValue = $("input[type='radio']:checked").val();
-      console.log("selectRadio",this.selectRadio);
+      console.log("selectRadio", this.selectRadio);
       if (this.selectRadio == 1) {
         //search框输入的搜索内容--全文搜索
         searchArr.forEach(e => {
@@ -261,35 +270,32 @@ export default {
           }
         });
         this.listTable = Search_List;
-        console.log('搜索结果',this.listTable);
-        this.currentPage=1
-      }else{
+        console.log("搜索结果", this.listTable);
+        this.currentPage = 1;
+      } else {
         console.log("this.selectRadio", this.selectRadio);
       }
     },
-
-    // searchId(keywords) {
-    //   return this.listTable.filter(item => {
-    //     if (item.id == keywords) {
-    //       return item;
-    //     }
-    //   });
     //实现表格分页
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
-      this.pageSize=val
+      this.pageSize = val;
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.currentPage=val
-      console.log('当前页数据',this.listTable.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize));
+      this.currentPage = val;
+      console.log(
+        "当前页数据",
+        this.listTable.slice(
+          (this.currentPage - 1) * this.pageSize,
+          this.currentPage * this.pageSize
+        )
+      );
     },
-    handleRadioSelectChange(val){
-      console.log('radio变更',val);
+    handleRadioSelectChange(val) {
+      console.log("radio变更", val);
     },
-    handleSwitchFile(val){
-
-    }
+    handleSwitchFile(val) {}
   }
 };
 </script>
@@ -322,20 +328,26 @@ a {
 }
 
 .el-header {
-  background-color: #b3c0d1;
+  /* background-color: #b3c0d1; */
   text-align: center;
-  line-height: 40px;
+  line-height: 20px;
   padding: 0;
   height: 10px;
 }
+/* .el-submenu /deep/ .el-submenu__title {
+  background-color: #fff;
+}
+.el-header /deep/ .el-header[data-v-469af010] .li .el-submenu .el-submenu__title {
+  background-color: #fff !important;
+} */
 
 .el-aside {
-  background-color: #d3dce6;
+  /* background-color: #d3dce6; */
   color: #333;
   text-align: center;
   /* line-height: 200px; */
   width: 30%;
-  overflow:hidden
+  overflow: hidden;
 }
 .el-aside .full-search-box {
   border: 1px solid #909399;
@@ -374,7 +386,7 @@ a {
   width: 100%;
   text-align-last: left;
   border: 1px solid rgb(202, 205, 210);
-  background-color: #e6e6e6;
+  background-color: #e9eef3;
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -383,13 +395,15 @@ a {
   padding-bottom: 5px; */
   padding: 5px 5px 5px 5px;
 }
-
+.full-upload-file-box .file-check-all {
+  text-align: right;
+}
 .full-upload-file-box {
   width: 100%;
 }
-.upload-filename-list{
-  height:400px;
-  overflow:auto
+.upload-filename-list {
+  height: 400px;
+  overflow: auto;
 }
 .full-upload-file-box .upload-filename-item {
   text-align: left;
@@ -399,13 +413,13 @@ a {
   font-size: 13px;
   border-right: 20px;
   display: flex;
-    justify-content: space-between;
+  justify-content: space-between;
 }
 .full-upload-file-box .file-switch {
   text-align: right;
 }
-.upload-filename{
-  width:80%;
+.upload-filename {
+  width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -417,7 +431,7 @@ a {
   width: 100%;
   text-align-last: left;
   border: 1px solid rgb(202, 205, 210);
-  background-color: #e6e6e6;
+  background-color: #e9eef3;
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -432,9 +446,11 @@ a {
 } */
 
 .el-main {
-  background-color: #e9eef3;
+  /* background-color: #e9eef3; */
   color: #333;
   text-align: center;
+  border: 1px solid rgb(202, 205, 210);
+  margin-left: 5px;
   /* line-height: 160px; */
 }
 .el-main .product-defect {
@@ -446,6 +462,16 @@ a {
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 5px 5px 5px 5px;
+}
+.el-main /deep/ .el-table__body-wrapper {
+  width: 99.7%;
+  border: 1px solid rgb(202, 205, 210);
+}
+.preview-excel /deep/ .el-table__body {
+  width: 100%;
+}
+.el-main .el-pagination {
+  padding: 5px 5px;
 }
 
 body > .el-container {
