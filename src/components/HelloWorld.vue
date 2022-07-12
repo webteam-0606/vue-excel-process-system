@@ -58,7 +58,6 @@
                 @change="handleCheckAllChange"
               >全选</el-checkbox>
             </div>
-
             <div class="upload-filename-list">
               <div class="upload-filename-item" v-for="(filename,index) in fileNameList">
                 <div class="upload-filename">
@@ -66,13 +65,25 @@
                   {{ filename }}
                 </div>
 
-                <el-switch
+                <el-checkbox-group
                   class="file-switch"
-                  v-model="activedFile[index]"
+                  v-model="selectedFile"
+                  @change="handleSwitchFile"
+                >
+                  <el-checkbox :key="index"></el-checkbox>
+                </el-checkbox-group>
+
+                <!-- <el-checkbox-group v-model="selectedFile" @change="handleCheckedCitiesChange">
+                  <el-checkbox v-for="filename in fileNameList" :label="filename" :key="filename">{{city}}</el-checkbox>
+                </el-checkbox-group>-->
+
+                <!-- <el-switch
+                  class="file-switch"
+                  v-model="selectedFile[index]"
                   active-color="#13ce66"
                   inactive-color="#e6e6e6"
                   @change="handleSwitchFile"
-                ></el-switch>
+                ></el-switch>-->
               </div>
             </div>
           </div>
@@ -93,10 +104,10 @@
               >
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">
-                  将文件拖到此处，或
+                  将文件拖到此处,或
                   <em>点击上传</em>
                 </div>
-                <div class="el-upload__tip" slot="tip">1次只能上传1个xls文件，最多上传50个</div>
+                <div class="el-upload__tip" slot="tip">1次只能上传1个xls文件,最多上传50个</div>
               </el-upload>
             </div>
           </div>
@@ -155,7 +166,7 @@ export default {
       //选择全文搜索/ID搜索
       radio: "1",
       //目前文件的选择按钮
-      activedFile: [],
+      selectedFile: [],
       //分页
       currentPage: 1,
       pageSize: 10,
@@ -165,26 +176,42 @@ export default {
 
   //监听search框输入的搜索内容
   watch: {
-    //监听：如果为空，显示所有数据
+    //监听：如果为空,显示所有数据
     inputVal(item1) {
       if (item1 == "") {
         this.listTable = this.showTable;
       }
     }
   },
-  //页面渲染时，显示所有的数据
+  //页面渲染时,显示所有的数据
   mounted() {
     this.showTable = this.listTable;
   },
   methods: {
+    // aside 的全文搜索/ID搜索
+    handleRadioSelectChange(val) {
+      console.log("radio变更", val);
+    },
     //header的menu
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
     // Recent File 的全选按钮
     handleCheckAllChange(val) {
-      this.checkedCities = val ? this.fileNameList : [];
+      console.log('val',val);
+      console.log('this.fileNameList',this.fileNameList);
+      const all = this.fileNameList.map(item => {
+        return item.value
+      })
+      // this.selectedFile = val ? this.fileNameList : [];
+      this.selectedFile = val ? all : [];
       this.isIndeterminate = false;
+    },
+    handleSwitchFile(val) {
+      let checkedCount = val.length;
+      this.checkAll = checkedCount === this.fileNameList.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.fileNameList.length;
     },
 
     //解析excel
@@ -203,7 +230,7 @@ export default {
           for (let sheet in workbook.Sheets) {
             //循环读取每个文件
             const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
-            //若当前sheet没有数据，则continue
+            //若当前sheet没有数据,则continue
             if (sheetArray.length == 0) {
               continue;
             }
@@ -291,11 +318,7 @@ export default {
           this.currentPage * this.pageSize
         )
       );
-    },
-    handleRadioSelectChange(val) {
-      console.log("radio变更", val);
-    },
-    handleSwitchFile(val) {}
+    }
   }
 };
 </script>
@@ -371,8 +394,6 @@ a {
   padding: 5px 5px 5px 5px;
 }
 .el-aside .UploadFileNameList {
-  /* padding-top: 10px;
-  padding-bottom: 10px; */
   padding: 10px 0px 10px 0px;
 }
 .el-aside /deep/ .el-input--prefix .el-input__inner {
@@ -383,20 +404,18 @@ a {
   font-size: 14px;
 }
 .full-upload-file-box .recent-file {
-  width: 100%;
+  width: 98%;
   text-align-last: left;
   border: 1px solid rgb(202, 205, 210);
   background-color: #e9eef3;
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 10px;
-  /* padding-left: 5px;
-  padding-top: 5px;
-  padding-bottom: 5px; */
-  padding: 5px 5px 5px 5px;
+  padding: 5px 0 5px 5px;
 }
 .full-upload-file-box .file-check-all {
   text-align: right;
+  padding-left: 58%;
 }
 .full-upload-file-box {
   width: 100%;
@@ -415,9 +434,9 @@ a {
   display: flex;
   justify-content: space-between;
 }
-.full-upload-file-box .file-switch {
+/* .full-upload-file-box .file-switch {
   text-align: right;
-}
+} */
 .upload-filename {
   width: 80%;
   overflow: hidden;
@@ -428,14 +447,14 @@ a {
   margin-top: 20px;
 }
 .full-upload-files .upload-file {
-  width: 100%;
+  width: 98%;
   text-align-last: left;
   border: 1px solid rgb(202, 205, 210);
   background-color: #e9eef3;
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 10px;
-  padding: 5px 5px 5px 5px;
+  padding: 5px 0 5px 5px;
 }
 .upload-demo /deep/ .el-upload-dragger {
   width: auto;
