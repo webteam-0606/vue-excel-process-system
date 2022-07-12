@@ -41,13 +41,9 @@
                 <el-radio label="1">Full Text</el-radio>
                 <el-radio label="2">By ID</el-radio>
               </el-radio-group>
-
-              <!-- <input type="radio" name="status" id="status" value="0" />
-              Full Text
-              <input type="radio" name="status" id="status" value="1" />
-              By ID-->
             </div>
           </div>
+          <!-- ---1-- -->
           <div class="full-upload-file-box">
             <div class="recent-file">
               Recent Flies
@@ -58,6 +54,7 @@
                 @change="handleCheckAllChange"
               >全选</el-checkbox>
             </div>
+
             <div class="upload-filename-list">
               <div class="upload-filename-item" v-for="(filename,index) in fileNameList">
                 <div class="upload-filename">
@@ -70,23 +67,61 @@
                   v-model="selectedFile"
                   @change="handleSwitchFile"
                 >
-                  <el-checkbox :key="index"></el-checkbox>
+                  <el-checkbox :label="filename.id" :key="filename.id"></el-checkbox>
                 </el-checkbox-group>
-
-                <!-- <el-checkbox-group v-model="selectedFile" @change="handleCheckedCitiesChange">
-                  <el-checkbox v-for="filename in fileNameList" :label="filename" :key="filename">{{city}}</el-checkbox>
-                </el-checkbox-group>-->
-
-                <!-- <el-switch
+              </div>
+            </div>
+          </div>
+          <!-- <el-switch
                   class="file-switch"
                   v-model="selectedFile[index]"
                   active-color="#13ce66"
                   inactive-color="#e6e6e6"
                   @change="handleSwitchFile"
-                ></el-switch>-->
+          ></el-switch>-->
+
+          <!--1 -----2 -->
+          <!-- <div class="full-upload-file-box">
+            <div class="recent-file">
+              Recent Flies
+              <el-checkbox
+                class="file-check-all"
+                :indeterminate="isIndeterminate"
+                v-model="checkAll"
+                @change="handleCheckAllChange"
+              >全选</el-checkbox>
+          </div>-->
+
+          <!-- <div class="upload-filename-list">
+              <div class="upload-filename-item" v-for="(filename,index) in fileNameList">
+                <div class="upload-filename">
+                  <i class="el-icon-document"></i>
+                  {{ filename }}
+                </div>
+
+                <el-checkbox-group
+                  class="file-switch"
+                  v-model="form.selectedFile"
+                  @change="handleSwitchFile"
+                >
+                  <el-checkbox :label="filename.id" :key="filename.id"></el-checkbox>
+                </el-checkbox-group>
               </div>
-            </div>
-          </div>
+          </div>-->
+
+          <!-- <el-checkbox-group v-model="selectedFile" @change="handleCheckedCitiesChange">
+                  <el-checkbox v-for="filename in fileNameList" :label="filename" :key="filename">{{city}}</el-checkbox>
+          </el-checkbox-group>-->
+
+          <!-- <el-switch
+                  class="file-switch"
+                  v-model="selectedFile[index]"
+                  active-color="#13ce66"
+                  inactive-color="#e6e6e6"
+                  @change="handleSwitchFile"
+          ></el-switch>-->
+          <!-- </div> -->
+          <!--2 ----- -->
           <!--  excel表格上传  -->
           <div class="full-upload-files">
             <div class="upload-file">Upload Flies</div>
@@ -118,7 +153,11 @@
             <!--  上传的excel表格预览  -->
             <data-preview
               :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
-            ></data-preview>
+            >
+              <!-- <template v-if="fileNameList != null && fileNameList.length>0">
+
+              </template>-->
+            </data-preview>
             <!-- 分页实现 -->
             <div class="block">
               <span class="demonstration"></span>
@@ -161,8 +200,10 @@ export default {
       checkAll: false,
       isIndeterminate: true,
       // search框搜索出来的值
+      listTable: [],
+      //渲染时 数据
       showTable: [],
-      listTable: [], // tableData: [],
+
       //选择全文搜索/ID搜索
       radio: "1",
       //目前文件的选择按钮
@@ -198,20 +239,33 @@ export default {
     },
     // Recent File 的全选按钮
     handleCheckAllChange(val) {
-      console.log('val',val);
-      console.log('this.fileNameList',this.fileNameList);
       const all = this.fileNameList.map(item => {
-        return item.value
-      })
-      // this.selectedFile = val ? this.fileNameList : [];
+        return item.value;
+      });
       this.selectedFile = val ? all : [];
       this.isIndeterminate = false;
     },
+    // Recent File 的文件单选按钮
     handleSwitchFile(val) {
+      // if (val.length >= 2) {
+      //   let arrays = val.splice(0, val.length - 1);
+      //   arrays.forEach((row) => {
+      //     this.$refs.fileNameList.toggleRowSelection(row);
+      //   });
+      // }
+      // this.selectedFile = val;
+      // const selectedFileArr = Object.entries(this.selectedFile);
+      // for (let i in this.selectedFile) {
+      //   selectedFileArr.push(this.selectedFile[i]); //属性值
+      // }
+      // console.log("selectedFile", typeof this.selectedFile);
+      // console.log("selectedFileArr", typeof selectedFileArr);
+
       let checkedCount = val.length;
-      this.checkAll = checkedCount === this.fileNameList.length;
+      this.checkAll = checkedCount === this.selectedFile.length;
       this.isIndeterminate =
         checkedCount > 0 && checkedCount < this.fileNameList.length;
+      console.log("this.isIndeterminate", this.isIndeterminate);
     },
 
     //解析excel
@@ -261,13 +315,20 @@ export default {
     },
     search() {
       const Search_List = [];
+      // const searchArr = [];
       let res1 = this.inputVal;
       const res = res1.replace(/\s/gi, "");
       console.log("res", res);
       let searchArr = this.showTable;
-      console.log("searchArr", searchArr);
-      // const myValue = $("input[type='radio']:checked").val();
-      console.log("selectRadio", this.selectRadio);
+
+      // var obj = this.listTable; //列表内容
+      // if (this.isIndeterminate == "false") {
+      //   searchArr.push(this.listTable);
+      // } else {
+      //   let searchArr = this.showTable;
+      // }
+      // console.log("searchArr", searchArr);
+
       if (this.selectRadio == 1) {
         //search框输入的搜索内容--全文搜索
         searchArr.forEach(e => {
@@ -303,6 +364,7 @@ export default {
         console.log("this.selectRadio", this.selectRadio);
       }
     },
+
     //实现表格分页
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
