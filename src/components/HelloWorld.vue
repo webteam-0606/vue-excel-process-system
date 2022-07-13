@@ -26,6 +26,7 @@
       </el-header>
       <el-container>
         <el-aside width="30%">
+          <!-- 搜索框 -->
           <div class="full-search-box">
             <div class="input-search-box">
               <el-input placeholder="请输入要搜索的内容" v-model="inputVal" clearable></el-input>
@@ -43,7 +44,7 @@
               </el-radio-group>
             </div>
           </div>
-          <!-- ---1-- -->
+          <!-- 当前文件 -->
           <div class="full-upload-file-box">
             <div class="recent-file">
               Recent Flies
@@ -54,7 +55,6 @@
                 @change="handleCheckAllChange"
               >全选</el-checkbox>
             </div>
-
             <div class="upload-filename-list">
               <el-checkbox-group
                 class="file-switch"
@@ -98,6 +98,23 @@
         </el-aside>
         <el-container>
           <el-main>
+            <!-- 文件的 tabs 标签页 -->
+            <div class="file-tabs-list">
+              <el-tabs
+                v-model="fileNameListValue"
+                type="card"
+                closable
+                @tab-remove="removeTab"
+                @tab-click="clickTab"
+              >
+                <el-tab-pane
+                  v-for="(filename, index) in fileNameList"
+                  :label="filename"
+                  :key="index"
+                >{{filename}}</el-tab-pane>
+              </el-tabs>
+            </div>
+
             <div class="product-defect">Product Defect :</div>
             <!--  上传的excel表格预览  -->
             <data-preview
@@ -153,6 +170,21 @@ export default {
       selectedFile: [],
       //上传的所有文件
       allFileData: [],
+      //tabs标签页
+      curTabsFile: [],
+      allFileDataCopy: [],
+
+      fileNameListValue: "2",
+      currentIndex: 1,
+
+      tabIndex: 1,
+      editableTabs: [
+        {
+          title: "tab1",
+          name: "1"
+        }
+      ],
+
       //分页
       currentPage: 1,
       pageSize: 10,
@@ -229,6 +261,9 @@ export default {
             }
             console.log("读取文件");
             console.log(sheetArray);
+            // this.listTable.push(sheetArray);
+            //暂时的所有上传文件内容，用于在allFileData里边遍历，找到被选中的文件，如何传给临时内容搜索盒子
+            this.allFileDataCopy.push(sheetArray);
             this.allFileData.push(sheetArray);
             for (let item in sheetArray) {
               let rowTable = {};
@@ -267,6 +302,7 @@ export default {
           ...tempSearchBox,
           ...this.allFileData[this.selectedFile[k]]
         ];
+        // console.log('this.selectedFile[k]',this.selectedFile[k],k);
       }
       // searchArr 待被搜索的文件内容
       let searchArr = tempSearchBox;
@@ -306,6 +342,48 @@ export default {
       } else {
         console.log("this.selectRadio", this.selectRadio);
       }
+    },
+
+    //实现tabs标签页
+    removeTab(targetName) {
+      if (this.fileNameList.length <= 1) {
+        return false;
+      }
+     
+      console.log("targetName", targetName); //undefined
+      let tabs = this.fileNameList;
+      console.log("tabs", tabs); //上传的列表名
+      let activeName = this.fileNameListValue;
+      console.log("activeName", activeName, this.fileNameListValue); // 1 1
+      if (activeName === targetName) {
+        tabs.forEach((tab, index) => {
+          if (tab.name === targetName) {
+            let nextTab = tabs[index + 1] || tabs[index - 1];
+            if (nextTab) {
+              activeName = nextTab.name;
+            }
+          }
+        });
+      }
+      this.fileNameListValue = activeName;
+      this.fileNameList = tabs.filter(tab => tab.name !== targetName);
+    },
+    clickTab(tab,event) {
+      // console.log('targetName',targetName);//VueComponent
+      // console.log('value',value);
+      // console.log('this.allFileDataCopy',this.allFileDataCopy);//数据内容
+      // console.log('this.fileNameList',this.fileNameList);//上传的数据表名
+      // let curBox = [];
+      // for (let k in this.fileNameList[tab.index]) {
+      //   curBox = [
+      //     ...curBox,
+      //     ...this.allFileDataCopy[this.fileNameList[k]]
+      //     ];
+      //     console.log('curBox',curBox);
+        
+      // }
+      
+      // this.listTable = curFileBox;
     },
 
     //实现表格分页
@@ -462,9 +540,6 @@ a {
   width: auto;
   height: auto;
 }
-/* .upload-demo {
-  padding-top: 10px;
-} */
 
 .el-main {
   /* background-color: #e9eef3; */
@@ -473,6 +548,24 @@ a {
   border: 1px solid rgb(202, 205, 210);
   margin-left: 5px;
   /* line-height: 160px; */
+}
+.file-tabs-list {
+  overflow: auto;
+}
+.file-tabs-list /deep/ .el-tabs__item {
+  height: 30px;
+  line-height: 35px;
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 2px;
+}
+.file-tabs-list /deep/ .el-icon-close {
+  vertical-align: inherit;
+}
+.file-tabs-list /deep/.file-tabs-list {
+  margin: 0 0 5px 0;
 }
 .el-main .product-defect {
   width: 99%;

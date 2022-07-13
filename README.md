@@ -32,6 +32,8 @@ npm test
 
 > 3、文件读取查找速度
 
+> 4、文件名重复问题
+
 ## 笔记
 > 1、子组件封装
 
@@ -106,5 +108,9 @@ let tempSearchBox = [];
         ];
       }
 ```
+>5、实现tabs标签得动态绑定
+
+1）、上传文件时候，拿到一个文件列表 `tabsList`=`allFileData`，标题渲染在标签页，内容传给 `listTable`，如果删除，就把当前的标题tab删除及对应页面 `listTable` 更新内容，
+2）、 `targetName`为点击时获得的文件标签名，
 
 
