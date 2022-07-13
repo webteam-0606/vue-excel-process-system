@@ -2,28 +2,38 @@
   <!--  上传的excel表格预览  -->
   <div class="preview-excel">
     <el-table class="listTable_ele" :data="dataSet" stripe height="500px" style="width:100%">
-      <el-table-column prop="id" label="id" width="200" align="center"></el-table-column>
-      <el-table-column prop="Headline" label="Headline" width="200" align="center"></el-table-column>
+      <el-table-column
+        v-for="(key, index) in keyList"
+        :prop="key"
+        :label="key"
+        align="center"
+      ></el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
-import XLSX from "xlsx";
+import XLSX from 'xlsx'
 export default {
-  name: "dataPreview",
+  name: 'dataPreview',
   data() {
-    return {};
+    return {}
   },
   props: {
-    dataSet:{
-        type:Array,
-        default:[]
+    dataSet: {
+      type: Array,
+      default: []
+    },
+    keyList:{
+      type: Array,
+      default: []
     }
   },
+  create() {
+    console.log('dataSet', this.dataSet)
+  },
   methods: {}
-};
+}
 </script>
 
-<style>
-</style>
+<style></style>

@@ -33,7 +33,7 @@
               <el-button class="search-button" type="primary" icon="el-icon-search" @click="search()">Search</el-button>
             </div>
             <div class="search-select">
-              <el-radio-group v-model="selectRadio" @change="handleRadioSelectChange">
+              <el-radio-group v-model="selectRadio" @change="handleRadioSelectChange" class="search-select-group">
                 <el-radio label="1">Full Text</el-radio>
                 <el-radio label="2">By ID</el-radio>
               </el-radio-group>
@@ -55,7 +55,7 @@
             <div class="upload-filename-list">
               <el-checkbox-group class="file-switch" v-model="selectedFile" @change="handleSelectedFile">
                 <div class="upload-filename-item" v-for="(filename, index) in fileNameList">
-                  <div class="upload-filename">
+                  <div class="upload-filename" @click="handleClickFileName(index)">
                     <i class="el-icon-document"></i>
                     {{ filename }}
                   </div>
@@ -93,15 +93,13 @@
           <el-main>
             <!-- 文件的 tabs 标签页 -->
             <div class="file-tabs-list">
-              <el-tabs v-model="fileNameListValue" type="card" closable @tab-remove="removeTab" @tab-click="clickTab">
+              <el-tabs v-model="fileNameListValue" type="card" @tab-remove="removeTab" @tab-click="clickTab">
                 <el-tab-pane
                   v-for="(filename, index) in fileNameList"
                   :label="stringIntercept(filename, 20)"
                   :key="index"
-                  :name="index"
-                >
-                  <span class="file-tab-name">{{ index }}</span>
-                </el-tab-pane>
+                  :name="(index + 1).toString()"
+                ></el-tab-pane>
               </el-tabs>
             </div>
 
@@ -109,6 +107,7 @@
             <!--  上传的excel表格预览  -->
             <data-preview
               :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+              :keyList="keyList"
             ></data-preview>
             <!-- 分页实现 -->
             <div class="block">
@@ -164,7 +163,7 @@ export default {
       curTabsFile: [],
       allFileDataCopy: [],
 
-      fileNameListValue:0,
+      fileNameListValue: 0,
       currentIndex: 1,
 
       tabIndex: 1,
@@ -178,7 +177,8 @@ export default {
       //分页
       currentPage: 1,
       pageSize: 10,
-      selectRadio: 0
+      selectRadio: 0,
+      keyList: [] //保存excel的列名
     }
   },
 
@@ -226,7 +226,20 @@ export default {
         this.checkAll = false
       }
     },
-
+    //点击左侧文件列表某个文件名时切换右侧展示内容
+    handleClickFileName(index) {
+      console.log('当前点击的文件index', index)
+      this.listTable = this.allFileData[index]
+      //同时更改keyList
+      this.keyList=[]
+      if (this.listTable.length > 0) {
+        for (let k in this.listTable[0]) {
+          this.keyList.push(k)
+        }
+      }
+      //同时切换右侧tab栏激活的标签
+      this.fileNameListValue = index + 1 + ''
+    },
     //解析excel
     async uploadFile(params) {
       this.listTable = []
@@ -254,14 +267,30 @@ export default {
             //暂时的所有上传文件内容，用于在allFileData里边遍历，找到被选中的文件，如何传给临时内容搜索盒子
             this.allFileDataCopy.push(sheetArray)
             this.allFileData.push(sheetArray)
+            console.log('sheetArray', sheetArray)
             for (let item in sheetArray) {
+              console.log('item', item)
               let rowTable = {}
               //这里的rowTable的属性名注意要与上面表格的prop一致
               //sheetArray的属性名与上传的表格的列名一致
-              rowTable.id = sheetArray[item].id
-              rowTable.Headline = sheetArray[item].Headline
+              for (let key in sheetArray[item]) {
+                rowTable[key] = sheetArray[item][key]
+              }
+              // rowTable.id = sheetArray[item].id
+              // rowTable.Headline = sheetArray[item].Headline
               this.listTable.push(rowTable)
             }
+            this.keyList=[]
+            if (this.listTable.length > 0) {
+              for (let k in this.listTable[0]) {
+                this.keyList.push(k)
+              }
+            }
+            console.log('this.listTable', this.listTable)
+            //上传完毕后把当前tab页激活(当前展示数据tab变成蓝色)
+            //element-ui tab的name属性只接收string类型
+            //v-model="fileNameListValue"意思是当前激活的tab的name属性为fileNameListValue
+            this.fileNameListValue = this.allFileData.length.toString()
           }
         } catch (e) {
           this.$message.warning('文件类型不正确！')
@@ -356,7 +385,18 @@ export default {
       this.fileNameList = tabs.filter(tab => tab.name !== targetName)
     },
     clickTab(targetName) {
-      console.log('targetName', targetName)
+      //切换tab页时更新展示数据
+      console.log('tabsIndex', targetName.index)
+      const tabIndex = targetName.index
+      this.listTable = this.allFileData[tabIndex]
+      //同步更改keyList
+      this.keyList=[]
+      if (this.listTable.length > 0) {
+        for (let k in this.listTable[0]) {
+          this.keyList.push(k)
+        }
+      }
+      console.log('fileNameListValue', this.fileNameListValue)
       // console.log('filenamelist',this.fileNameList[tab.index]);
       // console.log('tab.index',tab.index);
       // console.log('tab',tab);
@@ -404,10 +444,8 @@ export default {
       var chineseRegex = /[^\x00-\xff]/g
       var singleChar = ''
       var strLength = str.replace(chineseRegex, '**').length
-      console.log(strLength)
       for (var i = 0; i < strLength; i++) {
         singleChar = str.charAt(i).toString()
-        console.log(singleChar.match(chineseRegex))
         if (singleChar.match(chineseRegex) != null) {
           newLength += 2
         } else {
@@ -422,7 +460,7 @@ export default {
       if (hasDot && strLength > len) {
         newStr += hasDot
       }
-      return newStr
+      return newStr + '...'
     }
   }
 }
@@ -487,10 +525,15 @@ a {
 }
 .full-search-box .input-search-box .search-button {
   padding-left: 5px;
+  width: 25%;
 }
 .full-search-box .search-select {
   text-align: left;
   padding: 5px 5px 5px 5px;
+}
+.search-select-group {
+  display: flex;
+  justify-content: center;
 }
 .el-aside .UploadFileNameList {
   padding: 10px 0px 10px 0px;
@@ -503,6 +546,7 @@ a {
   font-size: 14px;
 }
 .full-upload-file-box .recent-file {
+  position: relative;
   width: 98%;
   text-align-last: left;
   border: 1px solid rgb(202, 205, 210);
@@ -513,8 +557,8 @@ a {
   padding: 5px 0 5px 5px;
 }
 .full-upload-file-box .file-check-all {
-  text-align: right;
-  padding-left: 58%;
+  position: absolute;
+  right: 10px;
 }
 .upload-filename-item /deep/ .el-checkbox__label {
   display: none;
@@ -544,6 +588,7 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  cursor: pointer;
 }
 .full-upload-files {
   margin-top: 20px;
