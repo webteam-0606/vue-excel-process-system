@@ -174,7 +174,7 @@ export default {
       curTabsFile: [],
       allFileDataCopy: [],
 
-      fileNameListValue: "2",
+      fileNameListValue: [],
       currentIndex: 1,
 
       tabIndex: 1,
@@ -356,6 +356,7 @@ export default {
       let activeName = this.fileNameListValue;
       console.log("activeName", activeName, this.fileNameListValue); // 1 1
       if (activeName === targetName) {
+        console.log(true);
         tabs.forEach((tab, index) => {
           if (tab.name === targetName) {
             let nextTab = tabs[index + 1] || tabs[index - 1];
@@ -368,7 +369,13 @@ export default {
       this.fileNameListValue = activeName;
       this.fileNameList = tabs.filter(tab => tab.name !== targetName);
     },
-    clickTab(tab,event) {
+    clickTab(targetName) {
+      console.log('targetName',targetName);
+      // console.log('filenamelist',this.fileNameList[tab.index]);
+      // console.log('tab.index',tab.index);
+      // console.log('tab',tab);
+      // if(this.fileNameList[tab.index]==targetName){}
+      // this.fileNameList = tab.name;
       // console.log('targetName',targetName);//VueComponent
       // console.log('value',value);
       // console.log('this.allFileDataCopy',this.allFileDataCopy);//数据内容
