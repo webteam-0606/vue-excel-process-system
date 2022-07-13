@@ -1,39 +1,5 @@
 # demo1
-> 子组件封装
-```
-1、el-table的表格需要data，动态绑定了dataSet
-
-:data="dataSet" 
-
-2、子组件props
-props: {
-    dataSet:{
-        type:Array,
-        default:[]
-    }
-```
-> 父组件拿到子组件
-```
-1、给占位符，写法是-
-<data-preview :dataSet="listTable"></data-preview>
-
-2、引入
-import dataPreview from "./dataPreview.vue";
-
-3、加入子组件名字
-components: {
-    dataPreview,
-  },
-```
-
->改 element-ui 组件样式
-
-1、找到 element-ui 给的类名，以及最近的自己编写的他的父亲类名，中间加/deep/ 样式穿透
-```
-.upload-demo /deep/ .el-upload-dragger
-```
-
-> vue project
+> vue+element-ui project
 
 ## Build Setup
 
@@ -59,5 +25,86 @@ npm run e2e
 # run all tests
 npm test
 ```
+## 需解决
+> 1、按ID/全文搜索
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+> 2、自动读入不同 `title` 的文件
+
+> 3、文件读取查找速度
+
+## 笔记
+> 1、子组件封装
+
+1)、`el-table` 的表格需要 `data`，动态绑定了 `dataSet`
+```
+:data="dataSet" 
+```
+2)、子组件 `props`
+```
+props: {
+    dataSet:{
+        type:Array,
+        default:[]
+    }
+```
+> 2、父组件拿到子组件
+
+1)、给占位符，写法是
+```
+<data-preview :dataSet="listTable"></data-preview>
+```
+
+2)、引入
+```
+import dataPreview from "./dataPreview.vue";
+```
+3)、加入子组件名字
+```
+components: {
+    dataPreview,
+  },
+```
+
+>3、改 `element-ui` 组件样式
+
+1)、找到 element-ui 给的类名，以及最近的自己编写的他的父亲类名，中间加/deep/ 样式穿透
+```
+.upload-demo /deep/ .el-upload-dragger
+```
+>4、`el-checkbox` 的问题
+
+1)、`el-radio` 不好做复选框，使用 `el-checkbox` 可以，注意动态绑定的是数组类型。
+
+2)、`el-checkbox` 的 `:label="index"`，绑定的是 `fileNameList` 的下标，是数组类型且具有唯一性。之前错误绑定了 `filename`，是文件名称，不确定且是字符串类型。错误绑定了`filename.id`，报错 `undefined`。因为 `filename` 没有 `id`，和普通的 `items` 不一样，注意区别。
+```
+<el-checkbox-group class="file-switch" v-model="selectedFile" @change="handleSelectedFile">
+                <div class="upload-filename-item" v-for="(filename, index) in fileNameList">
+                  <div class="upload-filename">
+                    <i class="el-icon-document"></i>
+                    {{ filename }}
+                  </div>
+                  <el-checkbox :label="index"></el-checkbox>
+                </div>
+              </el-checkbox-group>
+```
+3）、另外 `:label="index"` 会自动显示下标值，在样式中隐藏即刻。
+```
+.upload-filename-item /deep/ .el-checkbox__label {
+  display: none;
+}
+```
+>4、存储选中文件内容
+
+1)、循环 `selectedFile`，得到选中的文件，以数组形式存在 临时的待搜索内容盒子里
+```
+let tempSearchBox = [];
+      for (let k in this.selectedFile) {
+        // 改成数组形式
+        tempSearchBox = [
+          ...tempSearchBox,
+          ...this.allFileData[this.selectedFile[k]]
+        ];
+      }
+```
+
+

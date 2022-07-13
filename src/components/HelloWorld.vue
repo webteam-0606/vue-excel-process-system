@@ -2,7 +2,14 @@
   <div>
     <el-container>
       <el-header>
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color="#E4E7ED" text-color="#black" @select="handleSelect">
+        <el-menu
+          :default-active="activeIndex"
+          class="el-menu-demo"
+          mode="horizontal"
+          background-color="#E4E7ED"
+          text-color="#black"
+          @select="handleSelect"
+        >
           <el-submenu index="1">
             <template slot="title">Menu</template>
             <el-menu-item index="1-1">选项1</el-menu-item>
@@ -22,7 +29,12 @@
           <div class="full-search-box">
             <div class="input-search-box">
               <el-input placeholder="请输入要搜索的内容" v-model="inputVal" clearable></el-input>
-              <el-button class="search-button" type="primary" icon="el-icon-search" @click="search()">Search</el-button>
+              <el-button
+                class="search-button"
+                type="primary"
+                icon="el-icon-search"
+                @click="search()"
+              >Search</el-button>
             </div>
             <div class="search-select">
               <el-radio-group v-model="selectRadio" @change="handleRadioSelectChange">
@@ -35,11 +47,20 @@
           <div class="full-upload-file-box">
             <div class="recent-file">
               Recent Flies
-              <el-checkbox class="file-check-all" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+              <el-checkbox
+                class="file-check-all"
+                :indeterminate="isIndeterminate"
+                v-model="checkAll"
+                @change="handleCheckAllChange"
+              >全选</el-checkbox>
             </div>
 
             <div class="upload-filename-list">
-              <el-checkbox-group class="file-switch" v-model="selectedFile" @change="handleSelectedFile">
+              <el-checkbox-group
+                class="file-switch"
+                v-model="selectedFile"
+                @change="handleSelectedFile"
+              >
                 <div class="upload-filename-item" v-for="(filename, index) in fileNameList">
                   <div class="upload-filename">
                     <i class="el-icon-document"></i>
@@ -50,56 +71,6 @@
               </el-checkbox-group>
             </div>
           </div>
-          <!-- <el-switch
-                  class="file-switch"
-                  v-model="selectedFile[index]"
-                  active-color="#13ce66"
-                  inactive-color="#e6e6e6"
-                  @change="handleSwitchFile"
-          ></el-switch>-->
-
-          <!--1 -----2 -->
-          <!-- <div class="full-upload-file-box">
-            <div class="recent-file">
-              Recent Flies
-              <el-checkbox
-                class="file-check-all"
-                :indeterminate="isIndeterminate"
-                v-model="checkAll"
-                @change="handleCheckAllChange"
-              >全选</el-checkbox>
-          </div>-->
-
-          <!-- <div class="upload-filename-list">
-              <div class="upload-filename-item" v-for="(filename,index) in fileNameList">
-                <div class="upload-filename">
-                  <i class="el-icon-document"></i>
-                  {{ filename }}
-                </div>
-
-                <el-checkbox-group
-                  class="file-switch"
-                  v-model="form.selectedFile"
-                  @change="handleSwitchFile"
-                >
-                  <el-checkbox :label="filename.id" :key="filename.id"></el-checkbox>
-                </el-checkbox-group>
-              </div>
-          </div>-->
-
-          <!-- <el-checkbox-group v-model="selectedFile" @change="handleCheckedCitiesChange">
-                  <el-checkbox v-for="filename in fileNameList" :label="filename" :key="filename">{{city}}</el-checkbox>
-          </el-checkbox-group>-->
-
-          <!-- <el-switch
-                  class="file-switch"
-                  v-model="selectedFile[index]"
-                  active-color="#13ce66"
-                  inactive-color="#e6e6e6"
-                  @change="handleSwitchFile"
-          ></el-switch>-->
-          <!-- </div> -->
-          <!--2 ----- -->
           <!--  excel表格上传  -->
           <div class="full-upload-files">
             <div class="upload-file">Upload Flies</div>
@@ -129,11 +100,9 @@
           <el-main>
             <div class="product-defect">Product Defect :</div>
             <!--  上传的excel表格预览  -->
-            <data-preview :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)">
-              <!-- <template v-if="fileNameList != null && fileNameList.length>0">
-
-              </template>-->
-            </data-preview>
+            <data-preview
+              :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+            ></data-preview>
             <!-- 分页实现 -->
             <div class="block">
               <span class="demonstration"></span>
@@ -157,10 +126,10 @@
 
 <script src="jQuery.js"></script>
 <script>
-import XLSX from 'xlsx'
-import dataPreview from './dataPreview.vue'
+import XLSX from "xlsx";
+import dataPreview from "./dataPreview.vue";
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   components: {
     dataPreview
   },
@@ -168,9 +137,9 @@ export default {
     return {
       fileNameList: [],
       // Header的menu
-      activeIndex: '1',
+      activeIndex: "1",
       //Aside的请输入搜索的内容
-      inputVal: '',
+      inputVal: "",
       //Recent file的全选按钮
       checkAll: false,
       isIndeterminate: false,
@@ -178,194 +147,185 @@ export default {
       listTable: [],
       //渲染时 数据
       showTable: [],
-
       //选择全文搜索/ID搜索
-      radio: '1',
-      //目前文件的选择按钮
+      radio: "1",
+      //目前选择按钮选中的文件
       selectedFile: [],
+      //上传的所有文件
+      allFileData: [],
       //分页
       currentPage: 1,
       pageSize: 10,
-      selectRadio: 0,
-      allFileData:[]
-    }
+      selectRadio: 0
+    };
   },
 
   //监听search框输入的搜索内容
   watch: {
     //监听：如果为空,显示所有数据
     inputVal(item1) {
-      if (item1 == '') {
-        this.listTable = this.showTable
+      if (item1 == "") {
+        this.listTable = this.showTable;
       }
     }
   },
   //页面渲染时,显示所有的数据
   mounted() {
-    this.showTable = this.listTable
+    this.showTable = this.listTable;
   },
   methods: {
     // aside 的全文搜索/ID搜索
     handleRadioSelectChange(val) {
-      console.log('radio变更', val)
+      console.log("radio变更", val);
     },
     //header的menu
     handleSelect(key, keyPath) {
-      console.log(key, keyPath)
+      console.log(key, keyPath);
     },
     // Recent File 的全选按钮
     handleCheckAllChange(val) {
-      console.log('handleCheckAllChange--val',val);
-      const all = this.fileNameList.map((item,index) => {
-        return index
-      })
-      this.selectedFile = val ? all : []
-      this.isIndeterminate = false
+      console.log("handleCheckAllChange--val", val);
+      const all = this.fileNameList.map((item, index) => {
+        return index;
+      });
+      this.selectedFile = val ? all : [];
+      this.isIndeterminate = false;
     },
     // Recent File 的文件单选按钮
     handleSelectedFile(val) {
-      // if (val.length >= 2) {
-      //   let arrays = val.splice(0, val.length - 1);
-      //   arrays.forEach((row) => {
-      //     this.$refs.fileNameList.toggleRowSelection(row);
-      //   });
-      // }
-      // this.selectedFile = val;
-      // const selectedFileArr = Object.entries(this.selectedFile);
-      // for (let i in this.selectedFile) {
-      //   selectedFileArr.push(this.selectedFile[i]); //属性值
-      // }
-      // console.log("selectedFile", typeof this.selectedFile);
-      // console.log("selectedFileArr", typeof selectedFileArr);
-      console.log('val', val)
-      let checkedCount = val.length
-      this.checkAll = checkedCount === this.selectedFile.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.fileNameList.length
-      console.log('this.isIndeterminate', this.isIndeterminate)
-      if(val.length===0){
-        this.isIndeterminate=false
-        this.checkAll=false
+      console.log("val", val);
+      let checkedCount = val.length;
+      this.checkAll = checkedCount === this.selectedFile.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.fileNameList.length;
+      console.log("this.isIndeterminate", this.isIndeterminate);
+      //若不选中，清空选择框
+      if (val.length === 0) {
+        this.isIndeterminate = false;
+        this.checkAll = false;
       }
-      
-      // this.selectedFile.length===0&&this.isIndeterminate=false
     },
 
     //解析excel
     async uploadFile(params) {
-      this.listTable=[]
-      const _file = params.file
-      this.fileNameList.push(_file.name)
-      console.log('_file', _file)
-      const fileReader = new FileReader()
+      this.listTable = [];
+      const _file = params.file;
+      this.fileNameList.push(_file.name);
+      console.log("_file", _file);
+      const fileReader = new FileReader();
       fileReader.onload = ev => {
         try {
-          const data = ev.target.result
-          console.log('ev.target', ev.target)
+          const data = ev.target.result;
+          console.log("ev.target", ev.target);
           const workbook = XLSX.read(data, {
-            type: 'binary'
-          })
+            type: "binary"
+          });
           for (let sheet in workbook.Sheets) {
             //循环读取每个文件
-            const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
+            const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
             //若当前sheet没有数据,则continue
             if (sheetArray.length == 0) {
-              continue
+              continue;
             }
-            console.log('读取文件')
-            console.log(sheetArray)
-            this.allFileData.push(sheetArray)
+            console.log("读取文件");
+            console.log(sheetArray);
+            this.allFileData.push(sheetArray);
             for (let item in sheetArray) {
-              let rowTable = {}
+              let rowTable = {};
               //这里的rowTable的属性名注意要与上面表格的prop一致
               //sheetArray的属性名与上传的表格的列名一致
-              rowTable.id = sheetArray[item].id
-              rowTable.Headline = sheetArray[item].Headline
-              this.listTable.push(rowTable)
+              rowTable.id = sheetArray[item].id;
+              rowTable.Headline = sheetArray[item].Headline;
+              this.listTable.push(rowTable);
             }
           }
         } catch (e) {
-          this.$message.warning('文件类型不正确！')
+          this.$message.warning("文件类型不正确！");
         }
-      }
-      fileReader.readAsBinaryString(_file)
+      };
+      fileReader.readAsBinaryString(_file);
     },
     //上传1个以上文件时弹窗提示错误
     exceed: function() {
-      this.$message.error('最多只能上传2个xls文件')
+      this.$message.error("最多只能上传2个xls文件");
     },
     //删除文件
     remove() {
-      this.listTable = []
+      this.listTable = [];
     },
     search() {
-      const Search_List = []
-      // const searchArr = [];
-      let res1 = this.inputVal
-      const res = res1.replace(/\s/gi, '')
-      console.log('res', res)
-      let tempSearchBox=[]
-      for(let k in this.selectedFile){
-        // tempSearchBox.push(this.allFileData[this.selectedFile[k]])
-        tempSearchBox=[...tempSearchBox,...this.allFileData[this.selectedFile[k]]]
+      // Search_List 存放搜索成功返回的数据
+      const Search_List = [];
+      let res1 = this.inputVal;
+      const res = res1.replace(/\s/gi, "");
+      console.log("res", res);
+      // 被选中文件形成的暂时的文件内容
+      let tempSearchBox = [];
+      for (let k in this.selectedFile) {
+        // 改成数组形式
+        tempSearchBox = [
+          ...tempSearchBox,
+          ...this.allFileData[this.selectedFile[k]]
+        ];
       }
-      let searchArr = tempSearchBox
-
-      // var obj = this.listTable; //列表内容
-      // if (this.isIndeterminate == "false") {
-      //   searchArr.push(this.listTable);
-      // } else {
-      //   let searchArr = this.showTable;
-      // }
-      // console.log("searchArr", searchArr);
+      // searchArr 待被搜索的文件内容
+      let searchArr = tempSearchBox;
 
       if (this.selectRadio == 1) {
         //search框输入的搜索内容--全文搜索
         searchArr.forEach(e => {
           //绑定的table prop
-          let id = e.id
-          let Headline = e.Headline
+          let id = e.id;
+          let Headline = e.Headline;
           if (id.toString().includes(res)) {
-            if (Search_List.indexOf(e) == '-1') {
-              Search_List.push(e)
+            if (Search_List.indexOf(e) == "-1") {
+              Search_List.push(e);
             }
           }
           if (Headline.toString().includes(res)) {
-            if (Search_List.indexOf(e) == '-1') {
-              Search_List.push(e)
+            if (Search_List.indexOf(e) == "-1") {
+              Search_List.push(e);
             }
           }
-        })
-        this.listTable = Search_List
+        });
+        //Search_List 搜索成功返回的内容，给listTable展示
+        this.listTable = Search_List;
       } else if (this.selectRadio == 2) {
         searchArr.forEach(e => {
           //绑定的table prop
-          let id = e.id
+          let id = e.id;
           if (id.toString().includes(res)) {
-            if (Search_List.indexOf(e) == '-1') {
-              Search_List.push(e)
+            if (Search_List.indexOf(e) == "-1") {
+              Search_List.push(e);
             }
           }
-        })
-        this.listTable = Search_List
-        console.log('搜索结果', this.listTable)
-        this.currentPage = 1
+        });
+        this.listTable = Search_List;
+        console.log("搜索结果", this.listTable);
+        this.currentPage = 1;
       } else {
-        console.log('this.selectRadio', this.selectRadio)
+        console.log("this.selectRadio", this.selectRadio);
       }
     },
 
     //实现表格分页
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
-      this.pageSize = val
+      console.log(`每页 ${val} 条`);
+      this.pageSize = val;
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
-      this.currentPage = val
-      console.log('当前页数据', this.listTable.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize))
+      console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      console.log(
+        "当前页数据",
+        this.listTable.slice(
+          (this.currentPage - 1) * this.pageSize,
+          this.currentPage * this.pageSize
+        )
+      );
     }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -402,12 +362,6 @@ a {
   padding: 0;
   height: 10px;
 }
-/* .el-submenu /deep/ .el-submenu__title {
-  background-color: #fff;
-}
-.el-header /deep/ .el-header[data-v-469af010] .li .el-submenu .el-submenu__title {
-  background-color: #fff !important;
-} */
 
 .el-aside {
   /* background-color: #d3dce6; */
@@ -462,8 +416,8 @@ a {
   text-align: right;
   padding-left: 58%;
 }
-.upload-filename-item /deep/ .el-checkbox__label{
-  display:none
+.upload-filename-item /deep/ .el-checkbox__label {
+  display: none;
 }
 .full-upload-file-box {
   width: 100%;
