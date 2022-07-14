@@ -468,11 +468,7 @@ a {
   color: #42b983;
 }
 
-.el-footer {
-  background-color: #b3c0d1;
-  text-align: center;
-  line-height: 40px;
-}
+
 
 .el-header {
   /* background-color: #b3c0d1; */
@@ -603,6 +599,7 @@ a {
   border: 1px solid rgb(202, 205, 210);
   margin-left: 5px;
   /* line-height: 160px; */
+  overflow: hidden;
 }
 .file-tabs-list {
   overflow: auto;
@@ -648,7 +645,12 @@ a {
 .el-main .el-pagination {
   padding: 5px 5px;
 }
-
+.el-footer {
+  background-color: #b3c0d1;
+  text-align: center;
+  line-height: 40px;
+  margin-left: 5px;
+}
 body > .el-container {
   margin-bottom: 40px;
 }
