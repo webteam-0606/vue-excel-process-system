@@ -130,7 +130,6 @@
   </div>
 </template>
 
-<script src="jQuery.js"></script>
 <script>
 import XLSX from 'xlsx'
 import dataPreview from './dataPreview.vue'
@@ -397,24 +396,6 @@ export default {
         }
       }
       console.log('fileNameListValue', this.fileNameListValue)
-      // console.log('filenamelist',this.fileNameList[tab.index]);
-      // console.log('tab.index',tab.index);
-      // console.log('tab',tab);
-      // if(this.fileNameList[tab.index]==targetName){}
-      // this.fileNameList = tab.name;
-      // console.log('targetName',targetName);//VueComponent
-      // console.log('value',value);
-      // console.log('this.allFileDataCopy',this.allFileDataCopy);//数据内容
-      // console.log('this.fileNameList',this.fileNameList);//上传的数据表名
-      // let curBox = [];
-      // for (let k in this.fileNameList[tab.index]) {
-      //   curBox = [
-      //     ...curBox,
-      //     ...this.allFileDataCopy[this.fileNameList[k]]
-      //     ];
-      //     console.log('curBox',curBox);
-      // }
-      // this.listTable = curFileBox;
     },
 
     //实现表格分页
@@ -580,9 +561,6 @@ a {
   display: flex;
   justify-content: space-between;
 }
-/* .full-upload-file-box .file-switch {
-  text-align: right;
-} */
 .upload-filename {
   width: 80%;
   overflow: hidden;
@@ -602,6 +580,16 @@ a {
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 5px 0 5px 5px;
+}
+/* 上传列表多出时，滑页 */
+.upload-demo /deep/ .el-upload-list {
+  height: 150px;
+  overflow: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.upload-demo /deep/ .el-upload-list__item {
+  overflow: hidden;
 }
 .upload-demo /deep/ .el-upload-dragger {
   width: auto;
