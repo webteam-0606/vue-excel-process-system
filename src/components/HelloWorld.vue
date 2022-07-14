@@ -76,9 +76,7 @@
             </div>
           </div>
           <!--  excel表格上传  -->
-          <ClickUpload :exceed="exceed" 
-                :remove="remove"
-                :uploadFile="uploadFile"></ClickUpload>
+          <ClickUpload :exceed="exceed" :remove="remove" :uploadFile="uploadFile"></ClickUpload>
         </el-aside>
         <el-container>
           <el-main>
@@ -135,7 +133,7 @@ export default {
   components: {
     dataPreview,
     ClickUpload
-},
+  },
   data() {
     return {
       fileNameList: [],
