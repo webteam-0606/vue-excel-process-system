@@ -74,13 +74,41 @@ npm test
 ```java
 :data="dataSet" 
 ```
-2)、子组件 `props`
+2)、子组件 `props`，以及不同类型的props
 ```java
 props: {
     dataSet:{
         type:Array,
         default:[]
     }
+
+  props: {
+    fieldString: {
+      type: String,
+      default: ''
+    },
+    fieldNumber: {
+      type: Number,
+      default: 0
+    },
+    fieldBoolean: {
+      type: Boolean,
+      default: true
+    },
+    fieldArray: {
+      type: Array,
+      default: () => []
+    },
+    fieldObject: {
+      type: Object,
+      default: () => ({})
+    },
+    fieldFunction: {
+      type: Function,
+      default: function () { }
+    }
+  }
+
 ```
 > 2、父组件拿到子组件
 

@@ -27,27 +27,14 @@
       <el-container>
         <el-aside width="20%">
           <!-- 搜索框 -->
-          <div class="full-search-box">
-            <div class="input-search-box">
-              <el-input placeholder="请输入要搜索的内容" v-model="inputVal" clearable></el-input>
-              <el-button
-                class="search-button"
-                type="primary"
-                icon="el-icon-search"
-                @click="search()"
-              >Search</el-button>
-            </div>
-            <div class="search-select">
-              <el-radio-group
-                v-model="selectRadio"
-                @change="handleRadioSelectChange"
-                class="search-select-group"
-              >
-                <el-radio label="1">Full Text</el-radio>
-                <el-radio label="2">By ID</el-radio>
-              </el-radio-group>
-            </div>
-          </div>
+          <SearchFileBox>
+            <el-input v-model="inputVal"  />
+             <el-button @click="search()" />
+            <el-radio-group
+        v-model="selectRadio" @change="handleRadioSelectChange" />
+
+          </SearchFileBox>
+
           <!-- 当前文件 -->
           <div class="full-upload-file-box">
             <div class="recent-file">
@@ -76,7 +63,7 @@
             </div>
           </div>
           <!--  excel表格上传  -->
-          <ClickUpload :exceed="exceed" :remove="remove" :uploadFile="uploadFile"></ClickUpload>
+          <ClickUpload :exceed="exceed" :remove="remove" :uploadFile="uploadFile" @click="search()" @change="handleRadioSelectChange"></ClickUpload>
         </el-aside>
         <el-container>
           <el-main>
@@ -128,11 +115,13 @@
 import XLSX from "xlsx";
 import dataPreview from "./dataPreview.vue";
 import ClickUpload from "./clickUpload.vue";
+import SearchFileBox from "./searchFileBox.vue";
 export default {
   name: "HelloWorld",
   components: {
     dataPreview,
-    ClickUpload
+    ClickUpload,
+    SearchFileBox
   },
   data() {
     return {
@@ -167,7 +156,7 @@ export default {
       //分页
       currentPage: 1,
       pageSize: 10,
-      selectRadio: 0,
+      
       keyList: [] //保存excel的列名
     };
   },
@@ -480,38 +469,10 @@ a {
   width: 20%;
   overflow: hidden;
 }
-.el-aside .full-search-box {
-  border: 1px solid #909399;
-  margin-top: 5px;
-}
-.el-aside .input-search-box .el-input {
-  width: 70%;
-  padding-top: 5px;
-}
-.el-aside .input-search-box .el-button {
-  font-size: 12px;
-}
-.input-search-box /deep/ .el-input__inner {
-  padding-right: 2px;
-}
-.full-search-box .input-search-box .search-button {
-  padding-left: 5px;
-  width: 25%;
-}
-.full-search-box .search-select {
-  text-align: left;
-  padding: 5px 5px 5px 5px;
-}
-.search-select-group {
-  display: flex;
-  justify-content: center;
-}
 .el-aside .UploadFileNameList {
   padding: 10px 0px 10px 0px;
 }
-.el-aside /deep/ .el-input--prefix .el-input__inner {
-  padding-left: 15px;
-}
+
 .full-upload-file-box {
   margin-top: 10px;
   font-size: 14px;
