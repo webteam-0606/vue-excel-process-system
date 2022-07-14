@@ -7,6 +7,7 @@
         :prop="key"
         :label="key"
         align="center"
+        :key="index"
       ></el-table-column>
     </el-table>
   </div>

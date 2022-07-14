@@ -3,14 +3,12 @@
   <div class="full-search-box">
     <div class="input-search-box">
       <el-input placeholder="请输入要搜索的内容" v-model="inputVal" clearable></el-input>
-      <el-button class="search-button" type="primary" icon="el-icon-search" @click="search()">Search</el-button>
+      <el-button class="search-button" type="primary" icon="el-icon-search" @click="handleSearchButtonClick">
+        Search
+      </el-button>
     </div>
     <div class="search-select">
-      <el-radio-group
-        v-model="selectRadio"
-        @change="handleRadioSelectChange"
-        class="search-select-group"
-      >
+      <el-radio-group v-model="selectRadio" @change="handleRadioSelectChange" class="search-select-group">
         <el-radio label="1">Full Text</el-radio>
         <el-radio label="2">By ID</el-radio>
       </el-radio-group>
@@ -20,35 +18,25 @@
 
 <script scoped>
 export default {
-  name: "searchFileBox",
+  name: 'searchFileBox',
   data() {
-    return {};
-  },
-  model:{
-    prop:'inputVal',
-    event:'change',
-    prop:'selectRadio',
-    event:'change',
-  },
-  props: {
-    inputVal: String,
-    selectRadio: Number,
-    search: {
-      type: Function,
-      default: function() {}
-    },
-    handleRadioSelectChange: {
-      type: Function,
-      default: function() {}
+    return {
+      selectRadio: 0,
+      inputVal: ''
     }
   },
   create() {},
   methods: {
-    handleRadioSelectChange(val) {
-      console.log("radio变更", val);
+    handleSearchButtonClick() {
+      console.log('inputVal',this.inputVal)
+      this.$emit('searchButtonClick', this.inputVal)
     },
+    handleRadioSelectChange(val) {
+      console.log('radio变更', val)
+      this.$emit('radioSelectChange', val)
+    }
   }
-};
+}
 </script>
 
 <style scoped>

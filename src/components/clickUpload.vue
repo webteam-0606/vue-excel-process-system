@@ -4,6 +4,7 @@
     <div class="upload-file">Upload Flies</div>
     <div>
       <el-upload
+        id='input-file'
         class="upload-demo"
         drag
         action="https://jsonplaceholder.typicode.com/posts/"
@@ -13,6 +14,7 @@
         :limit="2"
         :on-remove="remove"
         :http-request="uploadFile"
+        :on-change="handleChange"
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">
@@ -33,7 +35,7 @@ export default {
     return {};
   },
   props: {
-    exceedMsg: {
+    exceed: {
       type: Function,
       default: function() {}
     },
@@ -47,7 +49,24 @@ export default {
     }
   },
   create() {},
-  methods: {}
+  methods: {
+    // 选择文件
+		handleChange(file, fileLists) {
+			console.log(file);
+			console.log(fileLists);
+			// 本地服务器路径
+			console.log(URL.createObjectURL(file.raw));
+			// 本地电脑路径
+			console.log(document.getElementsByClassName("el-upload__input")[0].value); 
+      var oFReader = new FileReader();
+			// var file = document.getElementById('input-file').files[0];
+			oFReader.readAsDataURL(file);
+			oFReader.onloadend = function(oFRevent){
+				var src = oFRevent.target.result;
+        console.log('src',src);
+		    }
+		},
+  }
 };
 </script>
 
