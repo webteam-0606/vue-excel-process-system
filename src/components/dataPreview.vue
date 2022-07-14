@@ -36,4 +36,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.preview-excel /deep/ .el-table__body {
+  width: 100%;
+}
+</style>

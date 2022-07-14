@@ -31,6 +31,27 @@ npm test
 > 2、自动读入不同 `title` 的文件 
 
 1）、搜索不到多余列里的中文字符
+2）、需要显示的列
++ Id
++ Products
++ Headline
++ SubmitDescription
++ VersionFoundIn        
++ Score
++ Probability_Score
++ Impact_Score
++ Hazard
++ InstallBase
++ CRB_MinutesActions
++ ReferenceID
++ Subsystem
++ RationaleForChange
++ ResolutionDescription
++ VersionsFixedIn                                        
++ CFR_ID
++ AssociatedDefects
++ Status
++ Workaround
 
 > 3、文件读取查找速度
 
@@ -42,7 +63,9 @@ npm test
 
 > 7、数据显示问题（列宽 行高）
 
-> 
+> 8、左侧文件框处，需要显示文件地址；解决文件名过长，重新命名为`solution` 和 `no solution`；
+
+>9、得显示关键的20列。
 
 ## 笔记
 > 1、子组件封装

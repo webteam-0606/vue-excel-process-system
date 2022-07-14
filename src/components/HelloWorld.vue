@@ -76,29 +76,9 @@
             </div>
           </div>
           <!--  excel表格上传  -->
-          <div class="full-upload-files">
-            <div class="upload-file">Upload Flies</div>
-            <div>
-              <el-upload
-                class="upload-demo"
-                drag
-                action="https://jsonplaceholder.typicode.com/posts/"
-                multiple
-                accept=".xlsx"
-                :on-exceed="exceed"
-                :limit="50"
-                :on-remove="remove"
-                :http-request="uploadFile"
-              >
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">
-                  将文件拖到此处,或
-                  <em>点击上传</em>
-                </div>
-                <div class="el-upload__tip" slot="tip">1次可上传多个xls文件,最多上传50个</div>
-              </el-upload>
-            </div>
-          </div>
+          <ClickUpload :exceed="exceed" 
+                :remove="remove"
+                :uploadFile="uploadFile"></ClickUpload>
         </el-aside>
         <el-container>
           <el-main>
@@ -149,11 +129,13 @@
 <script>
 import XLSX from "xlsx";
 import dataPreview from "./dataPreview.vue";
+import ClickUpload from "./clickUpload.vue";
 export default {
   name: "HelloWorld",
   components: {
-    dataPreview
-  },
+    dataPreview,
+    ClickUpload
+},
   data() {
     return {
       fileNameList: [],
@@ -532,9 +514,10 @@ a {
 .el-aside /deep/ .el-input--prefix .el-input__inner {
   padding-left: 15px;
 }
-.full-upload-file-box .full-upload-file-box {
+.full-upload-file-box {
   margin-top: 10px;
   font-size: 14px;
+  width: 100%;
 }
 .full-upload-file-box .recent-file {
   position: relative;
@@ -554,9 +537,7 @@ a {
 .upload-filename-item /deep/ .el-checkbox__label {
   display: none;
 }
-.full-upload-file-box {
-  width: 100%;
-}
+
 .upload-filename-list {
   height: 400px;
   overflow: auto;
@@ -577,33 +558,6 @@ a {
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
-}
-.full-upload-files {
-  margin-top: 20px;
-}
-.full-upload-files .upload-file {
-  width: 98%;
-  text-align-last: left;
-  border: 1px solid rgb(202, 205, 210);
-  background-color: #e9eef3;
-  font-size: 14px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 5px 0 5px 5px;
-}
-/* 上传列表多出时，滑页 */
-.upload-demo /deep/ .el-upload-list {
-  height: 150px;
-  overflow: auto;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.upload-demo /deep/ .el-upload-list__item {
-  overflow: hidden;
-}
-.upload-demo /deep/ .el-upload-dragger {
-  width: auto;
-  height: auto;
 }
 
 .el-main {
@@ -653,9 +607,7 @@ a {
   width: 99.7%;
   border: 1px solid rgb(202, 205, 210);
 }
-.preview-excel /deep/ .el-table__body {
-  width: 100%;
-}
+
 .el-main .el-pagination {
   padding: 5px 5px;
 }
