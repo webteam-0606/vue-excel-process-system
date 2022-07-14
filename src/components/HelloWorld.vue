@@ -84,7 +84,7 @@
                   将文件拖到此处,或
                   <em>点击上传</em>
                 </div>
-                <div class="el-upload__tip" slot="tip">1次只能上传1个xls文件,最多上传50个</div>
+                <div class="el-upload__tip" slot="tip">1次可上传多个xls文件,最多上传50个</div>
               </el-upload>
             </div>
           </div>
