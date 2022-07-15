@@ -11,7 +11,7 @@
         multiple
         accept=".xlsx"
         :on-exceed="exceed"
-        :limit="2"
+        :limit="50"
         
         :http-request="uploadFile"
         :on-change="handleChange"
