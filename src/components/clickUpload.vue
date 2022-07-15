@@ -12,7 +12,7 @@
         accept=".xlsx"
         :on-exceed="exceed"
         :limit="2"
-        :on-remove="remove"
+        
         :http-request="uploadFile"
         :on-change="handleChange"
       >
@@ -60,7 +60,7 @@ export default {
 			console.log(document.getElementsByClassName("el-upload__input")[0].value); 
       var oFReader = new FileReader();
 			// var file = document.getElementById('input-file').files[0];
-			oFReader.readAsDataURL(file);
+			// oFReader.readAsDataURL(file);
 			oFReader.onloadend = function(oFRevent){
 				var src = oFRevent.target.result;
         console.log('src',src);

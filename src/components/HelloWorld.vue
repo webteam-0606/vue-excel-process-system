@@ -60,7 +60,7 @@
           <!--  excel表格上传  -->
           <ClickUpload
             :exceed="exceed"
-            :remove="remove"
+            
             :uploadFile="uploadFile"
             @click="search()"
             @change="handleRadioSelectChange"
@@ -250,7 +250,7 @@ export default {
             this.allFileData.push(sheetArray)
             console.log('sheetArray', sheetArray)
             for (let item in sheetArray) {
-              console.log('item', item)
+              // console.log('item', item)
               let rowTable = {}
               //这里的rowTable的属性名注意要与上面表格的prop一致
               //sheetArray的属性名与上传的表格的列名一致
@@ -284,9 +284,9 @@ export default {
       this.$message.error('最多只能上传50个xls文件')
     },
     //删除文件
-    remove() {
-      this.listTable = []
-    },
+    // remove() {
+    //   this.listTable = []
+    // },
     search() {
       // Search_List 存放搜索成功返回的数据
       const Search_List = []
