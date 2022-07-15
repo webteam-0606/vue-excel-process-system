@@ -87,16 +87,21 @@ export default {
 
 /* 上传列表多出时，滑页 */
 .upload-demo /deep/ .el-upload-list {
-  height: 150px;
+  height: 60px;
   overflow: auto;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .upload-demo /deep/ .el-upload-list__item {
   overflow: hidden;
+  font-size: 8px;
+  margin: 1px 0px 0px 0px;
 }
 .upload-demo /deep/ .el-upload-dragger {
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 1%;
+}
+.upload-demo .el-icon-upload {
+  line-height: 0px;
 }
 </style>

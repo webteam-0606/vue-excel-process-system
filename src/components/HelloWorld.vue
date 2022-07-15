@@ -32,10 +32,13 @@
             @radioSelectChange="handleRadioSelectChange"
           ></SearchFileBox>
 
-          <!-- 当前文件 -->
+          <!-- 树形结构 -->
+          <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+
+          <!-- 当前文件 Refresh -->
           <div class="full-upload-file-box">
             <div class="recent-file">
-              Recent Flies
+              Refresh
               <el-checkbox
                 class="file-check-all"
                 :indeterminate="isIndeterminate"
@@ -59,6 +62,35 @@
               </el-checkbox-group>
             </div>
           </div>
+
+          <!-- 当前文件 Brilliance Air -->
+          <div class="full-upload-file-box">
+            <div class="recent-file">
+              Brilliance Air
+              <el-checkbox
+                class="file-check-all"
+                :indeterminate="isIndeterminate"
+                v-model="checkAll"
+                @change="handleCheckAllChange"
+              >全选</el-checkbox>
+            </div>
+            <div class="upload-filename-list">
+              <el-checkbox-group
+                class="file-switch"
+                v-model="selectedFile"
+                @change="handleSelectedFile"
+              >
+                <div class="upload-filename-item" v-for="(filename, index) in fileNameList">
+                  <div class="upload-filename" @click="handleClickFileName(index)">
+                    <i class="el-icon-document"></i>
+                    {{ filename }}
+                  </div>
+                  <el-checkbox :label="index"></el-checkbox>
+                </div>
+              </el-checkbox-group>
+            </div>
+          </div>
+
           <!--  excel表格上传  -->
           <ClickUpload
             :exceed="exceed"
@@ -130,6 +162,23 @@ export default {
   },
   data() {
     return {
+      //树形结构
+      data: [
+        {
+          label: "Refresh 1",
+          children: [
+            {
+              label: "二级 1-1",
+              label: "二级 1-2"
+            }
+          ]
+        }
+      ],
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
+
       fileNameList: [],
       // Header的menu
       activeIndex: "1",
@@ -161,7 +210,6 @@ export default {
       //分页
       currentPage: 1,
       pageSize: 10,
-
       keyList: [] //保存excel的列名
     };
   },
@@ -180,6 +228,10 @@ export default {
     this.showTable = this.listTable;
   },
   methods: {
+    //树形结构
+    handleNodeClick(data) {
+      console.log(data);
+    },
     handleSearchButtonClick(inputVal) {
       console.log("接收到子组件searchValue的变更", inputVal);
       this.inputVal = inputVal;
@@ -313,11 +365,48 @@ export default {
         ];
         // console.log('this.selectedFile[k]',this.selectedFile[k],k);
       }
+
       // searchArr 待被搜索的文件内容
       let searchArr = tempSearchBox;
-
       if (this.selectRadio == 1) {
         //search框输入的搜索内容--全文搜索
+
+        //------修改开始
+
+        // 我的想法是新创建一个临时的temKeyList，从searchArr获得数据的title行，存为数组。然后遍历，把title给e，但是为啥显示不行，总是说undefine啥的。也尝试使用过keyList。
+        // let temKeyList = [];
+        // for (let item in searchArr[0]) {
+        //   temKeyList.push(item);
+        // }
+        // searchArr.forEach(e => {
+        //   for (var i = 0; i < temKeyList.length; i++) {
+        //     let temp = e.temKeyList[i];
+        //     if (temp.includes(res)) {
+        //       if (Search_List.indexOf(e) == "-1") {
+        //         Search_List.push(e);
+        //       }
+        //     }
+        //   }
+        // });
+
+        // this.keyList = [];
+        // for (let item in searchArr[0]) {
+        //   this.keyList.push(item);
+        // }
+        // searchArr.forEach(e => {
+        //   for (var i = 0; i < this.keyList.length; i++) {
+        //     let temp = e.this.keyList[i];
+        //     if (temp.includes(res)) {
+        //       if (Search_List.indexOf(e) == "-1") {
+        //         Search_List.push(e);
+        //       }
+        //     }
+        //   }
+        // });
+        //------修改结束
+
+        //search框输入的搜索内容--全文搜索
+        // ------原始代码开始----
         searchArr.forEach(e => {
           //绑定的table prop
           let id = e.id;
@@ -333,12 +422,19 @@ export default {
             }
           }
         });
+        // ----原始代码结束----
+
         //Search_List 搜索成功返回的内容，给listTable展示
         this.listTable = Search_List;
       } else if (this.selectRadio == 2) {
         searchArr.forEach(e => {
           //绑定的table prop
           let id = e.id;
+          console.log("id", id);
+          console.log("typeof(id)", typeof id);
+
+          // console.log("6--id--id", id);
+          // console.log("7--id--e.id", e.id);
           if (id.toString().includes(res)) {
             if (Search_List.indexOf(e) == "-1") {
               Search_List.push(e);
@@ -392,8 +488,8 @@ export default {
       console.log("fileNameListValue", this.fileNameListValue);
     },
     //实现 Main 按钮
-    handleMainButton(val){
-      console.log('handleMainButton--val',val);
+    handleMainButton(val) {
+      console.log("handleMainButton--val", val);
     },
 
     //实现表格分页
@@ -514,7 +610,7 @@ a {
 }
 
 .upload-filename-list {
-  height: 400px;
+  height: 200px;
   overflow: auto;
 }
 .full-upload-file-box .upload-filename-item {
@@ -582,7 +678,7 @@ a {
   padding: 5px 5px 5px 5px;
 }
 .product-defect .product-main .el-button--primary {
-  padding: 5px 10px 5px 10px;  
+  padding: 5px 10px 5px 10px;
 }
 .el-main /deep/ .el-table__body-wrapper {
   width: 99.7%;
