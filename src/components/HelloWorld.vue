@@ -357,7 +357,7 @@ export default {
       if (val.length === 0) {
         this.isRefreshIndeterminate = false;
         this.checkRefreshAll = false;
-        this.selectedRefreshFile = []
+        this.selectedRefreshFile = [];
       }
     },
 
@@ -393,7 +393,7 @@ export default {
       if (val.length === 0) {
         this.isBrillianceIndeterminate = false;
         this.checkBrillianceAll = false;
-        this.selectedBrillianceFile=[];
+        this.selectedBrillianceFile = [];
       }
     },
 
@@ -619,6 +619,33 @@ export default {
     //实现 Main 按钮
     handleMainButton(val) {
       console.log("handleMainButton--val", val);
+      var mainKeyList = [];
+      mainKeyList = [
+        "id",
+        "Products",
+        "Headline",
+        "SubmitDescription",
+        "VersionFoundIn",
+        "Score",
+        "Probability_Score",
+        "Impact_Score",
+        "Hazard",
+        "InstallBase",
+        "CRB_MinutesActions",
+        "ReferenceID",
+        "Subsystem",
+        "RationaleForChange",
+        "ResolutionDescription",
+        "VersionsFixedIn",
+        "CFR_ID",
+        "AssociatedDefects",
+        "Status",
+        "Workaround"
+      ];
+      this.keyList = [];
+      for (let k in mainKeyList) {
+        this.keyList.push(mainKeyList[k]);
+      }
     },
 
     //实现表格分页
