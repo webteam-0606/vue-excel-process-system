@@ -1,5 +1,6 @@
 <template>
   <!--  上传的excel表格预览  -->
+  <!-- :fit="true" 表格内容换行 -->
   <div class="preview-excel">
     <el-table class="listTable_ele" :data="dataSet" stripe height="500px" style="width:100%">
       <el-table-column
@@ -38,6 +39,7 @@ export default {
     console.log('dataSet', this.dataSet)
   },
   methods: {
+    //设置列宽方法
     headSpanFit(h, { column, index }) {
       let labelLong = column.label.length // 表头label长度
       let size = 14 // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
