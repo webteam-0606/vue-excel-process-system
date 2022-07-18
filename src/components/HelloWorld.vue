@@ -31,7 +31,9 @@
             @searchButtonClick="handleSearchButtonClick"
             @radioSelectChange="handleRadioSelectChange"
           ></SearchFileBox>
-
+          <!-- 当前上传文件列表 -->
+          <!-- <recentFiles @Change="handleChange" @RefreshCheckAllChange="handleRefreshCheckAllChange" @SelectedRefreshFile="handleSelectedRefreshFile" @ClickFileName="handleClickFileName(index)"></recentFiles> -->
+          <!-- 当前上传文件列表 -->
           <div class="full-upload-file-box">
             <el-collapse v-model="activeNames" @change="handleChange">
               <!-- 当前文件 Refresh -->
@@ -171,12 +173,14 @@ import XLSX from "xlsx";
 import dataPreview from "./dataPreview.vue";
 import ClickUpload from "./clickUpload.vue";
 import SearchFileBox from "./searchFileBox.vue";
+import recentFiles from "./recentFiles.vue"
 export default {
   name: "HelloWorld",
   components: {
     dataPreview,
     ClickUpload,
-    SearchFileBox
+    SearchFileBox,
+    recentFiles
   },
   data() {
     return {
@@ -196,7 +200,7 @@ export default {
         children: "children",
         label: "label"
       },
-      activeNames: ["1"],
+      
       fileNameList: [],
       refreshFileNameList: [],
       brillianceFileNameList: [],
@@ -204,9 +208,9 @@ export default {
       activeIndex: "1",
       //Aside的请输入搜索的内容
       inputVal: "",
+      activeNames: ["1"],
       //Recent file的全选按钮
       checkRefreshAll: false,
-      // checkAll: false,
       checkBrillianceAll: false,
       isRefreshIndeterminate: false,
       isBrillianceIndeterminate: false,
@@ -415,7 +419,7 @@ export default {
     async uploadFile(params) {
       console.log("上传文件触发");
       this.listTable = [];
-      const _file = params.file;      
+      const _file = params.file;
       // if (_file.name.toLowerCase().includes("refresh") && !refreshFileNameList.includes(_file.name)) {
       //     this.refreshFileNameList.push(_file.name);
       //     this.fileNameList.push(_file.name);
@@ -423,19 +427,19 @@ export default {
       //     this.brillianceFileNameList.push(_file.name);
       //     this.fileNameList.push(_file.name);
       //   }
-         if (_file.name.toLowerCase().includes("refresh")) {
-          this.refreshFileNameList.push(_file.name);
-          this.fileNameList.push(_file.name);
-        } else if (_file.name.toLowerCase().includes("brilliance")) {
-          this.brillianceFileNameList.push(_file.name);
-          this.fileNameList.push(_file.name);
-        }
+      if (_file.name.toLowerCase().includes("refresh")) {
+        this.refreshFileNameList.push(_file.name);
+        this.fileNameList.push(_file.name);
+      } else if (_file.name.toLowerCase().includes("brilliance")) {
+        this.brillianceFileNameList.push(_file.name);
+        this.fileNameList.push(_file.name);
+      }
       //   if (
       //   refreshFileNameList.includes(_file.name) ||
       //   brillianceFileNameList.includes(_file.name)
       // ) {
       //   alert("文件名重复！请重新上传");
-      // } 
+      // }
       const fileReader = new FileReader();
       fileReader.onload = ev => {
         try {

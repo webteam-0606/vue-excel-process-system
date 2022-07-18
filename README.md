@@ -129,11 +129,12 @@ handleMainButton(val) {
 ## 笔记
 > 1、子组件封装
 
-1)、`el-table` 的表格需要 `data`，动态绑定了 `dataSet`
+1)、子组件中
++ `el-table` 的表格需要 `data`，动态绑定了 `dataSet`
 ```java
 :data="dataSet" 
 ```
-2)、子组件 `props`，以及不同类型的props
++ 子组件 `props`，以及不同类型的props
 ```java
 props: {
     dataSet:{
@@ -169,23 +170,145 @@ props: {
   }
 
 ```
-> 2、父组件拿到子组件
+2)、父组件拿到子组件
 
-1)、给占位符，写法是
++ 给占位符，写法是
 ```java
 <data-preview :dataSet="listTable"></data-preview>
 ```
 
-2)、引入
++ 引入
 ```java
 import dataPreview from "./dataPreview.vue";
 ```
-3)、加入子组件名字
++ 加入子组件名字
 ```java
 components: {
     dataPreview,
   },
 ```
+------
+>2、封装实例
+------
+1）、`dataPreview` 的封装
++ 子组件 `dataPreview`中：设置列宽方法写在子组件即可。
++ 判断哪些参数需要传给父组件，此示例需要传递`:dataSet` 与 `:keyList`。
++ ① `dataSet` 展示时，不断变化。分页应该动态绑定，加在子组件的引入这里。
++ ② `keyList` 是展示内容的 `title`，展示哪些内容，会动态变化，也得动态绑定。
+```java
+<template> //子组件`dataPreview`中：
+  <div class="preview-excel">
+    <el-table :data="dataSet">
+      <el-table-column
+        v-for="(key, index) in keyList"
+        :prop="key"
+        :label="key"
+        align="center"
+        :key="index"
+        :fit="true"
+        :render-header="headSpanFit"
+      ></el-table-column>
+    </el-table>
+  </div>
+</template>
+```
++ 子组件利用 `props` 与 `v-on` 和  `$.emit`向父组件传参。`v-on:click` 等价于 `@click`。
++ 父组件 `HelloWord` 中： `:dataSet` 与 `:keyList` 需要子传父，所以利用 `props`，给类型+默认值。
+```java
+<script> //子组件`dataPreview`中：
+export default {
+  name: 'dataPreview',
+  data() {
+    return {
+      longWidthKey: ['HistoryDetails'] //没用上
+    }
+  },
+  props: {
+    dataSet: {
+      type: Array,
+      default: []
+    },
+    keyList: {
+      type: Array,
+      default: []
+    }
+  },
+  create() {console.log('dataSet', this.dataSet)},
+  methods: {//设置列宽方法
+    headSpanFit(h, { column, index }) { 、、、},
+  }
+}
+</script>
+```
+-----
++ 父组件中：给占位符，引入，注册组件。
+```java
+<data-preview 
+              :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+              :keyList="keyList"
+            ></data-preview>
+```
+
+2）、`searchFileBox` 的封装
++ 子组件 `searchFileBox`中： 先判断哪些参数需要传给父组件。
++ ① 按照顺序，先看 `v-model`。其中，`inputVal` 的值是输入得到的一个 `String`， `selectRadio`的值是选择按钮得到的一个 `Number`。得到的简单的数值，都需要在 `data()` 里 `return` 给父组件。
++ ② 在看 `v-on:` 也就是 `@` 事件。 `@click="handleSearchButtonClick"` 是处理 `search` 按钮的点击函数，`@change="handleRadioSelectChange"` 是处理选择的小 `radios` 按钮的选中函数。 在子组件类定义函数内容，把得到的值通过 `&emit` 方式传父组件。
+```java
+<template>
+  <!-- 搜索框 -->
+  <div>
+    <div>
+      <el-input v-model="inputVal"></el-input>
+      <el-button @click="handleSearchButtonClick">
+        Search
+      </el-button>
+    </div>
+    <div>
+      <el-radio-group v-model="selectRadio" @change="handleRadioSelectChange">
+        <el-radio label="1">Full Text</el-radio>
+        <el-radio label="2">By ID</el-radio>
+      </el-radio-group>
+    </div>
+  </div>
+</template>
+```
++ 子组件利用 `props` 与 `v-on` 和  `$.emit`向父组件传参。`v-on:click` 等价于 `@click`。
++ 父组件 `HelloWord` 中： `:dataSet` 与 `:keyList` 需要子传父，所以利用 `props`，给类型+默认值。
+```java
+<script scoped>
+export default {
+  name: 'searchFileBox',
+  data() {
+    return {
+      selectRadio: 0,
+      inputVal: ''
+    }
+  },
+  create() {},
+  methods: {
+    handleSearchButtonClick() {
+      console.log('inputVal',this.inputVal)
+      this.$emit('searchButtonClick', this.inputVal)
+    },
+    handleRadioSelectChange(val) {
+      console.log('radio变更', val)
+      this.$emit('radioSelectChange', val)
+    }
+  }
+}
+</script>
+```
+-----
++ 父组件中：给占位符，引入，注册组件。
+```java
+<SearchFileBox
+            @searchButtonClick="handleSearchButtonClick"
+            @radioSelectChange="handleRadioSelectChange"
+          ></SearchFileBox>
+```
+
+
+
 
 >3、改 `element-ui` 组件样式
 
