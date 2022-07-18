@@ -415,14 +415,27 @@ export default {
     async uploadFile(params) {
       console.log("上传文件触发");
       this.listTable = [];
-      const _file = params.file;
-      if (_file.name.toLowerCase().includes("refresh")) {
-        this.refreshFileNameList.push(_file.name);
-        this.fileNameList.push(_file.name);
-      } else if (_file.name.toLowerCase().includes("brilliance")) {
-        this.brillianceFileNameList.push(_file.name);
-        this.fileNameList.push(_file.name);
-      }
+      const _file = params.file;      
+      // if (_file.name.toLowerCase().includes("refresh") && !refreshFileNameList.includes(_file.name)) {
+      //     this.refreshFileNameList.push(_file.name);
+      //     this.fileNameList.push(_file.name);
+      //   } else if (_file.name.toLowerCase().includes("brilliance") && !brillianceFileNameList.includes(_file.name)) {
+      //     this.brillianceFileNameList.push(_file.name);
+      //     this.fileNameList.push(_file.name);
+      //   }
+         if (_file.name.toLowerCase().includes("refresh")) {
+          this.refreshFileNameList.push(_file.name);
+          this.fileNameList.push(_file.name);
+        } else if (_file.name.toLowerCase().includes("brilliance")) {
+          this.brillianceFileNameList.push(_file.name);
+          this.fileNameList.push(_file.name);
+        }
+      //   if (
+      //   refreshFileNameList.includes(_file.name) ||
+      //   brillianceFileNameList.includes(_file.name)
+      // ) {
+      //   alert("文件名重复！请重新上传");
+      // } 
       const fileReader = new FileReader();
       fileReader.onload = ev => {
         try {

@@ -26,12 +26,58 @@ npm run e2e
 npm test
 ```
 ## 需解决
+> 1、文件名重复问题 
++ 判断一下文件名列表里是否已经存在，若存在，则报错，为啥不行。
+
+> 2、折叠版左侧的文件名点击，右侧的目录不能同步
+
+> 3、文件读取查找速度
+
+> 4、浏览器自适应问题
+
+> 5、数据缓存问题
+
+## 已完成
 > 1、按ID/全文搜索 √
 
 > 2、自动读入不同 `title` 的文件 √
 
-1）、搜索不到多余列里的中文字符
-2）、需要显示的列
+1）、搜索不到多余列里的字符 √
+```java
+//方法一
+
+if (this.selectRadio == 1) {
+        //search框输入的搜索内容--全文搜索
+        // 我的想法是新创建一个临时的temKeyList,或者直接使用keyList，从searchArr获得数据的title行，存为数组。然后遍历，把title给e，但是为啥显示不行，总是说undefine啥的。也尝试使用过keyList。
+        //这个方法也是对的 就是e[this.keyList[i]]才是键值对的值，不能用e.this.keyList[i]，这个是直接去e里边找键为this.keyList[i]，就算重新赋值也不行
+        this.keyList = [];
+        for (let item in searchArr[0]) {
+          this.keyList.push(item);
+        }
+        searchArr.forEach(e => {
+          for (var i = 0; i < this.keyList.length; i++) {
+            let temp = e[this.keyList[i]];
+            if (temp.toString().includes(res)) {
+              if (Search_List.indexOf(e) == "-1") {
+                Search_List.push(e);
+              }
+            }
+          }
+        });
+}
+
+//方法二
+//这个方法更加简单 obj[key]是遍历对象的值，obj是键
+          for(let key in obj){
+            console.log('obj[key]-----',obj[key]);
+            console.log('res-----',res);
+            if(obj[key].toString().includes(res)){
+              Search_List.push(obj);
+              break;
+            }
+          }
+```
+2）、需要显示的列 √
 + Id
 + Products
 + Headline
@@ -52,26 +98,33 @@ npm test
 + AssociatedDefects
 + Status
 + Workaround
+```java
+handleMainButton(val) {
+      console.log("handleMainButton--val", val);
+      var mainKeyList = [];
+      mainKeyList = [
+        "id",
+        "Products",
+        ...//省略
+        "Workaround"
+      ];
+      this.keyList = [];
+      for (let k in mainKeyList) {
+        this.keyList.push(mainKeyList[k]);
+      }
+    },
+```
 
-> 3、文件读取查找速度
-
-> 4、文件名重复问题
-
-> 5、浏览器自适应问题
-
-> 6、数据缓存问题
-
-> 7、数据显示问题（列宽 行高）
+> 3、数据显示问题（列宽 行高）
 + 目前按照title的宽度，设置的列宽，有些不准确
 + 文字内容目前居中平，可以设置成左上对齐
 
-> 8、左侧文件框处，需要显示文件地址；解决文件名过长，重新命名为`solution` 和 `no solution`；
+> 4、左侧文件框处，需要显示文件地址；解决文件名过长，重新命名为`solution` 和 `no solution`；
 
-> 9、得显示关键的20列。
+> 5、得显示关键的20列。 √
++ 正常搜索是全文搜索，争对所有title的搜索，如果按了main按钮只展示20列的数据。文件上传时的title 装在数组 `KeyList`里，然后展示对应列。
 
-> 10、正常搜索是全文搜索，争对所有title的搜索，如果按了main按钮只展示20列的数据。文件上传时的title 装在数组 `KeyList`里，然后展示对应列。
 
-> 11、折叠版左侧的文件名点击，右侧的目录不能同步
 
 ## 笔记
 > 1、子组件封装
