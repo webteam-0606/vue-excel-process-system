@@ -40,18 +40,21 @@
                   Refresh
                   <el-checkbox
                     class="file-check-all"
-                    :indeterminate="isIndeterminate"
-                    v-model="checkAll"
-                    @change="handleCheckAllChange"
+                    :indeterminate="isRefreshIndeterminate"
+                    v-model="checkRefreshAll"
+                    @change="handleRefreshCheckAllChange"
                   >全选</el-checkbox>
                 </template>
                 <div class="upload-filename-list">
                   <el-checkbox-group
                     class="file-switch"
-                    v-model="selectedFile"
-                    @change="handleSelectedFile"
+                    v-model="selectedRefreshFile"
+                    @change="handleSelectedRefreshFile"
                   >
-                    <div class="upload-filename-item" v-for="(filename, index) in fileNameList">
+                    <div
+                      class="upload-filename-item"
+                      v-for="(filename, index) in refreshFileNameList"
+                    >
                       <el-tooltip class="item" effect="light" :content="filename">
                         <div
                           class="upload-filename"
@@ -67,37 +70,44 @@
                   </el-checkbox-group>
                 </div>
               </el-collapse-item>
-              
+              <!-- 当前文件 Brilliance Air -->
+              <el-collapse-item name="2" class="refresh-file">
+                <template slot="title">
+                  Brilliance Air
+                  <el-checkbox
+                    class="file-check-all"
+                    :indeterminate="isBrillianceIndeterminate"
+                    v-model="checkBrillianceAll"
+                    @change="handleBrillianceCheckAllChange"
+                  >全选</el-checkbox>
+                </template>
+                <div class="upload-filename-list">
+                  <el-checkbox-group
+                    class="file-switch"
+                    v-model="selectedBrillianceFile"
+                    @change="handleSelectedBrillianceFile"
+                  >
+                    <div
+                      class="upload-filename-item"
+                      v-for="(filename, index) in brillianceFileNameList"
+                    >
+                      <el-tooltip class="item" effect="light" :content="filename">
+                        <div
+                          class="upload-filename"
+                          :alt="filename"
+                          @click="handleClickFileName(index)"
+                        >
+                          <i class="el-icon-document"></i>
+                          {{ filename }}
+                        </div>
+                      </el-tooltip>
+                      <el-checkbox :label="index"></el-checkbox>
+                    </div>
+                  </el-checkbox-group>
+                </div>
+              </el-collapse-item>
             </el-collapse>
           </div>
-
-          <!-- 当前文件 Brilliance Air
-          <div class="full-upload-file-box">
-            <div class="recent-file">
-              Brilliance Air
-              <el-checkbox
-                class="file-check-all"
-                :indeterminate="isIndeterminate"
-                v-model="checkAll"
-                @change="handleCheckAllChange"
-              >全选</el-checkbox>
-            </div>
-            <div class="upload-filename-list">
-              <el-checkbox-group
-                class="file-switch"
-                v-model="selectedFile"
-                @change="handleSelectedFile"
-              >
-                <div class="upload-filename-item" v-for="(filename, index) in fileNameList">
-                  <div class="upload-filename" @click="handleClickFileName(index)">
-                    <i class="el-icon-document"></i>
-                    {{ filename }}
-                  </div>
-                  <el-checkbox :label="index"></el-checkbox>
-                </div>
-              </el-checkbox-group>
-            </div>
-          </div>-->
 
           <!--  excel表格上传  -->
           <ClickUpload
@@ -188,12 +198,18 @@ export default {
       },
       activeNames: ["1"],
       fileNameList: [],
+      refreshFileNameList: [],
+      brillianceFileNameList: [],
       // Header的menu
       activeIndex: "1",
       //Aside的请输入搜索的内容
       inputVal: "",
       //Recent file的全选按钮
-      checkAll: false,
+      checkRefreshAll: false,
+      // checkAll: false,
+      checkBrillianceAll: false,
+      isRefreshIndeterminate: false,
+      isBrillianceIndeterminate: false,
       isIndeterminate: false,
       // search框搜索出来的值
       listTable: [],
@@ -203,6 +219,8 @@ export default {
       selectRadio: "1",
       //目前选择按钮选中的文件
       selectedFile: [],
+      selectedRefreshFile: [],
+      selectedBrillianceFile: [],
       //上传的所有文件
       allFileData: [],
       //tabs标签页
@@ -236,6 +254,65 @@ export default {
     this.showTable = this.listTable;
   },
   methods: {
+    //原uploadFile方法开始
+    // async uploadFile(params) {
+    //   console.log("上传文件触发");
+    //   this.listTable = [];
+    //   const _file = params.file;
+    //   this.fileNameList.push(_file.name);
+
+    //   console.log("_file", _file);
+    //   const fileReader = new FileReader();
+    //   fileReader.onload = ev => {
+    //     try {
+    //       const data = ev.target.result;
+    //       console.log("ev.target", ev.target);
+    //       const workbook = XLSX.read(data, {
+    //         type: "binary"
+    //       });
+    //       for (let sheet in workbook.Sheets) {
+    //         //循环读取每个文件
+    //         const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+    //         //若当前sheet没有数据,则continue
+    //         if (sheetArray.length == 0) {
+    //           continue;
+    //         }
+    //         console.log("读取文件");
+    //         console.log(sheetArray);
+    //         // this.listTable.push(sheetArray);
+    //         //暂时的所有上传文件内容，用于在allFileData里边遍历，找到被选中的文件，如何传给临时内容搜索盒子
+    //         this.allFileData.push(sheetArray);
+    //         console.log("sheetArray", sheetArray);
+    //         for (let item in sheetArray) {
+    //           // console.log('item', item)
+    //           let rowTable = {};
+    //           //这里的rowTable的属性名注意要与上面表格的prop一致
+    //           //sheetArray的属性名与上传的表格的列名一致
+    //           for (let key in sheetArray[item]) {
+    //             rowTable[key] = sheetArray[item][key];
+    //           }
+    //           this.listTable.push(rowTable);
+    //         }
+    //         this.keyList = [];
+    //         if (this.listTable.length > 0) {
+    //           for (let k in this.listTable[0]) {
+    //             this.keyList.push(k);
+    //           }
+    //         }
+    //         console.log("this.listTable", this.listTable);
+    //         //上传完毕后把当前tab页激活(当前展示数据tab变成蓝色)
+    //         //element-ui tab的name属性只接收string类型
+    //         //v-model="fileNameListValue"意思是当前激活的tab的name属性为fileNameListValue
+    //         this.fileNameListValue = this.allFileData.length.toString();
+    //       }
+    //     } catch (e) {
+    //       this.$message.warning("文件类型不正确！");
+    //     }
+    //   };
+    //   fileReader.readAsBinaryString(_file);
+    // },
+    //原uploadFile方法结束
+
     //折叠面板
     handleChange(val) {
       console.log(val);
@@ -254,29 +331,72 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
-    // Recent File 的全选按钮
-    handleCheckAllChange(val) {
+    // refresh-file 的全选按钮
+    handleRefreshCheckAllChange(val) {
       console.log("handleCheckAllChange--val", val);
-      const all = this.fileNameList.map((item, index) => {
+      const all = this.refreshFileNameList.map((item, index) => {
         return index;
       });
-      this.selectedFile = val ? all : [];
-      this.isIndeterminate = false;
+      this.selectedRefreshFile = val ? all : [];
+      console.log("this.selectedRefreshFile---", this.selectedRefreshFile);
+      // this.selectedFile.push(this.selectedRefreshFile);
+      // console.log("this.selectedFile---", this.selectedFile);
+      this.isRefreshIndeterminate = false;
     },
-    // Recent File 的文件单选按钮
-    handleSelectedFile(val) {
+    // refresh-file 的文件单选按钮
+    handleSelectedRefreshFile(val) {
       console.log("val", val);
-      let checkedCount = val.length;
-      this.checkAll = checkedCount === this.selectedFile.length;
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.fileNameList.length;
-      console.log("this.isIndeterminate", this.isIndeterminate);
+      let checkedRefreshCount = val.length;
+      this.checkRefreshAll =
+        checkedRefreshCount === this.selectedRefreshFile.length;
+      this.isRefreshIndeterminate =
+        checkedRefreshCount > 0 &&
+        checkedRefreshCount < this.refreshFileNameList.length;
+      console.log("this.isRefreshIndeterminate", this.isRefreshIndeterminate);
       //若不选中，清空选择框
       if (val.length === 0) {
-        this.isIndeterminate = false;
-        this.checkAll = false;
+        this.isRefreshIndeterminate = false;
+        this.checkRefreshAll = false;
+        this.selectedRefreshFile = []
       }
     },
+
+    // Brilliance Air 的全选按钮
+    handleBrillianceCheckAllChange(val) {
+      console.log("handleCheckAllChange--val", val);
+      const all = this.brillianceFileNameList.map((item, index) => {
+        return index;
+      });
+      this.selectedBrillianceFile = val ? all : [];
+      // this.selectedFile.push(this.selectedBrillianceFile);
+      console.log(
+        "this.selectedBrillianceFile---2-",
+        this.selectedBrillianceFile
+      );
+      // console.log("this.selectedFile---2-", this.selectedFile);
+      this.isBrillianceIndeterminate = false;
+    },
+    // Brilliance Air 的文件单选按钮
+    handleSelectedBrillianceFile(val) {
+      console.log("val", val);
+      let checkedBrillianceCount = val.length;
+      this.checkBrillianceAll =
+        checkedBrillianceCount === this.selectedBrillianceFile.length;
+      this.isBrillianceIndeterminate =
+        checkedBrillianceCount > 0 &&
+        checkedBrillianceCount < this.brillianceFileNameList.length;
+      console.log(
+        "this.isBrillianceIndeterminate",
+        this.isBrillianceIndeterminate
+      );
+      //若不选中，清空选择框
+      if (val.length === 0) {
+        this.isBrillianceIndeterminate = false;
+        this.checkBrillianceAll = false;
+        this.selectedBrillianceFile=[];
+      }
+    },
+
     //点击左侧文件列表某个文件名时切换右侧展示内容
     handleClickFileName(index) {
       console.log("当前点击的文件index", index);
@@ -289,16 +409,20 @@ export default {
         }
       }
       //同时切换右侧tab栏激活的标签
-      this.fileNameListValue = index + 1 + "";
+      this.fileNameListValue = index + 2 + "";
     },
     //解析excel
     async uploadFile(params) {
       console.log("上传文件触发");
       this.listTable = [];
       const _file = params.file;
-      this.fileNameList.push(_file.name);
-
-      console.log("_file", _file);
+      if (_file.name.toLowerCase().includes("refresh")) {
+        this.refreshFileNameList.push(_file.name);
+        this.fileNameList.push(_file.name);
+      } else if (_file.name.toLowerCase().includes("brilliance")) {
+        this.brillianceFileNameList.push(_file.name);
+        this.fileNameList.push(_file.name);
+      }
       const fileReader = new FileReader();
       fileReader.onload = ev => {
         try {
@@ -350,14 +474,11 @@ export default {
       };
       fileReader.readAsBinaryString(_file);
     },
+
     //上传1个以上文件时弹窗提示错误
     exceed: function() {
       this.$message.error("最多只能上传50个xls文件");
     },
-    //删除文件
-    // remove() {
-    //   this.listTable = []
-    // },
     search() {
       // Search_List 存放搜索成功返回的数据
       const Search_List = [];
@@ -366,11 +487,28 @@ export default {
       console.log("res", res);
       // 被选中文件形成的暂时的文件内容
       let tempSearchBox = [];
-      for (let k in this.selectedFile) {
+      //源代码
+      // for (let k in this.selectedFile) {
+      //   // 改成数组形式
+      //   tempSearchBox = [
+      //     ...tempSearchBox,
+      //     ...this.allFileData[this.selectedFile[k]]
+      //   ];
+      //   // console.log('this.selectedFile[k]',this.selectedFile[k],k);
+      // }
+      //源代码
+      for (let k in this.selectedRefreshFile) {
         // 改成数组形式
         tempSearchBox = [
           ...tempSearchBox,
-          ...this.allFileData[this.selectedFile[k]]
+          ...this.allFileData[this.selectedRefreshFile[k]]
+        ];
+      }
+      for (let k in this.selectedBrillianceFile) {
+        // 改成数组形式
+        tempSearchBox = [
+          ...tempSearchBox,
+          ...this.allFileData[this.selectedBrillianceFile[k]]
         ];
         // console.log('this.selectedFile[k]',this.selectedFile[k],k);
       }
@@ -383,21 +521,7 @@ export default {
         //------修改开始
 
         // 我的想法是新创建一个临时的temKeyList，从searchArr获得数据的title行，存为数组。然后遍历，把title给e，但是为啥显示不行，总是说undefine啥的。也尝试使用过keyList。
-        // let temKeyList = [];
-        // for (let item in searchArr[0]) {
-        //   temKeyList.push(item);
-        // }
-        // searchArr.forEach(e => {
-        //   for (var i = 0; i < temKeyList.length; i++) {
-        //     let temp = e.temKeyList[i];
-        //     if (temp.includes(res)) {
-        //       if (Search_List.indexOf(e) == "-1") {
-        //         Search_List.push(e);
-        //       }
-        //     }
-        //   }
-        // });
-
+        //这个方法也是对的 就是e[this.keyList[i]]才是键值对的值，不能用e.this.keyList[i]，这个是直接去e里边找键为this.keyList[i]，就算重新赋值也不行
         this.keyList = [];
         for (let item in searchArr[0]) {
           this.keyList.push(item);
@@ -420,8 +544,7 @@ export default {
         // searchArr.forEach(obj => {
 
         //   //绑定的table prop
-        //   let id = obj.id;
-        //   let Headline = obj.Headline;
+        //   这个方法更加简单 obj[key]是遍历对象的值，obj是键
         //   for(let key in obj){
         //     console.log('obj[key]-----',obj[key]);
         //     console.log('res-----',res);
@@ -430,16 +553,6 @@ export default {
         //       break;
         //     }
         //   }
-        //   // if (id.toString().includes(res)) {
-        //   //   if (Search_List.indexOf(obj) == "-1") {
-        //   //     Search_List.push(obj);
-        //   //   }
-        //   // }
-        //   // if (Headline.toString().includes(res)) {
-        //   //   if (Search_List.indexOf(obj) == "-1") {
-        //   //     Search_List.push(obj);
-        //   //   }
-        //   // }
         // });
         // ----原始代码结束----
 
@@ -451,9 +564,6 @@ export default {
           let id = e.id;
           console.log("id", id);
           console.log("typeof(id)", typeof id);
-
-          // console.log("6--id--id", id);
-          // console.log("7--id--e.id", e.id);
           if (id.toString().includes(res)) {
             if (Search_List.indexOf(e) == "-1") {
               Search_List.push(e);
