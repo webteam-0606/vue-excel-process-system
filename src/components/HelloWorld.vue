@@ -503,15 +503,15 @@ export default {
       // });
 
       // searchArr 待被搜索的文件内容
-      let searchArr = tempSearchBox2;
+      let searchArr = tempSearchBox;
       if (this.selectRadio == 1) {
         //search框输入的搜索内容--全文搜索
         console.log("开始全文搜索--");
         this.keyList = [];
+
         // for (let item in searchArr[0]) {
         //   this.keyList.push(item);
         // }
-        // console.log("this.keyList-1-", this.keyList);
 
         for (var j = 0; j < searchArr.length; j++) {
           for (let item in searchArr[j]) {
@@ -520,15 +520,16 @@ export default {
             }
           }
         }
+
         console.log("this.keyList-2-", this.keyList);
         //现在的问题是 searchArr存的文件形式是 表1+表二。属性不同。
         searchArr.forEach(e => {
           console.log("开始寻找");
           for (var i = 0; i < this.keyList.length; i++) {
-            // console.log("this.keyList[i]-",this.keyList[i]);//id
-            // console.log("e[this.keyList[i]]--",e[this.keyList[i]]);//第一行的内容
+            console.log("this.keyList[i]-",this.keyList[i]);//id
+            console.log("e[this.keyList[i]]--",e[this.keyList[i]]);//undefined
             let temp = e[this.keyList[i]];
-            if (tem.toString().includes(res)) {
+            if (temp.toString().includes(res)) {
               if (Search_List.indexOf(e) == "-1") {
                 Search_List.push(e);
               }
