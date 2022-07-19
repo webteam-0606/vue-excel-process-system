@@ -57,6 +57,7 @@ if (this.selectRadio == 1) {
         //search框输入的搜索内容--全文搜索
         // 我的想法是新创建一个临时的temKeyList,或者直接使用keyList，从searchArr获得数据的title行，存为数组。然后遍历，把title给e，但是为啥显示不行，总是说undefine啥的。也尝试使用过keyList。
         //这个方法也是对的 就是e[this.keyList[i]]才是键值对的值，不能用e.this.keyList[i]，这个是直接去e里边找键为this.keyList[i]，就算重新赋值也不行
+        //这种方法，只适合与 keyList 与待查找表格内容的title一致
         this.keyList = [];
         for (let item in searchArr[0]) {
           this.keyList.push(item);
@@ -74,7 +75,8 @@ if (this.selectRadio == 1) {
 }
 
 //方法二
-//这个方法更加简单 obj[key]是遍历对象的值，obj是键
+//这个方法更加简单 obj[key]是遍历对象的值，obj是键。
+//这种方法不依赖查找表的内容格式，只需要展示的keyList包含所有选中文件的title
           for(let key in obj){
             console.log('obj[key]-----',obj[key]);
             console.log('res-----',res);

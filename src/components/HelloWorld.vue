@@ -185,23 +185,6 @@ export default {
   },
   data() {
     return {
-      //树形结构
-      data: [
-        {
-          label: "Refresh 1",
-          children: [
-            {
-              label: "二级 1-1",
-              label: "二级 1-2"
-            }
-          ]
-        }
-      ],
-      defaultProps: {
-        children: "children",
-        label: "label"
-      },
-
       fileNameList: [],
       refreshFileNameList: [],
       brillianceFileNameList: [],
@@ -523,15 +506,13 @@ export default {
 
         console.log("this.keyList-2-", this.keyList);
         //现在的问题是 searchArr存的文件形式是 表1+表二。属性不同。
-        searchArr.forEach(e => {
+        searchArr.forEach(obj => {
           console.log("开始寻找");
-          for (var i = 0; i < this.keyList.length; i++) {
-            console.log("this.keyList[i]-",this.keyList[i]);//id
-            console.log("e[this.keyList[i]]--",e[this.keyList[i]]);//undefined
-            let temp = e[this.keyList[i]];
-            if (temp.toString().includes(res)) {
-              if (Search_List.indexOf(e) == "-1") {
-                Search_List.push(e);
+          for (let key in obj) {
+            if (obj[key].toString().includes(res)) {
+              if (Search_List.indexOf(obj) == "-1") {
+                Search_List.push(obj);
+                // break;
               }
             }
           }
