@@ -123,12 +123,7 @@
           <el-main>
             <!-- 文件的 tabs 标签页 -->
             <div class="file-tabs-list">
-              <el-tabs
-                v-model="fileNameListValue"
-                type="card"
-                @tab-remove="removeTab"
-                @tab-click="clickTab"
-              >
+              <el-tabs v-model="fileNameListValue" type="card" @tab-click="clickTab">
                 <el-tab-pane label="search result" :key="-1" name="0"></el-tab-pane>
                 <el-tab-pane
                   v-for="(filename, index) in fileNameList"
@@ -213,14 +208,8 @@ export default {
       allFileData: [],
       //tabs标签页
       fileNameListValue: 0,
-      currentIndex: 1,
+      // currentIndex: 1,
       tabIndex: 1,
-      editableTabs: [
-        {
-          title: "tab1",
-          name: "1"
-        }
-      ],
       //分页
       currentPage: 1,
       pageSize: 10,
@@ -399,6 +388,8 @@ export default {
             console.log("sheetArray--", sheetArray);
             //暂时的所有上传文件内容，用于在allFileData里边遍历，找到被选中的文件，如何传给临时内容搜索盒子
             this.allFileData.push(sheetArray);
+            //初始时，仅展示最近上传的一个文件 
+            this.listTable = sheetArray;
             // this.allFileData=[...this.allFileData,...sheetArray]
             console.log("this.allFileData--", this.allFileData);
             for (let item in sheetArray) {
@@ -410,20 +401,26 @@ export default {
               }
               // rowTable.id = sheetArray[item].id
               // rowTable.Headline = sheetArray[item].Headline
-              this.listTable.push(rowTable);
+              // this.listTable.push(rowTable);//如果增加这个，就会上传时候展示一次性上传的所有文件          
             }
             console.log("this.listTable-dp-", this.listTable);
             this.keyList = [];
             //keyList循环遍历listTable[i]，（不只是listTable[0]，看看有没有别的列名没有得到）可展示不同属性的文件
-            if (this.listTable.length > 0) {
-              for (var i = 0; i < this.listTable.length; i++) {
-                for (let item in this.listTable[i]) {
-                  if (!this.keyList.toString().includes(item)) {
-                    this.keyList.push(item);
-                  }
-                }
-              }
+            // if (this.listTable.length > 0) {
+            //   for (var i = 0; i < this.listTable.length; i++) {
+            //     for (let item in this.listTable[i]) {
+            //       if (!this.keyList.toString().includes(item)) {
+            //         this.keyList.push(item);
+            //       }
+            //     }
+            //   }
+            // }
+            //上传时候，只需要展示最近的一个文件内容，对应tabs标签选中即可。
+            console.log("sheetArray--", sheetArray);
+            for (let item in sheetArray[0]) {
+              this.keyList.push(item);
             }
+            // this.listTable = sheetArray
             console.log("this.keyList-upload-", this.keyList);
             console.log("this.listTable--", this.listTable);
             //上传完毕后把当前tab页激活(当前展示数据tab变成蓝色)
@@ -445,22 +442,12 @@ export default {
     search() {
       // Search_List 存放搜索成功返回的数据
       const Search_List = [];
+      this.keyList = [];
       let res1 = this.inputVal;
       const res = res1.replace(/\s/gi, "");
       console.log("res--", res);
       // 被选中文件形成的暂时的文件内容
       let tempSearchBox = [];
-      let tempSearchBox0 = [];
-      let tempSearchBox1 = [];
-      let tempSearchBox2 = [];
-
-      console.log("this.keyList--", this.keyList);
-      // for(let k in this.keyList){
-      //   if(!tempSearchBox.toString().includes(this.keyList[k])){
-      //     tempSearchBox=[...tempSearchBox[k],...this.keyList[k]]
-      //   }
-      // }
-      // console.log("tempSearchBox-1--", tempSearchBox);
       //解决文件列表名和tabs标签页不对应。把selectedRefreshFile里的值在整个allFileData里边找到对应下标，即可以正确对应
       for (let k in this.selectedRefreshFile) {
         // 改成数组形式
@@ -470,7 +457,6 @@ export default {
           }
         });
       }
-      console.log("tempSearchBox1-", tempSearchBox1);
       for (let k in this.selectedBrillianceFile) {
         // 改成数组形式
         this.fileNameList.find((item, index) => {
@@ -479,46 +465,32 @@ export default {
           }
         });
       }
-      console.log("tempSearchBox---", tempSearchBox);
-
-      // tempSearchBox = tempSearchBox1.map((item, index) => {
-      //   return { ...item, ...tempSearchBox2[index] };
-      // });
-
       // searchArr 待被搜索的文件内容
       let searchArr = tempSearchBox;
+      this.keyList = [];
+      for (var j = 0; j < searchArr.length; j++) {
+        for (let item in searchArr[j]) {
+          if (!this.keyList.toString().includes(item)) {
+            this.keyList.push(item);
+          }
+        }
+      }
       if (this.selectRadio == 1) {
         //search框输入的搜索内容--全文搜索
         console.log("开始全文搜索--");
-        this.keyList = [];
-
-        // for (let item in searchArr[0]) {
-        //   this.keyList.push(item);
-        // }
-
-        for (var j = 0; j < searchArr.length; j++) {
-          for (let item in searchArr[j]) {
-            if (!this.keyList.toString().includes(item)) {
-              this.keyList.push(item);
-            }
-          }
-        }
-
-        console.log("this.keyList-2-", this.keyList);
-        //现在的问题是 searchArr存的文件形式是 表1+表二。属性不同。
         searchArr.forEach(obj => {
           console.log("开始寻找");
           for (let key in obj) {
             if (obj[key].toString().includes(res)) {
               if (Search_List.indexOf(obj) == "-1") {
                 Search_List.push(obj);
-                // break;
               }
             }
           }
         });
         //Search_List 搜索成功返回的内容，给listTable展示
         this.listTable = Search_List;
+        // this.keyList = []
       } else if (this.selectRadio == 2) {
         searchArr.forEach(e => {
           //绑定的table prop
@@ -530,37 +502,13 @@ export default {
           }
         });
         this.listTable = Search_List;
+        // this.keyList = []
         console.log("搜索结果this.listTable-", this.listTable);
         this.currentPage = 1;
       } else {
         console.log("this.selectRadio--", this.selectRadio);
       }
       this.fileNameListValue = "0";
-    },
-
-    //实现tabs标签页
-    removeTab(targetName) {
-      if (this.fileNameList.length <= 1) {
-        return false;
-      }
-      console.log("targetName-", targetName); //undefined
-      let tabs = this.fileNameList;
-      console.log("tabs-", tabs); //上传的列表名
-      let activeName = this.fileNameListValue;
-      console.log("activeName-", activeName, this.fileNameListValue); // 1 1
-      if (activeName === targetName) {
-        console.log(true);
-        tabs.forEach((tab, index) => {
-          if (tab.name === targetName) {
-            let nextTab = tabs[index + 1] || tabs[index - 1];
-            if (nextTab) {
-              activeName = nextTab.name;
-            }
-          }
-        });
-      }
-      this.fileNameListValue = activeName;
-      this.fileNameList = tabs.filter(tab => tab.name !== targetName);
     },
     clickTab(targetName) {
       //切换tab页时更新展示数据

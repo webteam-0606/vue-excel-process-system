@@ -37,6 +37,33 @@ if (this.refreshFileNameList.includes(_file.name) || this.brillianceFileNameList
 ```
 
 > 2、折叠版左侧的文件名点击，右侧的目录不能同步
++ 解决：解决文件列表名和tabs标签页不对应。把 `selectedRefreshFile` 里的值在整个 `allFileData` 里边找到对应下标，即可以正确对应。`selectedBrillianceFile` 同理。
+```java
+// console.log("tempSearchBox-1--", tempSearchBox);
+      for (let k in this.selectedRefreshFile) {
+        // 改成数组形式
+        this.fileNameList.find((item, index) => {
+          if (item === this.refreshFileNameList[k]) {
+            tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
+          }
+        });
+      }
+      for (let k in this.selectedBrillianceFile) {
+        // 改成数组形式
+        this.fileNameList.find((item, index) => {
+          if (item === this.brillianceFileNameList[k]) {
+            tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
+          }
+        });
+      }
+```
++ 备注：
+```java      
+//这种是将Box1与Box2对应合并，Box2的不同属性对应合并到Box1里。
+      tempSearchBox = tempSearchBox1.map((item, index) => {
+        return { ...item, ...tempSearchBox2[index] };
+      });
+```
 
 > 3、文件读取查找速度
 
@@ -46,6 +73,7 @@ if (this.refreshFileNameList.includes(_file.name) || this.brillianceFileNameList
 
 ## 已完成
 > 1、按ID/全文搜索 √
++ `this.listTable=` 啥， `dataPreview` 就展示啥内容。所以解决一开始的展示一次性上传的多个文件内容，只需要去掉 `this.listTable.push(rowTable);`，加上 `this.listTable = sheetArray;` 即可。
 
 > 2、自动读入不同 `title` 的文件 √
 
