@@ -45,9 +45,7 @@
                     :indeterminate="isRefreshIndeterminate"
                     v-model="checkRefreshAll"
                     @change="handleRefreshCheckAllChange"
-                  >
-                    全选
-                  </el-checkbox>
+                  >全选</el-checkbox>
                 </template>
                 <div class="upload-filename-list">
                   <el-checkbox-group
@@ -55,9 +53,16 @@
                     v-model="selectedRefreshFile"
                     @change="handleSelectedRefreshFile"
                   >
-                    <div class="upload-filename-item" v-for="(filename, index) in refreshFileNameList">
+                    <div
+                      class="upload-filename-item"
+                      v-for="(filename, index) in refreshFileNameList"
+                    >
                       <el-tooltip class="item" effect="light" :content="filename">
-                        <div class="upload-filename" :alt="filename" @click="handleClickFileName(index,'refresh')">
+                        <div
+                          class="upload-filename"
+                          :alt="filename"
+                          @click="handleClickFileName(index,'refresh')"
+                        >
                           <i class="el-icon-document"></i>
                           {{ filename }}
                         </div>
@@ -76,9 +81,7 @@
                     :indeterminate="isBrillianceIndeterminate"
                     v-model="checkBrillianceAll"
                     @change="handleBrillianceCheckAllChange"
-                  >
-                    全选
-                  </el-checkbox>
+                  >全选</el-checkbox>
                 </template>
                 <div class="upload-filename-list">
                   <el-checkbox-group
@@ -86,9 +89,16 @@
                     v-model="selectedBrillianceFile"
                     @change="handleSelectedBrillianceFile"
                   >
-                    <div class="upload-filename-item" v-for="(filename, index) in brillianceFileNameList">
+                    <div
+                      class="upload-filename-item"
+                      v-for="(filename, index) in brillianceFileNameList"
+                    >
                       <el-tooltip class="item" effect="light" :content="filename">
-                        <div class="upload-filename" :alt="filename" @click="handleClickFileName(index,'brilliance')">
+                        <div
+                          class="upload-filename"
+                          :alt="filename"
+                          @click="handleClickFileName(index,'brilliance')"
+                        >
                           <i class="el-icon-document"></i>
                           {{ filename }}
                         </div>
@@ -113,12 +123,13 @@
           <el-main>
             <!-- 文件的 tabs 标签页 -->
             <div class="file-tabs-list">
-              <el-tabs v-model="fileNameListValue" type="card" @tab-remove="removeTab" @tab-click="clickTab">
-                <el-tab-pane
-                  label="search result"
-                  :key="-1"
-                  name="0"
-                ></el-tab-pane>
+              <el-tabs
+                v-model="fileNameListValue"
+                type="card"
+                @tab-remove="removeTab"
+                @tab-click="clickTab"
+              >
+                <el-tab-pane label="search result" :key="-1" name="0"></el-tab-pane>
                 <el-tab-pane
                   v-for="(filename, index) in fileNameList"
                   :label="stringIntercept(filename, 20)"
@@ -159,13 +170,13 @@
 </template>
 
 <script>
-import XLSX from 'xlsx'
-import dataPreview from './dataPreview.vue'
-import ClickUpload from './clickUpload.vue'
-import SearchFileBox from './searchFileBox.vue'
-import recentFiles from './recentFiles.vue'
+import XLSX from "xlsx";
+import dataPreview from "./dataPreview.vue";
+import ClickUpload from "./clickUpload.vue";
+import SearchFileBox from "./searchFileBox.vue";
+import recentFiles from "./recentFiles.vue";
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   components: {
     dataPreview,
     ClickUpload,
@@ -177,28 +188,28 @@ export default {
       //树形结构
       data: [
         {
-          label: 'Refresh 1',
+          label: "Refresh 1",
           children: [
             {
-              label: '二级 1-1',
-              label: '二级 1-2'
+              label: "二级 1-1",
+              label: "二级 1-2"
             }
           ]
         }
       ],
       defaultProps: {
-        children: 'children',
-        label: 'label'
+        children: "children",
+        label: "label"
       },
 
       fileNameList: [],
       refreshFileNameList: [],
       brillianceFileNameList: [],
       // Header的menu
-      activeIndex: '1',
+      activeIndex: "1",
       //Aside的请输入搜索的内容
-      inputVal: '',
-      activeNames: ['1', '2'],
+      inputVal: "",
+      activeNames: ["1", "2"],
       //Recent file的全选按钮
       checkRefreshAll: false,
       checkBrillianceAll: false,
@@ -210,7 +221,7 @@ export default {
       //渲染时 数据
       showTable: [],
       //选择全文搜索/ID搜索
-      selectRadio: '1',
+      selectRadio: "1",
       //目前选择按钮选中的文件
       selectedFile: [],
       selectedRefreshFile: [],
@@ -223,423 +234,453 @@ export default {
       tabIndex: 1,
       editableTabs: [
         {
-          title: 'tab1',
-          name: '1'
+          title: "tab1",
+          name: "1"
         }
       ],
       //分页
       currentPage: 1,
       pageSize: 10,
       keyList: [] //保存excel的列名
-    }
+    };
   },
 
   //监听search框输入的搜索内容
   watch: {
     //监听：如果为空,显示所有数据
     inputVal(item1) {
-      if (item1 == '') {
-        this.listTable = this.showTable
+      if (item1 == "") {
+        this.listTable = this.showTable;
       }
     }
   },
   //页面渲染时,显示所有的数据
   mounted() {
-    this.showTable = this.listTable
+    this.showTable = this.listTable;
   },
   methods: {
-
     //折叠面板
     handleChange(val) {
-      console.log(val)
+      console.log("handleChange-val--", val);
     },
     handleSearchButtonClick(inputVal) {
-      console.log('接收到子组件searchValue的变更', inputVal)
-      this.inputVal = inputVal
-      this.search()
+      console.log("接收到子组件searchValue的变更", inputVal);
+      this.inputVal = inputVal;
+      this.search();
     },
     // aside 的全文搜索/ID搜索
     handleRadioSelectChange(val) {
-      console.log('父组件---radio变更', val)
-      this.selectRadio = val
+      console.log("父组件---radio变更", val);
+      this.selectRadio = val;
     },
     //header的menu
     handleSelect(key, keyPath) {
-      console.log(key, keyPath)
+      console.log(key, keyPath);
     },
     // refresh-file 的全选按钮
     handleRefreshCheckAllChange(val) {
-      console.log('handleCheckAllChange--val', val)
+      console.log("handleCheckAllChange--val", val);
       const all = this.refreshFileNameList.map((item, index) => {
-        return index
-      })
-      this.selectedRefreshFile = val ? all : []
-      console.log('this.selectedRefreshFile---', this.selectedRefreshFile)
+        return index;
+      });
+      this.selectedRefreshFile = val ? all : [];
+      console.log("this.selectedRefreshFile---", this.selectedRefreshFile);
       // this.selectedFile.push(this.selectedRefreshFile);
-      // console.log("this.selectedFile---", this.selectedFile);
-      this.isRefreshIndeterminate = false
+      this.isRefreshIndeterminate = false;
     },
     // refresh-file 的文件单选按钮
     handleSelectedRefreshFile(val) {
-      console.log('val', val)
-      let checkedRefreshCount = val.length
-      this.checkRefreshAll = checkedRefreshCount === this.selectedRefreshFile.length
-      this.isRefreshIndeterminate = checkedRefreshCount > 0 && checkedRefreshCount < this.refreshFileNameList.length
-      console.log('this.isRefreshIndeterminate', this.isRefreshIndeterminate)
+      console.log("handleSelectedRefreshFile-val-", val);
+      let checkedRefreshCount = val.length;
+      this.checkRefreshAll =
+        checkedRefreshCount === this.selectedRefreshFile.length;
+      this.isRefreshIndeterminate =
+        checkedRefreshCount > 0 &&
+        checkedRefreshCount < this.refreshFileNameList.length;
+      console.log("this.isRefreshIndeterminate-", this.isRefreshIndeterminate);
       //若不选中，清空选择框
       if (val.length === 0) {
-        this.isRefreshIndeterminate = false
-        this.checkRefreshAll = false
-        this.selectedRefreshFile = []
+        this.isRefreshIndeterminate = false;
+        this.checkRefreshAll = false;
+        this.selectedRefreshFile = [];
       }
     },
 
     // Brilliance Air 的全选按钮
     handleBrillianceCheckAllChange(val) {
-      console.log('handleCheckAllChange--val', val)
+      console.log("handleCheckAllChange--val", val);
       const all = this.brillianceFileNameList.map((item, index) => {
-        return index
-      })
-      this.selectedBrillianceFile = val ? all : []
+        return index;
+      });
+      this.selectedBrillianceFile = val ? all : [];
       // this.selectedFile.push(this.selectedBrillianceFile);
-      console.log('this.selectedBrillianceFile---2-', this.selectedBrillianceFile)
-      // console.log("this.selectedFile---2-", this.selectedFile);
-      this.isBrillianceIndeterminate = false
+      console.log(
+        "this.selectedBrillianceFile---2-",
+        this.selectedBrillianceFile
+      );
+      this.isBrillianceIndeterminate = false;
     },
     // Brilliance Air 的文件单选按钮
     handleSelectedBrillianceFile(val) {
-      console.log('val', val)
-      let checkedBrillianceCount = val.length
-      this.checkBrillianceAll = checkedBrillianceCount === this.selectedBrillianceFile.length
+      console.log("val", val);
+      let checkedBrillianceCount = val.length;
+      this.checkBrillianceAll =
+        checkedBrillianceCount === this.selectedBrillianceFile.length;
       this.isBrillianceIndeterminate =
-        checkedBrillianceCount > 0 && checkedBrillianceCount < this.brillianceFileNameList.length
-      console.log('this.isBrillianceIndeterminate', this.isBrillianceIndeterminate)
+        checkedBrillianceCount > 0 &&
+        checkedBrillianceCount < this.brillianceFileNameList.length;
+      console.log(
+        "this.isBrillianceIndeterminate",
+        this.isBrillianceIndeterminate
+      );
       //若不选中，清空选择框
       if (val.length === 0) {
-        this.isBrillianceIndeterminate = false
-        this.checkBrillianceAll = false
-        this.selectedBrillianceFile = []
+        this.isBrillianceIndeterminate = false;
+        this.checkBrillianceAll = false;
+        this.selectedBrillianceFile = [];
       }
     },
 
     //点击左侧文件列表某个文件名时切换右侧展示内容
-    handleClickFileName(index,folderName) {
-      console.log('当前点击的文件index', index)
-      console.log('当前点击的文件所属文件夹', folderName)
-      let tempFileName=""
-      let allFileIndex=0
-      if(folderName==='refresh'){
-        tempFileName = this.refreshFileNameList[index]
-      }else{
-        tempFileName = this.brillianceFileNameList[index]
+    handleClickFileName(index, folderName) {
+      console.log("当前点击的文件index", index);
+      console.log("当前点击的文件所属文件夹", folderName);
+      let tempFileName = "";
+      let allFileIndex = 0;
+      if (folderName === "refresh") {
+        tempFileName = this.refreshFileNameList[index];
+      } else {
+        tempFileName = this.brillianceFileNameList[index];
       }
-      this.fileNameList.find((fileName,index)=>{
-        if(fileName===tempFileName){
-          allFileIndex=index
+      this.fileNameList.find((fileName, index) => {
+        if (fileName === tempFileName) {
+          allFileIndex = index;
         }
-      })
-      this.listTable = this.allFileData[allFileIndex]
-      console.log('this.listTable', this.listTable)
+      });
+      this.listTable = this.allFileData[allFileIndex];
+      console.log("this.listTable", this.listTable);
       //同时更改keyList
-      this.keyList = []
+      this.keyList = [];
       if (this.listTable.length > 0) {
         for (let k in this.listTable[0]) {
-          this.keyList.push(k)
+          this.keyList.push(k);
         }
       }
+      console.log("this.keyList-handleClickFileName-", this.keyList);
       //同时切换右侧tab栏激活的标签
-      this.fileNameListValue = allFileIndex + 1 + ''
+      this.fileNameListValue = allFileIndex + 1 + "";
     },
     //解析excel
     async uploadFile(params) {
-      console.log('上传文件触发')
-      this.listTable = []
-      const _file = params.file
-      console.log('file',_file);
-      // if (_file.name.toLowerCase().includes("refresh") && !refreshFileNameList.includes(_file.name)) {
-      //     this.refreshFileNameList.push(_file.name);
-      //     this.fileNameList.push(_file.name);
-      //   } else if (_file.name.toLowerCase().includes("brilliance") && !brillianceFileNameList.includes(_file.name)) {
-      //     this.brillianceFileNameList.push(_file.name);
-      //     this.fileNameList.push(_file.name);
-      //   }
-
-      if (this.refreshFileNameList.includes(_file.name) || this.brillianceFileNameList.includes(_file.name)) {
-        alert('文件名重复！请重新上传')
-        return true
+      console.log("上传文件触发");
+      this.listTable = [];
+      const _file = params.file;
+      console.log("file--", _file);
+      if (
+        this.refreshFileNameList.includes(_file.name) ||
+        this.brillianceFileNameList.includes(_file.name)
+      ) {
+        alert("文件名重复！请重新上传");
+        return true;
       }
-      if (_file.name.toLowerCase().includes('refresh')) {
-        this.refreshFileNameList.push(_file.name)
-        this.fileNameList.push(_file.name)
-      } else if (_file.name.toLowerCase().includes('brilliance')) {
-        this.brillianceFileNameList.push(_file.name)
-        this.fileNameList.push(_file.name)
+      if (_file.name.toLowerCase().includes("refresh")) {
+        this.refreshFileNameList.push(_file.name);
+        this.fileNameList.push(_file.name);
+        console.log("this.fileNameList---refresh---", this.fileNameList);
+      } else if (_file.name.toLowerCase().includes("brilliance")) {
+        this.brillianceFileNameList.push(_file.name);
+        this.fileNameList.push(_file.name);
+        console.log("this.fileNameList---brilliance---", this.fileNameList);
+      } else {
+        alert(
+          "仅支持refresh/brilliance两种类型文件上传!上传文件名必须包含refresh/brilliance,请重新命名文件名并上传。"
+        );
+        return true;
       }
-      const fileReader = new FileReader()
+      const fileReader = new FileReader();
       fileReader.onload = ev => {
         try {
-          const data = ev.target.result
-          console.log('ev.target', ev.target)
+          const data = ev.target.result;
+          console.log("ev.target", ev.target);
           const workbook = XLSX.read(data, {
-            type: 'binary'
-          })
+            type: "binary"
+          });
           for (let sheet in workbook.Sheets) {
             //循环读取每个文件
-            const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
+            const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
             //若当前sheet没有数据,则continue
             if (sheetArray.length == 0) {
-              continue
+              continue;
             }
-            console.log('读取文件')
-            console.log(sheetArray)
-            // this.listTable.push(sheetArray);
+            console.log("读取文件");
+            console.log("sheetArray--", sheetArray);
             //暂时的所有上传文件内容，用于在allFileData里边遍历，找到被选中的文件，如何传给临时内容搜索盒子
-            this.allFileData.push(sheetArray)
-            console.log('sheetArray', sheetArray)
+            this.allFileData.push(sheetArray);
+            // this.allFileData=[...this.allFileData,...sheetArray]
+            console.log("this.allFileData--", this.allFileData);
             for (let item in sheetArray) {
-              // console.log('item', item)
-              let rowTable = {}
+              let rowTable = {};
               //这里的rowTable的属性名注意要与上面表格的prop一致
               //sheetArray的属性名与上传的表格的列名一致
               for (let key in sheetArray[item]) {
-                rowTable[key] = sheetArray[item][key]
+                rowTable[key] = sheetArray[item][key];
               }
               // rowTable.id = sheetArray[item].id
               // rowTable.Headline = sheetArray[item].Headline
-              this.listTable.push(rowTable)
+              this.listTable.push(rowTable);
             }
-            this.keyList = []
+            console.log("this.listTable-dp-", this.listTable);
+            this.keyList = [];
+            //keyList循环遍历listTable[i]，（不只是listTable[0]，看看有没有别的列名没有得到）可展示不同属性的文件
             if (this.listTable.length > 0) {
-              for (let k in this.listTable[0]) {
-                this.keyList.push(k)
+              for (var i = 0; i < this.listTable.length; i++) {
+                for (let item in this.listTable[i]) {
+                  if (!this.keyList.toString().includes(item)) {
+                    this.keyList.push(item);
+                  }
+                }
               }
             }
-            console.log('this.listTable', this.listTable)
+            console.log("this.keyList-upload-", this.keyList);
+            console.log("this.listTable--", this.listTable);
             //上传完毕后把当前tab页激活(当前展示数据tab变成蓝色)
             //element-ui tab的name属性只接收string类型
             //v-model="fileNameListValue"意思是当前激活的tab的name属性为fileNameListValue
-            this.fileNameListValue = this.allFileData.length.toString()
+            this.fileNameListValue = this.allFileData.length.toString();
           }
         } catch (e) {
-          this.$message.warning('文件类型不正确！')
+          this.$message.warning("文件类型不正确！");
         }
-      }
-      fileReader.readAsBinaryString(_file)
+      };
+      fileReader.readAsBinaryString(_file);
     },
 
     //上传1个以上文件时弹窗提示错误
     exceed: function() {
-      this.$message.error('最多只能上传50个xls文件')
+      this.$message.error("最多只能上传50个xls文件");
     },
     search() {
       // Search_List 存放搜索成功返回的数据
-      const Search_List = []
-      let res1 = this.inputVal
-      const res = res1.replace(/\s/gi, '')
-      console.log('res', res)
+      const Search_List = [];
+      let res1 = this.inputVal;
+      const res = res1.replace(/\s/gi, "");
+      console.log("res--", res);
       // 被选中文件形成的暂时的文件内容
-      let tempSearchBox = []
-      //源代码
-      // for (let k in this.selectedFile) {
-      //   // 改成数组形式
-      //   tempSearchBox = [
-      //     ...tempSearchBox,
-      //     ...this.allFileData[this.selectedFile[k]]
-      //   ];
-      //   // console.log('this.selectedFile[k]',this.selectedFile[k],k);
+      let tempSearchBox = [];
+      let tempSearchBox0 = [];
+      let tempSearchBox1 = [];
+      let tempSearchBox2 = [];
+
+      console.log("this.keyList--", this.keyList);
+      // for(let k in this.keyList){
+      //   if(!tempSearchBox.toString().includes(this.keyList[k])){
+      //     tempSearchBox=[...tempSearchBox[k],...this.keyList[k]]
+      //   }
       // }
-      //源代码
+      // console.log("tempSearchBox-1--", tempSearchBox);
+      //解决文件列表名和tabs标签页不对应。把selectedRefreshFile里的值在整个allFileData里边找到对应下标，即可以正确对应
       for (let k in this.selectedRefreshFile) {
         // 改成数组形式
-        this.fileNameList.find((item,index)=>{
-          if(item===this.refreshFileNameList[k]){
-            tempSearchBox=[...tempSearchBox, ...this.allFileData[index]]
+        this.fileNameList.find((item, index) => {
+          if (item === this.refreshFileNameList[k]) {
+            tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
           }
-        })
-        //tempSearchBox = [...tempSearchBox, ...this.allFileData[this.selectedRefreshFile[k]]]
+        });
       }
+      console.log("tempSearchBox1-", tempSearchBox1);
       for (let k in this.selectedBrillianceFile) {
         // 改成数组形式
-        this.fileNameList.find((item,index)=>{
-          if(item===this.brillianceFileNameList[k]){
-            tempSearchBox=[...tempSearchBox, ...this.allFileData[index]]
+        this.fileNameList.find((item, index) => {
+          if (item === this.brillianceFileNameList[k]) {
+            tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
           }
-        })
-        //tempSearchBox = [...tempSearchBox, ...this.allFileData[this.selectedBrillianceFile[k]]]
-        // console.log('this.selectedFile[k]',this.selectedFile[k],k);
+        });
       }
-      console.log('tempSearchBox',tempSearchBox);
+      console.log("tempSearchBox---", tempSearchBox);
+
+      // tempSearchBox = tempSearchBox1.map((item, index) => {
+      //   return { ...item, ...tempSearchBox2[index] };
+      // });
+
       // searchArr 待被搜索的文件内容
-      let searchArr = tempSearchBox
+      let searchArr = tempSearchBox2;
       if (this.selectRadio == 1) {
         //search框输入的搜索内容--全文搜索
+        console.log("开始全文搜索--");
+        this.keyList = [];
+        // for (let item in searchArr[0]) {
+        //   this.keyList.push(item);
+        // }
+        // console.log("this.keyList-1-", this.keyList);
 
-        //------修改开始
-
-        // 我的想法是新创建一个临时的temKeyList，从searchArr获得数据的title行，存为数组。然后遍历，把title给e，但是为啥显示不行，总是说undefine啥的。也尝试使用过keyList。
-        //这个方法也是对的 就是e[this.keyList[i]]才是键值对的值，不能用e.this.keyList[i]，这个是直接去e里边找键为this.keyList[i]，就算重新赋值也不行
-        this.keyList = []
-        for (let item in searchArr[0]) {
-          this.keyList.push(item)
+        for (var j = 0; j < searchArr.length; j++) {
+          for (let item in searchArr[j]) {
+            if (!this.keyList.toString().includes(item)) {
+              this.keyList.push(item);
+            }
+          }
         }
+        console.log("this.keyList-2-", this.keyList);
+        //现在的问题是 searchArr存的文件形式是 表1+表二。属性不同。
         searchArr.forEach(e => {
+          console.log("开始寻找");
           for (var i = 0; i < this.keyList.length; i++) {
-            let temp = e[this.keyList[i]]
-            if (temp.toString().includes(res)) {
-              if (Search_List.indexOf(e) == '-1') {
-                Search_List.push(e)
+            // console.log("this.keyList[i]-",this.keyList[i]);//id
+            // console.log("e[this.keyList[i]]--",e[this.keyList[i]]);//第一行的内容
+            let temp = e[this.keyList[i]];
+            if (tem.toString().includes(res)) {
+              if (Search_List.indexOf(e) == "-1") {
+                Search_List.push(e);
               }
             }
           }
-        })
-        //------修改结束
-
+        });
         //Search_List 搜索成功返回的内容，给listTable展示
-        this.listTable = Search_List
+        this.listTable = Search_List;
       } else if (this.selectRadio == 2) {
         searchArr.forEach(e => {
           //绑定的table prop
-          let id = e.id
-          console.log('id', id)
-          console.log('typeof(id)', typeof id)
+          let id = e.id;
           if (id.toString().includes(res)) {
-            if (Search_List.indexOf(e) == '-1') {
-              Search_List.push(e)
+            if (Search_List.indexOf(e) == "-1") {
+              Search_List.push(e);
             }
           }
-        })
-        this.listTable = Search_List
-        console.log('搜索结果', this.listTable)
-        this.currentPage = 1
+        });
+        this.listTable = Search_List;
+        console.log("搜索结果this.listTable-", this.listTable);
+        this.currentPage = 1;
       } else {
-        console.log('this.selectRadio', this.selectRadio)
+        console.log("this.selectRadio--", this.selectRadio);
       }
-      this.fileNameListValue="0"
+      this.fileNameListValue = "0";
     },
 
     //实现tabs标签页
     removeTab(targetName) {
       if (this.fileNameList.length <= 1) {
-        return false
+        return false;
       }
-      console.log('targetName', targetName) //undefined
-      let tabs = this.fileNameList
-      console.log('tabs', tabs) //上传的列表名
-      let activeName = this.fileNameListValue
-      console.log('activeName', activeName, this.fileNameListValue) // 1 1
+      console.log("targetName-", targetName); //undefined
+      let tabs = this.fileNameList;
+      console.log("tabs-", tabs); //上传的列表名
+      let activeName = this.fileNameListValue;
+      console.log("activeName-", activeName, this.fileNameListValue); // 1 1
       if (activeName === targetName) {
-        console.log(true)
+        console.log(true);
         tabs.forEach((tab, index) => {
           if (tab.name === targetName) {
-            let nextTab = tabs[index + 1] || tabs[index - 1]
+            let nextTab = tabs[index + 1] || tabs[index - 1];
             if (nextTab) {
-              activeName = nextTab.name
+              activeName = nextTab.name;
             }
           }
-        })
+        });
       }
-      this.fileNameListValue = activeName
-      this.fileNameList = tabs.filter(tab => tab.name !== targetName)
+      this.fileNameListValue = activeName;
+      this.fileNameList = tabs.filter(tab => tab.name !== targetName);
     },
     clickTab(targetName) {
       //切换tab页时更新展示数据
-      
-      const tabIndex = parseInt(targetName.index) 
-      console.log('tabsIndex', tabIndex)
-      if(tabIndex===0){
-        this.listTable=[]
-        this.keyList = []
-        return true
+      const tabIndex = parseInt(targetName.index);
+      console.log("tabsIndex--", tabIndex);
+      if (tabIndex === 0) {
+        this.listTable = [];
+        this.keyList = [];
+        return true;
       }
-      this.listTable = this.allFileData[tabIndex-1]
+      this.listTable = this.allFileData[tabIndex - 1];
       //同步更改keyList
-      this.keyList = []
+      this.keyList = [];
       if (this.listTable.length > 0) {
         for (let k in this.listTable[0]) {
-          this.keyList.push(k)
+          this.keyList.push(k);
         }
       }
-      console.log('fileNameListValue', this.fileNameListValue)
+      console.log("fileNameListValue--", this.fileNameListValue);
     },
     //实现 Main 按钮
     handleMainButton(val) {
-      console.log('handleMainButton--val', val)
-      var mainKeyList = []
+      console.log("handleMainButton--val", val);
+      var mainKeyList = [];
       mainKeyList = [
-        'id',
-        'Products',
-        'Headline',
-        'SubmitDescription',
-        'VersionFoundIn',
-        'Score',
-        'Probability_Score',
-        'Impact_Score',
-        'Hazard',
-        'InstallBase',
-        'CRB_MinutesActions',
-        'ReferenceID',
-        'Subsystem',
-        'RationaleForChange',
-        'ResolutionDescription',
-        'VersionsFixedIn',
-        'CFR_ID',
-        'AssociatedDefects',
-        'Status',
-        'Workaround'
-      ]
-      this.keyList = []
+        "id",
+        "Products",
+        "Headline",
+        "SubmitDescription",
+        "VersionFoundIn",
+        "Score",
+        "Probability_Score",
+        "Impact_Score",
+        "Hazard",
+        "InstallBase",
+        "CRB_MinutesActions",
+        "ReferenceID",
+        "Subsystem",
+        "RationaleForChange",
+        "ResolutionDescription",
+        "VersionsFixedIn",
+        "CFR_ID",
+        "AssociatedDefects",
+        "Status",
+        "Workaround"
+      ];
+      this.keyList = [];
       for (let k in mainKeyList) {
-        this.keyList.push(mainKeyList[k])
+        this.keyList.push(mainKeyList[k]);
       }
     },
 
     //实现表格分页
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
-      this.pageSize = val
+      console.log(`每页 ${val} 条`);
+      this.pageSize = val;
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
-      this.currentPage = val
+      console.log(`当前页: ${val}`);
+      this.currentPage = val;
       console.log(
-        '当前页数据',
-        this.listTable.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-      )
+        "当前页数据",
+        this.listTable.slice(
+          (this.currentPage - 1) * this.pageSize,
+          this.currentPage * this.pageSize
+        )
+      );
     },
     spliceFileName(fileName) {
-      let name = fileName
+      let name = fileName;
       if (fileName.length > 22) {
-        fileName = fileName.substring(0, 20) + '...'
+        fileName = fileName.substring(0, 20) + "...";
       }
-      return fileName
+      return fileName;
     },
     //截取字符串 包含中文处理,一个中文字符等于2个长度
     stringIntercept(str, len, hasDot) {
-      var newLength = 0
-      var newStr = ''
-      var chineseRegex = /[^\x00-\xff]/g
-      var singleChar = ''
-      var strLength = str.replace(chineseRegex, '**').length
+      var newLength = 0;
+      var newStr = "";
+      var chineseRegex = /[^\x00-\xff]/g;
+      var singleChar = "";
+      var strLength = str.replace(chineseRegex, "**").length;
       for (var i = 0; i < strLength; i++) {
-        singleChar = str.charAt(i).toString()
+        singleChar = str.charAt(i).toString();
         if (singleChar.match(chineseRegex) != null) {
-          newLength += 2
+          newLength += 2;
         } else {
-          newLength++
+          newLength++;
         }
         if (newLength > len) {
-          break
+          break;
         }
-        newStr += singleChar
+        newStr += singleChar;
       }
 
       if (hasDot && strLength > len) {
-        newStr += hasDot
+        newStr += hasDot;
       }
-      return newStr + '...'
+      return newStr + "...";
     }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

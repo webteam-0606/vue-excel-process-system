@@ -28,6 +28,13 @@ npm test
 ## 需解决
 > 1、文件名重复问题 
 + 判断一下文件名列表里是否已经存在，若存在，则报错，为啥不行。
++ 解决：之前报错因为没有加 `this`，所以 `undefined`。同时，重复的话，就不给文件上传了，直接 `return true`，不执行下边代码。
+```java
+if (this.refreshFileNameList.includes(_file.name) || this.brillianceFileNameList.includes(_file.name)) {
+        alert('文件名重复！请重新上传')
+        return true
+      }
+```
 
 > 2、折叠版左侧的文件名点击，右侧的目录不能同步
 
