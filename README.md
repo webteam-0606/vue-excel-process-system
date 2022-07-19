@@ -115,26 +115,26 @@ if (this.selectRadio == 1) {
           }
 ```
 2）、需要显示的列 √
-+ Id
-+ Products
-+ Headline
-+ SubmitDescription
-+ VersionFoundIn        
-+ Score
-+ Probability_Score
-+ Impact_Score
-+ Hazard
-+ InstallBase
-+ CRB_MinutesActions
-+ ReferenceID
++ Id  ×
++ Products  ×
++ Headline  ×
++ SubmitDescription √
++ VersionFoundIn ×        
++ Score ×
++ Probability_Score  ×
++ Impact_Score  ×
++ Hazard  ×
++ InstallBase ×
++ CRB_MinutesActions √
++ ReferenceID ×
 + Subsystem
-+ RationaleForChange
-+ ResolutionDescription
-+ VersionsFixedIn                                        
-+ CFR_ID
-+ AssociatedDefects
-+ Status
-+ Workaround
++ RationaleForChange √
++ ResolutionDescription √
++ VersionsFixedIn  ×                                    
++ CFR_ID ×
++ AssociatedDefects ×
++ Status ×
++ Workaround ×
 ```java
 handleMainButton(val) {
       console.log("handleMainButton--val", val);
