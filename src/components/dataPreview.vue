@@ -2,7 +2,7 @@
   <!--  上传的excel表格预览  -->
   <!-- :fit="true" 表格内容换行 -->
   <div class="preview-excel">
-    <el-table class="listTable_ele" :data="dataSet" stripe height="500px" style="width:100%">
+    <el-table class="listTable_ele" :data="dataSet" stripe height="650px" style="width:100%">
       <el-table-column
         v-for="(key, index) in keyList"
         :prop="key"
@@ -17,13 +17,39 @@
 </template>
 
 <script>
-import XLSX from 'xlsx'
+import XLSX from "xlsx";
 export default {
-  name: 'dataPreview',
+  name: "dataPreview",
   data() {
     return {
-      longWidthKey: ['HistoryDetails']
-    }
+      longWidthKey: [
+        "crb_minutesactions",
+        "rationaleforchange",
+        "resolutiondescription",
+        "historydetails"
+      ],
+      // shortWidthKey: [
+      //   "score",
+      //   "hazard",
+      //   "installbase",
+      //   "status",
+      //   "workaround",
+      //   "score",
+      //   "capareqd",
+      //   "approvedformerge",
+      //   "associateddefectscount",
+      //   "bgprocstate",
+      //   "CnR",
+      //   "cnrreqd",
+      //   "complaint",
+      //   "crb_absent",
+      //   "esig_is_current",
+      //   "is_duplicate",
+      //   "Noacceptcount",
+      //   "nositesobserved",
+      //   "readyformerge"
+      // ]
+    }; //"submitdescription"
   },
   props: {
     dataSet: {
@@ -36,21 +62,36 @@ export default {
     }
   },
   create() {
-    console.log('dataSet', this.dataSet)
+    console.log("dataSet", this.dataSet);
   },
   methods: {
     //设置列宽方法
     headSpanFit(h, { column, index }) {
-      let labelLong = column.label.length // 表头label长度
-      let size = 14 // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
-      column.minWidth = labelLong * size + 10 // 根据label长度计算该表头最终宽度
-      if (this.longWidthKey.includes(column.label)) {
-        column.minWidth = 1200
+      let labelLong = column.label.length; // 表头label长度
+      let size = 14; // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
+      if (this.longWidthKey.includes(column.label.toLowerCase())) {
+        column.minWidth = 800;
+      } else if (labelLong > 0 && labelLong < 4) {
+        column.minWidth = (labelLong + 4) * size; // 根据label长度计算该表头最终宽度
+      } else {
+        column.minWidth = labelLong * size;
       }
-      return h('span', { class: 'cell-content', style: { width: '100%' } }, [column.label])
-    },
+      return h("span", { class: "cell-content", style: { width: "100%" } }, [
+        column.label
+      ]);
+    }
+    //原始设置列宽方法
+    // headSpanFit(h, { column, index }) {
+    //   let labelLong = column.label.length // 表头label长度
+    //   let size = 14 // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
+    //   column.minWidth = labelLong * size + 10 // 根据label长度计算该表头最终宽度
+    //   if (this.longWidthKey.includes(column.label)) {
+    //     column.minWidth = 1200
+    //   }
+    //   return h('span', { class: 'cell-content', style: { width: '100%' } }, [column.label])
+    // },
   }
-}
+};
 </script>
 
 <style scoped>

@@ -72,6 +72,8 @@ if (this.refreshFileNameList.includes(_file.name) || this.brillianceFileNameList
 > 5、数据缓存问题
 
 ## 已完成
+> \\yy257728\CT System Engineering\90-Personal
+
 > 1、按ID/全文搜索 √
 + `this.listTable=` 啥， `dataPreview` 就展示啥内容。所以解决一开始的展示一次性上传的多个文件内容，只需要去掉 `this.listTable.push(rowTable);`，加上 `this.listTable = sheetArray;` 即可。
 
@@ -127,7 +129,7 @@ if (this.selectRadio == 1) {
 + InstallBase ×
 + CRB_MinutesActions √
 + ReferenceID ×
-+ Subsystem
++ Subsystem ×
 + RationaleForChange √
 + ResolutionDescription √
 + VersionsFixedIn  ×                                    
@@ -155,6 +157,33 @@ handleMainButton(val) {
 > 3、数据显示问题（列宽 行高）
 + 目前按照title的宽度，设置的列宽，有些不准确
 + 文字内容目前居中平，可以设置成左上对齐
+```java
+:render-header="headSpanFit" //动态绑定
+
+data() {  //给定宽的列名
+    return {
+      longWidthKey: [
+        "crb_minutesactions",
+        "rationaleforchange",
+        "resolutiondescription",
+        "historydetails"
+      ],
+
+headSpanFit(h, { column, index }) {
+      let labelLong = column.label.length; // 表头label长度
+      let size = 14; // 根据需要定义标尺，直接使用字体大小确定就行
+      if (this.longWidthKey.includes(column.label.toLowerCase())) {
+        column.minWidth = 800;
+      } else if (labelLong > 0 && labelLong < 4) {
+        column.minWidth = (labelLong + 4) * size; // 根据label长度计算该表头最终宽度
+      } else {
+        column.minWidth = labelLong * size;
+      }
+      return h("span", { class: "cell-content", style: { width: "100%" } }, [
+        column.label
+      ]);
+    }
+```
 
 > 4、左侧文件框处，需要显示文件地址；解决文件名过长，重新命名为`solution` 和 `no solution`；
 

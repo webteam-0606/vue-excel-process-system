@@ -30,9 +30,7 @@
           <SearchFileBox
             @searchButtonClick="handleSearchButtonClick"
             @radioSelectChange="handleRadioSelectChange"
-          ></SearchFileBox>
-          <!-- 当前上传文件列表 -->
-          <!-- <recentFiles @Change="handleChange" @RefreshCheckAllChange="handleRefreshCheckAllChange" @SelectedRefreshFile="handleSelectedRefreshFile" @ClickFileName="handleClickFileName(index)"></recentFiles> -->
+          ></SearchFileBox>          
           <!-- 当前上传文件列表 -->
           <div class="full-upload-file-box">
             <el-collapse v-model="activeNames" @change="handleChange">
@@ -388,7 +386,7 @@ export default {
             console.log("sheetArray--", sheetArray);
             //暂时的所有上传文件内容，用于在allFileData里边遍历，找到被选中的文件，如何传给临时内容搜索盒子
             this.allFileData.push(sheetArray);
-            //初始时，仅展示最近上传的一个文件 
+            //初始时，仅展示最近上传的一个文件
             this.listTable = sheetArray;
             // this.allFileData=[...this.allFileData,...sheetArray]
             console.log("this.allFileData--", this.allFileData);
@@ -401,7 +399,7 @@ export default {
               }
               // rowTable.id = sheetArray[item].id
               // rowTable.Headline = sheetArray[item].Headline
-              // this.listTable.push(rowTable);//如果增加这个，就会上传时候展示一次性上传的所有文件          
+              // this.listTable.push(rowTable);//如果增加这个，就会上传时候展示一次性上传的所有文件
             }
             console.log("this.listTable-dp-", this.listTable);
             this.keyList = [];
@@ -639,7 +637,14 @@ a {
   text-align: center;
   line-height: 20px;
   padding: 0;
-  height: 10px;
+  height: 30px !important;
+}
+.el-header /deep/ .el-menu--horizontal > .el-submenu .el-submenu__title {
+  height: 30px;
+  line-height: 30px;
+}
+.el-header /deep/ .el-menu--horizontal {
+  height: 30px;
 }
 
 .el-aside {
@@ -667,9 +672,10 @@ a {
   border: 1px solid rgb(202, 205, 210);
   background-color: #e9eef3;
   font-size: 14px;
-  /* margin-top: 10px;
-  margin-bottom: 10px; */
+  margin-top: 10px;
+  margin-bottom: 10px;
   padding: 2px 2px 2px 2px;
+  line-height: 30px;
 }
 .full-upload-file-box /deep/ .el-collapse-item__wrap {
   padding-right: 2px;
@@ -680,6 +686,7 @@ a {
 .full-upload-file-box /deep/ .el-collapse-item__header {
   display: initial;
   background-color: transparent;
+  line-height: 30px;
 }
 .full-upload-file-box .file-check-all {
   left: 60%;
@@ -691,7 +698,7 @@ a {
 }
 
 .upload-filename-list {
-  height: 160px;
+  height: 200px;
   overflow: auto;
 }
 .full-upload-file-box .upload-filename-item {
@@ -772,7 +779,8 @@ a {
 .el-footer {
   background-color: #b3c0d1;
   text-align: center;
-  line-height: 40px;
+  height: 30px !important;
+  line-height: 30px;
   margin-left: 5px;
 }
 body > .el-container {
