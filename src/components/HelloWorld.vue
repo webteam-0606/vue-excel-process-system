@@ -167,14 +167,12 @@ import XLSX from "xlsx";
 import dataPreview from "./dataPreview.vue";
 import ClickUpload from "./clickUpload.vue";
 import SearchFileBox from "./searchFileBox.vue";
-import recentFiles from "./recentFiles.vue";
 export default {
   name: "HelloWorld",
   components: {
     dataPreview,
     ClickUpload,
     SearchFileBox,
-    recentFiles
   },
   data() {
     return {

@@ -137,6 +137,28 @@ if (this.selectRadio == 1) {
 + AssociatedDefects ×
 + Status ×
 + Workaround ×
+
+      <!-- // shortWidthKey: [
+      //   "score",
+      //   "hazard",
+      //   "installbase",
+      //   "status",
+      //   "workaround",
+      //   "score",
+      //   "capareqd",
+      //   "approvedformerge",
+      //   "associateddefectscount",
+      //   "bgprocstate",
+      //   "CnR",
+      //   "cnrreqd",
+      //   "complaint",
+      //   "crb_absent",
+      //   "esig_is_current",
+      //   "is_duplicate",
+      //   "Noacceptcount",
+      //   "nositesobserved",
+      //   "readyformerge"
+      // ] -->
 ```java
 handleMainButton(val) {
       console.log("handleMainButton--val", val);
