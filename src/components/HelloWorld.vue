@@ -24,140 +24,142 @@
           </el-submenu>
         </el-menu>
       </el-header>
-      <el-container>
-        <el-aside width="20%">
-          <!-- 搜索框 -->
-          <SearchFileBox
-            @searchButtonClick="handleSearchButtonClick"
-            @radioSelectChange="handleRadioSelectChange"
-          ></SearchFileBox>          
-          <!-- 当前上传文件列表 -->
-          <div class="full-upload-file-box">
-            <el-collapse v-model="activeNames" @change="handleChange">
-              <!-- 当前文件 Refresh -->
-              <el-collapse-item name="1" class="refresh-file">
-                <template slot="title">
-                  Refresh
-                  <el-checkbox
-                    class="file-check-all"
-                    :indeterminate="isRefreshIndeterminate"
-                    v-model="checkRefreshAll"
-                    @change="handleRefreshCheckAllChange"
-                  >全选</el-checkbox>
-                </template>
-                <div class="upload-filename-list">
-                  <el-checkbox-group
-                    class="file-switch"
-                    v-model="selectedRefreshFile"
-                    @change="handleSelectedRefreshFile"
-                  >
-                    <div
-                      class="upload-filename-item"
-                      v-for="(filename, index) in refreshFileNameList"
-                    >
-                      <el-tooltip class="item" effect="light" :content="filename">
-                        <div
-                          class="upload-filename"
-                          :alt="filename"
-                          @click="handleClickFileName(index,'refresh')"
-                        >
-                          <i class="el-icon-document"></i>
-                          {{ filename }}
-                        </div>
-                      </el-tooltip>
-                      <el-checkbox :label="index"></el-checkbox>
-                    </div>
-                  </el-checkbox-group>
-                </div>
-              </el-collapse-item>
-              <!-- 当前文件 Brilliance Air -->
-              <el-collapse-item name="2" class="refresh-file">
-                <template slot="title">
-                  Brilliance Air
-                  <el-checkbox
-                    class="file-check-all"
-                    :indeterminate="isBrillianceIndeterminate"
-                    v-model="checkBrillianceAll"
-                    @change="handleBrillianceCheckAllChange"
-                  >全选</el-checkbox>
-                </template>
-                <div class="upload-filename-list">
-                  <el-checkbox-group
-                    class="file-switch"
-                    v-model="selectedBrillianceFile"
-                    @change="handleSelectedBrillianceFile"
-                  >
-                    <div
-                      class="upload-filename-item"
-                      v-for="(filename, index) in brillianceFileNameList"
-                    >
-                      <el-tooltip class="item" effect="light" :content="filename">
-                        <div
-                          class="upload-filename"
-                          :alt="filename"
-                          @click="handleClickFileName(index,'brilliance')"
-                        >
-                          <i class="el-icon-document"></i>
-                          {{ filename }}
-                        </div>
-                      </el-tooltip>
-                      <el-checkbox :label="index"></el-checkbox>
-                    </div>
-                  </el-checkbox-group>
-                </div>
-              </el-collapse-item>
-            </el-collapse>
-          </div>
-
-          <!--  excel表格上传  -->
-          <ClickUpload
-            :exceed="exceed"
-            :uploadFile="uploadFile"
-            @click="search()"
-            @change="handleRadioSelectChange"
-          ></ClickUpload>
-        </el-aside>
+      <div ref="mainDiv" class="mainDivName">
         <el-container>
-          <el-main>
-            <!-- 文件的 tabs 标签页 -->
-            <div class="file-tabs-list">
-              <el-tabs v-model="fileNameListValue" type="card" @tab-click="clickTab">
-                <el-tab-pane label="search result" :key="-1" name="0"></el-tab-pane>
-                <el-tab-pane
-                  v-for="(filename, index) in fileNameList"
-                  :label="stringIntercept(filename, 20)"
-                  :key="index"
-                  :name="(index + 1).toString()"
-                ></el-tab-pane>
-              </el-tabs>
+          <el-aside id="d1" width="20%">
+            <!-- 搜索框 -->
+            <SearchFileBox
+              @searchButtonClick="handleSearchButtonClick"
+              @radioSelectChange="handleRadioSelectChange"
+            ></SearchFileBox>
+            <!-- 当前上传文件列表 -->
+            <div class="full-upload-file-box">
+              <el-collapse v-model="activeNames" @change="handleChange">
+                <!-- 当前文件 Refresh -->
+                <el-collapse-item name="1" class="refresh-file">
+                  <template slot="title">
+                    Refresh
+                    <el-checkbox
+                      class="file-check-all"
+                      :indeterminate="isRefreshIndeterminate"
+                      v-model="checkRefreshAll"
+                      @change="handleRefreshCheckAllChange"
+                    >全选</el-checkbox>
+                  </template>
+                  <div class="upload-filename-list">
+                    <el-checkbox-group
+                      class="file-switch"
+                      v-model="selectedRefreshFile"
+                      @change="handleSelectedRefreshFile"
+                    >
+                      <div
+                        class="upload-filename-item"
+                        v-for="(filename, index) in refreshFileNameList"
+                      >
+                        <el-tooltip class="item" effect="light" :content="filename">
+                          <div
+                            class="upload-filename"
+                            :alt="filename"
+                            @click="handleClickFileName(index,'refresh')"
+                          >
+                            <i class="el-icon-document"></i>
+                            {{ filename }}
+                          </div>
+                        </el-tooltip>
+                        <el-checkbox :label="index"></el-checkbox>
+                      </div>
+                    </el-checkbox-group>
+                  </div>
+                </el-collapse-item>
+                <!-- 当前文件 Brilliance Air -->
+                <el-collapse-item name="2" class="refresh-file">
+                  <template slot="title">
+                    Brilliance Air
+                    <el-checkbox
+                      class="file-check-all"
+                      :indeterminate="isBrillianceIndeterminate"
+                      v-model="checkBrillianceAll"
+                      @change="handleBrillianceCheckAllChange"
+                    >全选</el-checkbox>
+                  </template>
+                  <div class="upload-filename-list">
+                    <el-checkbox-group
+                      class="file-switch"
+                      v-model="selectedBrillianceFile"
+                      @change="handleSelectedBrillianceFile"
+                    >
+                      <div
+                        class="upload-filename-item"
+                        v-for="(filename, index) in brillianceFileNameList"
+                      >
+                        <el-tooltip class="item" effect="light" :content="filename">
+                          <div
+                            class="upload-filename"
+                            :alt="filename"
+                            @click="handleClickFileName(index,'brilliance')"
+                          >
+                            <i class="el-icon-document"></i>
+                            {{ filename }}
+                          </div>
+                        </el-tooltip>
+                        <el-checkbox :label="index"></el-checkbox>
+                      </div>
+                    </el-checkbox-group>
+                  </div>
+                </el-collapse-item>
+              </el-collapse>
             </div>
 
-            <div class="product-defect">
-              Product Defect :
-              <el-button @click="handleMainButton" class="product-main" type="primary">Main</el-button>
-            </div>
-            <!--  上传的excel表格预览  -->
-            <data-preview
-              :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
-              :keyList="keyList"
-            ></data-preview>
-            <!-- 分页实现 -->
-            <div class="block">
-              <span class="demonstration"></span>
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="listTable.length"
-              ></el-pagination>
-            </div>
-          </el-main>
-          <el-footer>Footer222</el-footer>
+            <!--  excel表格上传  -->
+            <ClickUpload
+              :exceed="exceed"
+              :uploadFile="uploadFile"
+              @click="search()"
+              @change="handleRadioSelectChange"
+            ></ClickUpload>
+          </el-aside>
+          <el-container>
+            <el-main id="d2" >
+              <!-- 文件的 tabs 标签页 -->
+              <div class="file-tabs-list">
+                <el-tabs v-model="fileNameListValue" type="card" @tab-click="clickTab">
+                  <el-tab-pane label="search result" :key="-1" name="0"></el-tab-pane>
+                  <el-tab-pane
+                    v-for="(filename, index) in fileNameList"
+                    :label="stringIntercept(filename, 20)"
+                    :key="index"
+                    :name="(index + 1).toString()"
+                  ></el-tab-pane>
+                </el-tabs>
+              </div>
+
+              <div class="product-defect">
+                Product Defect :
+                <el-button @click="handleMainButton" class="product-main" type="primary">Main</el-button>
+              </div>
+              <!--  上传的excel表格预览  -->
+              <data-preview
+                :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+                :keyList="keyList"
+              ></data-preview>
+              <!-- 分页实现 -->
+              <div class="block">
+                <span class="demonstration"></span>
+                <el-pagination
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage"
+                  :page-sizes="[10, 20, 30, 40]"
+                  :page-size="pageSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="listTable.length"
+                ></el-pagination>
+              </div>
+            </el-main>
+            <el-footer>Footer222</el-footer>
+          </el-container>
         </el-container>
-      </el-container>
+      </div>
     </el-container>
   </div>
 </template>
@@ -172,7 +174,7 @@ export default {
   components: {
     dataPreview,
     ClickUpload,
-    SearchFileBox,
+    SearchFileBox
   },
   data() {
     return {
@@ -224,9 +226,18 @@ export default {
   },
   //页面渲染时,显示所有的数据
   mounted() {
+    this.getDivHeight();
+    window.addEventListener("resize", this.getDivHeight);
     this.showTable = this.listTable;
   },
+  destroyed() {
+    window.removeEventListener("resize", this.getDivHeight, false);
+  },
   methods: {
+    getDivHeight() {
+      const screenHeight = window.innerHeight;
+      this.$refs.mainDiv.style.height = screenHeight - 30 + "px";
+    },
     //折叠面板
     handleChange(val) {
       console.log("handleChange-val--", val);
@@ -637,6 +648,10 @@ a {
   padding: 0;
   height: 30px !important;
 }
+.mainDivName {
+  height: 0;
+  min-height: 600px;
+}
 .el-header /deep/ .el-menu--horizontal > .el-submenu .el-submenu__title {
   height: 30px;
   line-height: 30px;
@@ -729,6 +744,9 @@ a {
 .file-tabs-list {
   overflow: auto;
 }
+.file-tabs-list /deep/ .el-tabs__nav-wrap.is-scrollable {
+  padding: 0 15px;
+}
 .file-tabs-list /deep/ .el-tabs__item {
   height: 30px;
   line-height: 35px;
@@ -736,13 +754,23 @@ a {
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0 2px;
+  padding: 0 5px;
+  font-size: 12px;
+}
+.el-main /deep/ .el-tabs__header {
+  margin: 0 0 1px;
+}
+.file-tabs-list /deep/ .el-tabs__item:nth-child(2){
+  padding-left: 2px !important;
 }
 .file-tabs-list /deep/ .el-icon-close {
   vertical-align: inherit;
 }
 .file-tabs-list /deep/.file-tabs-list {
   margin: 0 0 5px 0;
+}
+.file-tabs-list /deep/ .el-button {
+  padding: 6px 8px;
 }
 .file-tab-name {
   width: 180px;
@@ -759,9 +787,10 @@ a {
   border: 1px solid rgb(202, 205, 210);
   background-color: #b3c0d1;
   font-size: 14px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 5px 5px 5px 5px;
+  /* margin-top: 10px;
+  margin-bottom: 10px; */
+  padding: 2px 2px 2px 2px;
+  border-radius: 2px;
 }
 .product-defect .product-main .el-button--primary {
   padding: 5px 10px 5px 10px;

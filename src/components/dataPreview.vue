@@ -28,28 +28,7 @@ export default {
         "resolutiondescription",
         "historydetails"
       ],
-      // shortWidthKey: [
-      //   "score",
-      //   "hazard",
-      //   "installbase",
-      //   "status",
-      //   "workaround",
-      //   "score",
-      //   "capareqd",
-      //   "approvedformerge",
-      //   "associateddefectscount",
-      //   "bgprocstate",
-      //   "CnR",
-      //   "cnrreqd",
-      //   "complaint",
-      //   "crb_absent",
-      //   "esig_is_current",
-      //   "is_duplicate",
-      //   "Noacceptcount",
-      //   "nositesobserved",
-      //   "readyformerge"
-      // ]
-    }; //"submitdescription"
+    }; 
   },
   props: {
     dataSet: {
@@ -80,16 +59,6 @@ export default {
         column.label
       ]);
     }
-    //原始设置列宽方法
-    // headSpanFit(h, { column, index }) {
-    //   let labelLong = column.label.length // 表头label长度
-    //   let size = 14 // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
-    //   column.minWidth = labelLong * size + 10 // 根据label长度计算该表头最终宽度
-    //   if (this.longWidthKey.includes(column.label)) {
-    //     column.minWidth = 1200
-    //   }
-    //   return h('span', { class: 'cell-content', style: { width: '100%' } }, [column.label])
-    // },
   }
 };
 </script>
