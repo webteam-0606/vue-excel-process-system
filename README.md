@@ -26,50 +26,13 @@ npm run e2e
 npm test
 ```
 ## 需解决
-> 1、文件名重复问题 
-+ 判断一下文件名列表里是否已经存在，若存在，则报错，为啥不行。
-+ 解决：之前报错因为没有加 `this`，所以 `undefined`。同时，重复的话，就不给文件上传了，直接 `return true`，不执行下边代码。
-```java
-if (this.refreshFileNameList.includes(_file.name) || this.brillianceFileNameList.includes(_file.name)) {
-        alert('文件名重复！请重新上传')
-        return true
-      }
-```
+> 如果全文搜索，展示所有列时，其中一列（不是关键20列）有搜索内容，再展示关键20列时，这一条数据还是会显示,但是此时看不见搜索内容。
 
-> 2、折叠版左侧的文件名点击，右侧的目录不能同步
-+ 解决：解决文件列表名和tabs标签页不对应。把 `selectedRefreshFile` 里的值在整个 `allFileData` 里边找到对应下标，即可以正确对应。`selectedBrillianceFile` 同理。
-```java
-// console.log("tempSearchBox-1--", tempSearchBox);
-      for (let k in this.selectedRefreshFile) {
-        // 改成数组形式
-        this.fileNameList.find((item, index) => {
-          if (item === this.refreshFileNameList[k]) {
-            tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
-          }
-        });
-      }
-      for (let k in this.selectedBrillianceFile) {
-        // 改成数组形式
-        this.fileNameList.find((item, index) => {
-          if (item === this.brillianceFileNameList[k]) {
-            tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
-          }
-        });
-      }
-```
-+ 备注：
-```java      
-//这种是将Box1与Box2对应合并，Box2的不同属性对应合并到Box1里。
-      tempSearchBox = tempSearchBox1.map((item, index) => {
-        return { ...item, ...tempSearchBox2[index] };
-      });
-```
+> 1、文件读取查找速度
 
-> 3、文件读取查找速度
+> 2、浏览器自适应问题
 
-> 4、浏览器自适应问题
-
-> 5、数据缓存问题
+> 3、数据缓存问题
 
 ## 已完成
 > \\yy257728\CT System Engineering\90-Personal
@@ -212,6 +175,45 @@ headSpanFit(h, { column, index }) {
 > 5、得显示关键的20列。 √
 + 正常搜索是全文搜索，争对所有title的搜索，如果按了main按钮只展示20列的数据。文件上传时的title 装在数组 `KeyList`里，然后展示对应列。
 
+
+> 6、文件名重复问题 
++ 判断一下文件名列表里是否已经存在，若存在，则报错，为啥不行。
++ 解决：之前报错因为没有加 `this`，所以 `undefined`。同时，重复的话，就不给文件上传了，直接 `return true`，不执行下边代码。
+```java
+if (this.refreshFileNameList.includes(_file.name) || this.brillianceFileNameList.includes(_file.name)) {
+        alert('文件名重复！请重新上传')
+        return true
+      }
+```
+
+> 7、折叠版左侧的文件名点击，右侧的目录不能同步
++ 解决：解决文件列表名和tabs标签页不对应。把 `selectedRefreshFile` 里的值在整个 `allFileData` 里边找到对应下标，即可以正确对应。`selectedBrillianceFile` 同理。
+```java
+// console.log("tempSearchBox-1--", tempSearchBox);
+      for (let k in this.selectedRefreshFile) {
+        // 改成数组形式
+        this.fileNameList.find((item, index) => {
+          if (item === this.refreshFileNameList[k]) {
+            tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
+          }
+        });
+      }
+      for (let k in this.selectedBrillianceFile) {
+        // 改成数组形式
+        this.fileNameList.find((item, index) => {
+          if (item === this.brillianceFileNameList[k]) {
+            tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
+          }
+        });
+      }
+```
++ 备注：
+```java      
+//这种是将Box1与Box2对应合并，Box2的不同属性对应合并到Box1里。
+      tempSearchBox = tempSearchBox1.map((item, index) => {
+        return { ...item, ...tempSearchBox2[index] };
+      });
+```
 
 
 ## 笔记

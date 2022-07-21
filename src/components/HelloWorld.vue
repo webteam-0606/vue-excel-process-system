@@ -119,7 +119,7 @@
             ></ClickUpload>
           </el-aside>
           <el-container>
-            <el-main id="d2" >
+            <el-main id="d2">
               <!-- 文件的 tabs 标签页 -->
               <div class="file-tabs-list">
                 <el-tabs v-model="fileNameListValue" type="card" @tab-click="clickTab">
@@ -588,6 +588,8 @@ export default {
       let name = fileName;
       if (fileName.length > 22) {
         fileName = fileName.substring(0, 20) + "...";
+        // fileName = fileName.substring(0, 10) + "..." + fileName.substring(fileName.length-10, fileName.length);
+        // console.log('fileName',fileName);
       }
       return fileName;
     },
@@ -760,7 +762,7 @@ a {
 .el-main /deep/ .el-tabs__header {
   margin: 0 0 1px;
 }
-.file-tabs-list /deep/ .el-tabs__item:nth-child(2){
+.file-tabs-list /deep/ .el-tabs__item:nth-child(2) {
   padding-left: 2px !important;
 }
 .file-tabs-list /deep/ .el-icon-close {

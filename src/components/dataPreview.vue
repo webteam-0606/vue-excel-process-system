@@ -2,7 +2,7 @@
   <!--  上传的excel表格预览  -->
   <!-- :fit="true" 表格内容换行 -->
   <div class="preview-excel">
-    <el-table class="listTable_ele" :data="dataSet" stripe height="650px" style="width:100%">
+    <el-table class="listTable_ele" :data="dataSet" border stripe height="650px" style="width:100%">
       <el-table-column
         v-for="(key, index) in keyList"
         :prop="key"
@@ -26,7 +26,8 @@ export default {
         "crb_minutesactions",
         "rationaleforchange",
         "resolutiondescription",
-        "historydetails"
+        "historydetails",
+        "submitdescription"
       ],
     }; 
   },
@@ -48,7 +49,9 @@ export default {
     headSpanFit(h, { column, index }) {
       let labelLong = column.label.length; // 表头label长度
       let size = 14; // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
-      if (this.longWidthKey.includes(column.label.toLowerCase())) {
+      if(column.label.toLowerCase().includes('solution')){
+        column.minWidth = 1100;
+      } else if (this.longWidthKey.includes(column.label.toLowerCase())) {
         column.minWidth = 800;
       } else if (labelLong > 0 && labelLong < 4) {
         column.minWidth = (labelLong + 4) * size; // 根据label长度计算该表头最终宽度
