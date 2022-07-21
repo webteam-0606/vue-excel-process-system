@@ -26,7 +26,7 @@ npm run e2e
 npm test
 ```
 ## 需解决
-> 选中1-1文件后，可以搜索，但是选择5-5后搜不到5-5的内容，还是只能搜索到1-1内容
+
 > 如果全文搜索，展示所有列时，其中一列（不是关键20列）有搜索内容，再展示关键20列时，这一条数据还是会显示,但是此时看不见搜索内容。
 
 > 1、文件读取查找速度
@@ -214,6 +214,18 @@ if (this.refreshFileNameList.includes(_file.name) || this.brillianceFileNameList
       tempSearchBox = tempSearchBox1.map((item, index) => {
         return { ...item, ...tempSearchBox2[index] };
       });
+```
+>8、 选中1-1文件后，可以搜索，但是选择5-5后搜不到5-5的内容，还是只能搜索到1-1内容
++ 已解决,`this.refreshFileNameList[k]`改为`this.refreshFileNameList[this.selectedRefreshFile[k]]` 即可，前者 k=0 每次都是第一个文件名。后者是选中文件的序号。同时找到当前文件在整个文件里的下标，使得 `tabs` 标签一一对应.
+```java
+for (let k in this.selectedRefreshFile) {
+        // 改成数组形式
+        this.fileNameList.find((item, index) => {
+          if (item === this.refreshFileNameList[this.selectedRefreshFile[k]]) {
+            tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
+          }
+        });
+      }
 ```
 
 
