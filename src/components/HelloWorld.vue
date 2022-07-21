@@ -348,7 +348,7 @@ export default {
     async uploadFile(params) {
       console.log("上传文件触发");
       this.listTable = [];
-      this.keyList = []
+      this.keyList = [];
       const _file = params.file;
       console.log("file--", _file);
       if (
@@ -446,9 +446,8 @@ export default {
       // 被选中文件形成的暂时的文件内容
       let tempSearchBox = [];
       //解决文件列表名和tabs标签页不对应。把selectedRefreshFile里的值在整个allFileData里边找到对应下标，即可以正确对应
-      
+
       for (let k in this.selectedRefreshFile) {
-        
         // 改成数组形式
         this.fileNameList.find((item, index) => {
           if (item === this.refreshFileNameList[this.selectedRefreshFile[k]]) {
@@ -459,15 +458,17 @@ export default {
       for (let k in this.selectedBrillianceFile) {
         // 改成数组形式
         this.fileNameList.find((item, index) => {
-          if (item === this.brillianceFileNameList[this.selectedBrillianceFile[k]]) {
+          if (
+            item === this.brillianceFileNameList[this.selectedBrillianceFile[k]]
+          ) {
             tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
           }
         });
       }
-      
+
       // searchArr 待被搜索的文件内容
       let searchArr = tempSearchBox;
-      console.log("searchArr---",searchArr);
+      console.log("searchArr---", searchArr);
       this.keyList = [];
       for (var j = 0; j < searchArr.length; j++) {
         for (let item in searchArr[j]) {
@@ -479,8 +480,10 @@ export default {
       if (this.selectRadio == 1) {
         //search框输入的搜索内容--全文搜索
         console.log("开始全文搜索--");
+        alert("点击确定按钮开始搜索，搜索结束将会提示。");
         searchArr.forEach(obj => {
           console.log("开始寻找");
+
           for (let key in obj) {
             if (obj[key].toString().includes(res)) {
               if (Search_List.indexOf(obj) == "-1") {
@@ -510,6 +513,7 @@ export default {
       }
       this.fileNameListValue = "0";
       console.log("搜索结束。");
+      alert("搜索结束。");
     },
     clickTab(targetName) {
       //切换tab页时更新展示数据
@@ -791,6 +795,7 @@ a {
 }
 .el-main /deep/ .el-table__body-wrapper {
   width: 99.7%;
+  height: 90% !important;
   border: 1px solid rgb(202, 205, 210);
 }
 
