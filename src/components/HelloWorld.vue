@@ -263,8 +263,6 @@ export default {
         return index;
       });
       this.selectedRefreshFile = val ? all : [];
-      console.log("this.selectedRefreshFile---", this.selectedRefreshFile);
-      // this.selectedFile.push(this.selectedRefreshFile);
       this.isRefreshIndeterminate = false;
     },
     // refresh-file 的文件单选按钮
@@ -276,12 +274,11 @@ export default {
       this.isRefreshIndeterminate =
         checkedRefreshCount > 0 &&
         checkedRefreshCount < this.refreshFileNameList.length;
-      console.log("this.isRefreshIndeterminate-", this.isRefreshIndeterminate);
       //若不选中，清空选择框
       if (val.length === 0) {
         this.isRefreshIndeterminate = false;
         this.checkRefreshAll = false;
-        this.selectedRefreshFile = [];
+        // this.selectedRefreshFile = [];
       }
     },
 
@@ -292,7 +289,6 @@ export default {
         return index;
       });
       this.selectedBrillianceFile = val ? all : [];
-      // this.selectedFile.push(this.selectedBrillianceFile);
       console.log(
         "this.selectedBrillianceFile---2-",
         this.selectedBrillianceFile
@@ -316,7 +312,7 @@ export default {
       if (val.length === 0) {
         this.isBrillianceIndeterminate = false;
         this.checkBrillianceAll = false;
-        this.selectedBrillianceFile = [];
+        // this.selectedBrillianceFile = [];
       }
     },
 
@@ -345,7 +341,6 @@ export default {
           this.keyList.push(k);
         }
       }
-      console.log("this.keyList-handleClickFileName-", this.keyList);
       //同时切换右侧tab栏激活的标签
       this.fileNameListValue = allFileIndex + 1 + "";
     },
@@ -353,6 +348,7 @@ export default {
     async uploadFile(params) {
       console.log("上传文件触发");
       this.listTable = [];
+      this.keyList = []
       const _file = params.file;
       console.log("file--", _file);
       if (
@@ -365,11 +361,9 @@ export default {
       if (_file.name.toLowerCase().includes("refresh")) {
         this.refreshFileNameList.push(_file.name);
         this.fileNameList.push(_file.name);
-        console.log("this.fileNameList---refresh---", this.fileNameList);
       } else if (_file.name.toLowerCase().includes("brilliance")) {
         this.brillianceFileNameList.push(_file.name);
         this.fileNameList.push(_file.name);
-        console.log("this.fileNameList---brilliance---", this.fileNameList);
       } else {
         alert(
           "仅支持refresh/brilliance两种类型文件上传!上传文件名必须包含refresh/brilliance,请重新命名文件名并上传。"
@@ -398,7 +392,6 @@ export default {
             //初始时，仅展示最近上传的一个文件
             this.listTable = sheetArray;
             // this.allFileData=[...this.allFileData,...sheetArray]
-            console.log("this.allFileData--", this.allFileData);
             for (let item in sheetArray) {
               let rowTable = {};
               //这里的rowTable的属性名注意要与上面表格的prop一致
@@ -410,7 +403,6 @@ export default {
               // rowTable.Headline = sheetArray[item].Headline
               // this.listTable.push(rowTable);//如果增加这个，就会上传时候展示一次性上传的所有文件
             }
-            console.log("this.listTable-dp-", this.listTable);
             this.keyList = [];
             //keyList循环遍历listTable[i]，（不只是listTable[0]，看看有没有别的列名没有得到）可展示不同属性的文件
             // if (this.listTable.length > 0) {
@@ -428,8 +420,6 @@ export default {
               this.keyList.push(item);
             }
             // this.listTable = sheetArray
-            console.log("this.keyList-upload-", this.keyList);
-            console.log("this.listTable--", this.listTable);
             //上传完毕后把当前tab页激活(当前展示数据tab变成蓝色)
             //element-ui tab的name属性只接收string类型
             //v-model="fileNameListValue"意思是当前激活的tab的name属性为fileNameListValue
@@ -456,10 +446,12 @@ export default {
       // 被选中文件形成的暂时的文件内容
       let tempSearchBox = [];
       //解决文件列表名和tabs标签页不对应。把selectedRefreshFile里的值在整个allFileData里边找到对应下标，即可以正确对应
+      
       for (let k in this.selectedRefreshFile) {
+        
         // 改成数组形式
         this.fileNameList.find((item, index) => {
-          if (item === this.refreshFileNameList[k]) {
+          if (item === this.refreshFileNameList[this.selectedRefreshFile[k]]) {
             tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
           }
         });
@@ -467,13 +459,15 @@ export default {
       for (let k in this.selectedBrillianceFile) {
         // 改成数组形式
         this.fileNameList.find((item, index) => {
-          if (item === this.brillianceFileNameList[k]) {
+          if (item === this.brillianceFileNameList[this.selectedBrillianceFile[k]]) {
             tempSearchBox = [...tempSearchBox, ...this.allFileData[index]];
           }
         });
       }
+      
       // searchArr 待被搜索的文件内容
       let searchArr = tempSearchBox;
+      console.log("searchArr---",searchArr);
       this.keyList = [];
       for (var j = 0; j < searchArr.length; j++) {
         for (let item in searchArr[j]) {
@@ -491,13 +485,13 @@ export default {
             if (obj[key].toString().includes(res)) {
               if (Search_List.indexOf(obj) == "-1") {
                 Search_List.push(obj);
+                break;
               }
             }
           }
         });
         //Search_List 搜索成功返回的内容，给listTable展示
         this.listTable = Search_List;
-        // this.keyList = []
       } else if (this.selectRadio == 2) {
         searchArr.forEach(e => {
           //绑定的table prop
@@ -509,13 +503,13 @@ export default {
           }
         });
         this.listTable = Search_List;
-        // this.keyList = []
         console.log("搜索结果this.listTable-", this.listTable);
         this.currentPage = 1;
       } else {
         console.log("this.selectRadio--", this.selectRadio);
       }
       this.fileNameListValue = "0";
+      console.log("搜索结束。");
     },
     clickTab(targetName) {
       //切换tab页时更新展示数据
@@ -588,8 +582,6 @@ export default {
       let name = fileName;
       if (fileName.length > 22) {
         fileName = fileName.substring(0, 20) + "...";
-        // fileName = fileName.substring(0, 10) + "..." + fileName.substring(fileName.length-10, fileName.length);
-        // console.log('fileName',fileName);
       }
       return fileName;
     },

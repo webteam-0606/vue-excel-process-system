@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import XLSX from "xlsx";
 export default {
   name: "dataPreview",
   data() {
@@ -49,9 +48,10 @@ export default {
     headSpanFit(h, { column, index }) {
       let labelLong = column.label.length; // 表头label长度
       let size = 14; // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
-      if(column.label.toLowerCase().includes('solution')){
-        column.minWidth = 1100;
-      } else if (this.longWidthKey.includes(column.label.toLowerCase())) {
+      // if(column.label.toLowerCase().includes('solution')){
+      //   column.minWidth = 1100;
+      // } else 
+      if (this.longWidthKey.includes(column.label.toLowerCase())) {
         column.minWidth = 800;
       } else if (labelLong > 0 && labelLong < 4) {
         column.minWidth = (labelLong + 4) * size; // 根据label长度计算该表头最终宽度
