@@ -27,8 +27,11 @@ npm test
 ```
 ## 需解决
 
-> 大文件搜索时，展示框高度会变小
-> 如果全文搜索，展示所有列时，其中一列（不是关键20列）有搜索内容，再展示关键20列时，这一条数据还是会显示,但是此时看不见搜索内容。
+> 没有选中文件，直接搜索时，提示 √
+> 等待时，加loading
+> tabs 文字提示
+> 大文件搜索时，展示框高度会变小 √
+> 如果全文搜索，展示所有列时，其中一列（不是关键20列）有搜索内容，再展示关键20列时，这一条数据还是会显示,但是此时看不见搜索内容。 √
 
 > 1、文件读取查找速度
 
@@ -228,7 +231,18 @@ for (let k in this.selectedRefreshFile) {
         });
       }
 ```
-
+>9、`keyList` 循环遍历 `listTable[i]`，（不只是 `listTable[0]`，看看有没有别的列名没有得到）可展示不同属性的文件
+```java
+            if (this.listTable.length > 0) {
+              for (var i = 0; i < this.listTable.length; i++) {
+                for (let item in this.listTable[i]) {
+                  if (!this.keyList.toString().includes(item)) {
+                    this.keyList.push(item);
+                  }
+                }
+              }
+            }
+```
 
 ## 笔记
 > 1、子组件封装

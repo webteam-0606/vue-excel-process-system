@@ -26,7 +26,7 @@
       </el-header>
       <div ref="mainDiv" class="mainDivName">
         <el-container>
-          <el-aside id="d1" width="20%">
+          <el-aside width="20%">
             <!-- 搜索框 -->
             <SearchFileBox
               @searchButtonClick="handleSearchButtonClick"
@@ -119,7 +119,7 @@
             ></ClickUpload>
           </el-aside>
           <el-container>
-            <el-main id="d2">
+            <el-main>
               <!-- 文件的 tabs 标签页 -->
               <div class="file-tabs-list">
                 <el-tabs v-model="fileNameListValue" type="card" @tab-click="clickTab">
@@ -135,12 +135,20 @@
 
               <div class="product-defect">
                 Product Defect :
-                <el-button @click="handleMainButton" class="product-main" type="primary">Main</el-button>
+                <el-tooltip
+                  class="item"
+                  effect="light"
+                  content="仅展示重要的20列内容"
+                  placement="bottom-end"
+                >
+                  <el-button @click="handleMainButton" class="product-main" type="primary">Main</el-button>
+                </el-tooltip>
               </div>
               <!--  上传的excel表格预览  -->
               <data-preview
                 :dataSet="listTable.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
                 :keyList="keyList"
+                :loading="loading"
               ></data-preview>
               <!-- 分页实现 -->
               <div class="block">
@@ -178,6 +186,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       fileNameList: [],
       refreshFileNameList: [],
       brillianceFileNameList: [],
@@ -226,18 +235,18 @@ export default {
   },
   //页面渲染时,显示所有的数据
   mounted() {
-    this.getDivHeight();
-    window.addEventListener("resize", this.getDivHeight);
+    // this.getDivHeight();
+    // window.addEventListener("resize", this.getDivHeight);
     this.showTable = this.listTable;
   },
-  destroyed() {
-    window.removeEventListener("resize", this.getDivHeight, false);
-  },
+  // destroyed() {
+  //   window.removeEventListener("resize", this.getDivHeight, false);
+  // },
   methods: {
-    getDivHeight() {
-      const screenHeight = window.innerHeight;
-      this.$refs.mainDiv.style.height = screenHeight - 30 + "px";
-    },
+    // getDivHeight() {
+    //   const screenHeight = window.innerHeight;
+    //   this.$refs.mainDiv.style.height = screenHeight - 30 + "px";
+    // },
     //折叠面板
     handleChange(val) {
       console.log("handleChange-val--", val);
@@ -245,7 +254,9 @@ export default {
     handleSearchButtonClick(inputVal) {
       console.log("接收到子组件searchValue的变更", inputVal);
       this.inputVal = inputVal;
+      this.loading = true;
       this.search();
+      this.loading = false;
     },
     // aside 的全文搜索/ID搜索
     handleRadioSelectChange(val) {
@@ -320,6 +331,7 @@ export default {
     handleClickFileName(index, folderName) {
       console.log("当前点击的文件index", index);
       console.log("当前点击的文件所属文件夹", folderName);
+      this.loading = true;
       let tempFileName = "";
       let allFileIndex = 0;
       if (folderName === "refresh") {
@@ -333,6 +345,7 @@ export default {
         }
       });
       this.listTable = this.allFileData[allFileIndex];
+      this.loading = false;
       console.log("this.listTable", this.listTable);
       //同时更改keyList
       this.keyList = [];
@@ -347,6 +360,7 @@ export default {
     //解析excel
     async uploadFile(params) {
       console.log("上传文件触发");
+      this.loading = true;
       this.listTable = [];
       this.keyList = [];
       const _file = params.file;
@@ -366,7 +380,7 @@ export default {
         this.fileNameList.push(_file.name);
       } else {
         alert(
-          "仅支持refresh/brilliance两种类型文件上传!上传文件名必须包含refresh/brilliance,请重新命名文件名并上传。"
+          "上传文件名必须包含 refresh / brilliance, 请重新命名文件名并上传。"
         );
         return true;
       }
@@ -391,6 +405,7 @@ export default {
             this.allFileData.push(sheetArray);
             //初始时，仅展示最近上传的一个文件
             this.listTable = sheetArray;
+            this.loading = false;
             // this.allFileData=[...this.allFileData,...sheetArray]
             for (let item in sheetArray) {
               let rowTable = {};
@@ -399,21 +414,10 @@ export default {
               for (let key in sheetArray[item]) {
                 rowTable[key] = sheetArray[item][key];
               }
-              // rowTable.id = sheetArray[item].id
-              // rowTable.Headline = sheetArray[item].Headline
               // this.listTable.push(rowTable);//如果增加这个，就会上传时候展示一次性上传的所有文件
             }
             this.keyList = [];
-            //keyList循环遍历listTable[i]，（不只是listTable[0]，看看有没有别的列名没有得到）可展示不同属性的文件
-            // if (this.listTable.length > 0) {
-            //   for (var i = 0; i < this.listTable.length; i++) {
-            //     for (let item in this.listTable[i]) {
-            //       if (!this.keyList.toString().includes(item)) {
-            //         this.keyList.push(item);
-            //       }
-            //     }
-            //   }
-            // }
+
             //上传时候，只需要展示最近的一个文件内容，对应tabs标签选中即可。
             console.log("sheetArray--", sheetArray);
             for (let item in sheetArray[0]) {
@@ -438,6 +442,7 @@ export default {
     },
     search() {
       // Search_List 存放搜索成功返回的数据
+      // this.loading = true;
       const Search_List = [];
       this.keyList = [];
       let res1 = this.inputVal;
@@ -469,62 +474,76 @@ export default {
       // searchArr 待被搜索的文件内容
       let searchArr = tempSearchBox;
       console.log("searchArr---", searchArr);
-      this.keyList = [];
-      for (var j = 0; j < searchArr.length; j++) {
-        for (let item in searchArr[j]) {
-          if (!this.keyList.toString().includes(item)) {
-            this.keyList.push(item);
+      console.log("searchArr.length--", searchArr.length);
+      if (searchArr.length == 0) {
+        alert("请上传并勾选需要搜索的文件，再进行搜索！");
+      } else {
+        this.keyList = [];
+        for (var j = 0; j < searchArr.length; j++) {
+          for (let item in searchArr[j]) {
+            if (!this.keyList.toString().includes(item)) {
+              this.keyList.push(item);
+            }
           }
         }
-      }
-      if (this.selectRadio == 1) {
-        //search框输入的搜索内容--全文搜索
-        console.log("开始全文搜索--");
-        alert("点击确定按钮开始搜索，搜索结束将会提示。");
-        searchArr.forEach(obj => {
-          console.log("开始寻找");
+        if (this.selectRadio == 1) {
+          //search框输入的搜索内容--全文搜索
+          console.log("开始全文搜索--");
 
-          for (let key in obj) {
-            if (obj[key].toString().includes(res)) {
-              if (Search_List.indexOf(obj) == "-1") {
-                Search_List.push(obj);
-                break;
+          searchArr.forEach(obj => {
+            // console.log("开始寻找");
+            for (let key in obj) {
+              if (obj[key].toString().includes(res)) {
+                if (Search_List.indexOf(obj) == "-1") {
+                  Search_List.push(obj);
+                  break;
+                }
               }
             }
-          }
-        });
-        //Search_List 搜索成功返回的内容，给listTable展示
-        this.listTable = Search_List;
-      } else if (this.selectRadio == 2) {
-        searchArr.forEach(e => {
-          //绑定的table prop
-          let id = e.id;
-          if (id.toString().includes(res)) {
-            if (Search_List.indexOf(e) == "-1") {
-              Search_List.push(e);
+          });
+          //Search_List 搜索成功返回的内容，给listTable展示
+          this.listTable = Search_List;
+          // this.loading = false;
+        } else if (this.selectRadio == 2) {
+          searchArr.forEach(e => {
+            //绑定的table prop
+            let id = e.id;
+            if (id.toString().includes(res)) {
+              if (Search_List.indexOf(e) == "-1") {
+                Search_List.push(e);
+              }
             }
-          }
-        });
-        this.listTable = Search_List;
-        console.log("搜索结果this.listTable-", this.listTable);
-        this.currentPage = 1;
-      } else {
-        console.log("this.selectRadio--", this.selectRadio);
+          });
+          this.listTable = Search_List;
+          // this.loading = false;
+          console.log("触发this.loading = false---");
+          console.log("搜索结果this.listTable-", this.listTable);
+          this.currentPage = 1;
+        } else {
+          alert("搜索错误。");
+          console.log("this.selectRadio--", this.selectRadio);
+        }
+
+        this.fileNameListValue = "0";
+        this.loading = false;
+        console.log("触发this.loading = false---");
+        console.log("搜索结束。");
+        // alert("搜索结束。");
       }
-      this.fileNameListValue = "0";
-      console.log("搜索结束。");
-      alert("搜索结束。");
     },
     clickTab(targetName) {
       //切换tab页时更新展示数据
+      this.loading = true;
       const tabIndex = parseInt(targetName.index);
       console.log("tabsIndex--", tabIndex);
       if (tabIndex === 0) {
         this.listTable = [];
+        this.loading = false;
         this.keyList = [];
         return true;
       }
       this.listTable = this.allFileData[tabIndex - 1];
+      this.loading = false;
       //同步更改keyList
       this.keyList = [];
       if (this.listTable.length > 0) {
@@ -536,6 +555,7 @@ export default {
     },
     //实现 Main 按钮
     handleMainButton(val) {
+      this.loading = true;
       console.log("handleMainButton--val", val);
       var mainKeyList = [];
       mainKeyList = [
@@ -564,6 +584,7 @@ export default {
       for (let k in mainKeyList) {
         this.keyList.push(mainKeyList[k]);
       }
+      this.loading = false;
     },
 
     //实现表格分页
