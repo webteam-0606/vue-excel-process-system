@@ -235,18 +235,10 @@ export default {
   },
   //页面渲染时,显示所有的数据
   mounted() {
-    // this.getDivHeight();
-    // window.addEventListener("resize", this.getDivHeight);
     this.showTable = this.listTable;
   },
-  // destroyed() {
-  //   window.removeEventListener("resize", this.getDivHeight, false);
   // },
   methods: {
-    // getDivHeight() {
-    //   const screenHeight = window.innerHeight;
-    //   this.$refs.mainDiv.style.height = screenHeight - 30 + "px";
-    // },
     //折叠面板
     handleChange(val) {
       console.log("handleChange-val--", val);
@@ -254,9 +246,9 @@ export default {
     handleSearchButtonClick(inputVal) {
       console.log("接收到子组件searchValue的变更", inputVal);
       this.inputVal = inputVal;
-      this.loading = true;
+      // this.loading = true;
       this.search();
-      this.loading = false;
+      // this.loading = false;
     },
     // aside 的全文搜索/ID搜索
     handleRadioSelectChange(val) {
@@ -442,7 +434,7 @@ export default {
     },
     search() {
       // Search_List 存放搜索成功返回的数据
-      // this.loading = true;
+      this.loading = true;
       const Search_List = [];
       this.keyList = [];
       let res1 = this.inputVal;
@@ -473,8 +465,6 @@ export default {
 
       // searchArr 待被搜索的文件内容
       let searchArr = tempSearchBox;
-      console.log("searchArr---", searchArr);
-      console.log("searchArr.length--", searchArr.length);
       if (searchArr.length == 0) {
         alert("请上传并勾选需要搜索的文件，再进行搜索！");
       } else {
@@ -503,7 +493,7 @@ export default {
           });
           //Search_List 搜索成功返回的内容，给listTable展示
           this.listTable = Search_List;
-          // this.loading = false;
+          this.loading = false;
         } else if (this.selectRadio == 2) {
           searchArr.forEach(e => {
             //绑定的table prop
@@ -515,7 +505,7 @@ export default {
             }
           });
           this.listTable = Search_List;
-          // this.loading = false;
+          this.loading = false;
           console.log("触发this.loading = false---");
           console.log("搜索结果this.listTable-", this.listTable);
           this.currentPage = 1;
@@ -525,8 +515,7 @@ export default {
         }
 
         this.fileNameListValue = "0";
-        this.loading = false;
-        console.log("触发this.loading = false---");
+        // this.loading = false;
         console.log("搜索结束。");
         // alert("搜索结束。");
       }
