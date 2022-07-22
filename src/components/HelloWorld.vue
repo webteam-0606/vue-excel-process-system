@@ -785,8 +785,6 @@ a {
   border: 1px solid rgb(202, 205, 210);
   background-color: #b3c0d1;
   font-size: 14px;
-  /* margin-top: 10px;
-  margin-bottom: 10px; */
   padding: 2px 2px 2px 2px;
   border-radius: 2px;
 }
