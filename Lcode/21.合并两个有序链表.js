@@ -13,12 +13,27 @@
  * @return {ListNode}
  */
  var mergeTwoLists = function(list1, list2) {
-  var len = 0;
-  if(list1.length < list2.length ? len=list1.length: len=list2.length)
-  for(var i=0;i<len;i++){
-    if((list1[i]<list2[i] || list1[i]==list2[i]) ? list2.unshift(list1[i]) : list1.unshift(list2[i])){
-      //把1放到2的第一个位置
-      list2.unshift(list1[i])
-    }
+  let list = new ListNode();
+  // 用给定封装好的链表，这里运行不了
+  let cur = list;
+  // 注意先给一个表头，最后输出这个，不然链表形成了，不好从头输出。
+  while(list1!=null && list2!=null){
+      if(list1.val<list2.val){
+          list.next = list1;
+          list1 = list1.next;
+      }else {
+          list.next = list2;
+          list2 = list2.next;
+      }
+      list = list.next;
+      // 注意新的链表也得往后挪一个指针
   }
+  // 判断，如果剩下的链表还有数据，则直接接上
+  if(list1 != null){
+      list.next = list1;
+  }else if(list2 != null) {
+      list.next = list2;
+  }
+  // 得返回 list 的表头
+  return cur.next;
 };
