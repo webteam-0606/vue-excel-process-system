@@ -26,21 +26,47 @@ npm run e2e
 npm test
 ```
 ## 需解决
++ 上传大文件，页面崩溃问题。`：`切片上传？
 
-> 没有选中文件，直接搜索时，提示 √
-> 等待时，加loading
-> tabs 文字提示
-> 大文件搜索时，展示框高度会变小 √
-> 如果全文搜索，展示所有列时，其中一列（不是关键20列）有搜索内容，再展示关键20列时，这一条数据还是会显示,但是此时看不见搜索内容。 √
++ `tabs` 文字提示
 
-> 1、文件读取查找速度
++ 等待搜索结果时，加 `loading`，没有实现
 
-> 2、浏览器自适应问题
++  `no solution` 明明`156`列，但是只显示了`86`列。造成原因是只有 `title` 没有数据的列不显示。且若是该列的第一行没有数据也不显示该列。
 
-> 3、数据缓存问题
++ 1、文件读取查找速度
+
++ 2、浏览器自适应问题
+
++ 3、数据缓存问题
 
 ## 已完成
 > \\yy257728\CT System Engineering\90-Personal
+
++ √ 若上传时，列名重复了，列名会自动加上`_1，_2...` 
+
++ √ 没有选中文件，直接搜索时，提示 
+
++ √ 上传文件时，等待加载 `loading..`
+
++ √ 大文件搜索时，展示框高度会变小。`：`给高度 `!important`
+
++ √ 如果全文搜索，展示所有列时，其中一列（不是关键`20`列）有搜索内容，再展示关键`20`列时，这一条数据还是会显示,但是此时看不见搜索内容。
+
++ √ `mainKeyList` 的大小写问题。如表格里有 `ID`，但是 `main` 的是 `id`，不会识别。`：`先判断一下，若变小写，值相等，则把表格里的 `ID` 重赋值给 `main` 的 `id`。
+```java
+for (let k in this.keyList) {
+        for (let i = 0; i < mainKeyList.length; i++) {
+          if (mainKeyList[i].toLowerCase() === this.keyList[k].toLowerCase()) {
+            mainKeyList[i] = this.keyList[k];
+          }
+        }
+      }
+      this.keyList = [];
+      for (let k in mainKeyList) {
+        this.keyList.push(mainKeyList[k]);
+      }
+```
 
 > 1、按ID/全文搜索 √
 + `this.listTable=` 啥， `dataPreview` 就展示啥内容。所以解决一开始的展示一次性上传的多个文件内容，只需要去掉 `this.listTable.push(rowTable);`，加上 `this.listTable = sheetArray;` 即可。

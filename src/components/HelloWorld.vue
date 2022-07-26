@@ -164,7 +164,7 @@
                 ></el-pagination>
               </div>
             </el-main>
-            <el-footer>Footer222</el-footer>
+            <el-footer></el-footer>
           </el-container>
         </el-container>
       </div>
@@ -508,6 +508,7 @@ export default {
           this.loading = false;
           console.log("触发this.loading = false---");
           console.log("搜索结果this.listTable-", this.listTable);
+          console.log("搜索结果this.keyList--", this.keyList);
           this.currentPage = 1;
         } else {
           alert("搜索错误。");
@@ -517,7 +518,6 @@ export default {
         this.fileNameListValue = "0";
         // this.loading = false;
         console.log("搜索结束。");
-        // alert("搜索结束。");
       }
     },
     clickTab(targetName) {
@@ -569,6 +569,14 @@ export default {
         "Status",
         "Workaround"
       ];
+      // 解决关键列与表格title的大小写识别问题
+      for (let k in this.keyList) {
+        for (let i = 0; i < mainKeyList.length; i++) {
+          if (mainKeyList[i].toLowerCase() === this.keyList[k].toLowerCase()) {
+            mainKeyList[i] = this.keyList[k];
+          }
+        }
+      }
       this.keyList = [];
       for (let k in mainKeyList) {
         this.keyList.push(mainKeyList[k]);
