@@ -28,6 +28,15 @@ npm test
 ## 需解决
 + 上传大文件，页面崩溃问题。`：`切片上传+断点续传
 
+```java
+前端渲染几十万条数据不卡顿
+https://blog.csdn.net/weixin_48728668/article/details/110780086?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-110780086-blog-106267489.pc_relevant_multi_platform_whitelistv1&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-110780086-blog-106267489.pc_relevant_multi_platform_whitelistv1&utm_relevant_index=1
+
+VUE-多文件断点续传、秒传、分片上传
+https://segmentfault.com/a/1190000023434864
+https://github.com/debug-null/vue-simple-upload
+```
+
 + `tabs` 文字提示
 
 + 等待搜索结果时，加 `loading`，没有实现
