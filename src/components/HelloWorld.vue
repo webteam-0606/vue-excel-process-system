@@ -415,7 +415,7 @@ export default {
                 requestAnimationFrame(() => {
                   for (
                     let i = page * limit;
-                    i < page * limit + limit && i <= total;
+                    i < page * limit + limit;
                     i++
                   ) {
                     let renderTable = [];
