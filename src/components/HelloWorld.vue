@@ -418,11 +418,11 @@ export default {
                     i < page * limit + limit && i <= total;
                     i++
                   ) {
-                    let listTable0 = [];
+                    let renderTable = [];
                     for (let key in list[i]) {
-                      listTable0[key] = list[i][key];
+                      renderTable[key] = list[i][key];
                     }
-                    this.listTable.push(listTable0);
+                    this.listTable.push(renderTable);
                   }
                   render(page + 1);
                 });
