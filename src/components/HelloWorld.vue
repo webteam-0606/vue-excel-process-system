@@ -392,14 +392,54 @@ export default {
               continue;
             }
             console.log("读取文件");
-            console.log("sheetArray--", sheetArray);
+            // console.log("sheetArray--", sheetArray);
             //暂时的所有上传文件内容，用于在allFileData里边遍历，找到被选中的文件，如何传给临时内容搜索盒子
             this.allFileData.push(sheetArray);
             //初始时，仅展示最近上传的一个文件
-            this.listTable = sheetArray;
+
+            // ---begin-replace-------------------------------
+            const renderList = async () => {
+              console.time("列表时间");
+              const list = sheetArray;
+              console.log("list", list);
+              const total = list.length;
+              console.log("total", total);
+              const page = 0;
+              const limit = 200;
+              const totalPage = Math.ceil(total / limit);
+              console.log("totalPage", totalPage);
+
+              const render = page => {
+                if (page >= totalPage) return;
+                // 使用requestAnimationFrame代替setTimeout
+                requestAnimationFrame(() => {
+                  for (
+                    let i = page * limit;
+                    i < page * limit + limit && i <= total;
+                    i++
+                  ) {
+                    let listTable0 = [];
+                    for (let key in list[i]) {
+                      listTable0[key] = list[i][key];
+                    }
+                    this.listTable.push(listTable0);
+                  }
+                  render(page + 1);
+                });
+              };
+              render(page);
+              console.timeEnd("列表时间");
+            };
+            renderList();
+
+            // this.listTable = sheetArray;
+            // ---end-replace-------------------------------
+
             this.loading = false;
             // this.allFileData=[...this.allFileData,...sheetArray]
+
             for (let item in sheetArray) {
+              // console.log("item=",item);
               let rowTable = {};
               //这里的rowTable的属性名注意要与上面表格的prop一致
               //sheetArray的属性名与上传的表格的列名一致
@@ -408,10 +448,10 @@ export default {
               }
               // this.listTable.push(rowTable);//如果增加这个，就会上传时候展示一次性上传的所有文件
             }
+
             this.keyList = [];
 
             //上传时候，只需要展示最近的一个文件内容，对应tabs标签选中即可。
-            console.log("sheetArray--", sheetArray);
             for (let item in sheetArray[0]) {
               this.keyList.push(item);
             }
