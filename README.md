@@ -33,11 +33,14 @@ npm test
 后端一次给你10万条数据，如何优雅展示，到底考察我什么?
 https://juejin.cn/post/7031923575044964389
 
+数据量太大，DOM节点加载过多，怎么保证前端在渲染的时候页面不会卡（性能优化）
+https://blog.csdn.net/z1093541823/article/details/124724513
+
 前端框架Vue如何渲染几千几万条数据（DOM）而不卡顿
 https://blog.csdn.net/RkHker/article/details/109549263
 
 前端渲染几十万条数据不卡顿
-https://blog.csdn.net/weixin_48728668/article/details/110780086?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-110780086-blog-106267489.pc_relevant_multi_platform_whitelistv1&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-110780086-blog-106267489.pc_relevant_multi_platform_whitelistv1&utm_relevant_index=1
+https://blog.csdn.net/weixin_48728668/article/details/110780086
 
 VUE-多文件断点续传、秒传、分片上传
 https://segmentfault.com/a/1190000023434864
