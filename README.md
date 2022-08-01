@@ -33,6 +33,9 @@ npm test
 后端一次给你10万条数据，如何优雅展示，到底考察我什么?
 https://juejin.cn/post/7031923575044964389
 
+Vue项目通过node连接MySQL数据库并实现增删改查操作
+https://blog.csdn.net/weixin_52580677/article/details/123204092
+
 数据量太大，DOM节点加载过多，怎么保证前端在渲染的时候页面不会卡（性能优化）
 https://blog.csdn.net/z1093541823/article/details/124724513
 
@@ -45,9 +48,15 @@ https://blog.csdn.net/weixin_48728668/article/details/110780086
 VUE-多文件断点续传、秒传、分片上传
 https://segmentfault.com/a/1190000023434864
 https://github.com/debug-null/vue-simple-upload
+
+解释新手node+mysql+vue这个项目怎么运行
+链接：https://pan.baidu.com/s/1B26orr3t6TZFjPBQz_y-Tg 
+提取码：o286 
 ```
 
 + `tabs` 文字提示
+
++ 多个文件时，`Main` 显示的 `title` 大小写问题
 
 + 等待搜索结果时，加 `loading`，没有实现
 
