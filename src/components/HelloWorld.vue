@@ -165,7 +165,7 @@
               </div>
             </el-main>
             <el-footer>
-              <button @click="get()">获取refresh1表数据</button>
+              <button @click="get()">获取refresh1_no_solution表数据</button>
             </el-footer>
           </el-container>
         </el-container>
@@ -244,11 +244,11 @@ export default {
   methods: {
     get() {
       axios
-        .get("http://127.0.0.1/refresh1")
+        .get("http://127.0.0.1/refresh1_no_solution")
         .then(res => {
           console.log(res.data);
 
-          const _file = "refresh1";
+          const _file = "refresh1_no_solution";
           let refresh1Data = res.data;
           this.listTable = [];
           this.keyList = [];
@@ -880,7 +880,7 @@ a {
 }
 .el-main /deep/ .el-table__body-wrapper {
   width: 99.7%;
-  height: 90% !important;
+  height: 89% !important;
   border: 1px solid rgb(202, 205, 210);
 }
 
