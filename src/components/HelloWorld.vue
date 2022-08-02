@@ -246,8 +246,27 @@ export default {
       axios
         .get("http://127.0.0.1/refresh1")
         .then(res => {
-          
           console.log(res.data);
+
+          const _file = "refresh1";
+          let refresh1Data = res.data;
+          this.listTable = [];
+          this.keyList = [];
+          this.refreshFileNameList.push(_file);
+          this.fileNameList.push(_file);
+          this.allFileData.push(refresh1Data);
+          this.listTable = refresh1Data;
+          for (let item in refresh1Data) {
+            let row1Table = {};
+            for (let key in refresh1Data[item]) {
+              row1Table[key] = refresh1Data[item][key];
+            }
+          }
+          this.keyList = [];
+          for (let item in refresh1Data[0]) {
+            this.keyList.push(item);
+          }
+          this.fileNameListValue = this.allFileData.length.toString();
         })
         .catch(err => {
           console.log("获取数据失败" + err);
@@ -427,11 +446,7 @@ export default {
                 if (page >= totalPage) return;
                 // 使用requestAnimationFrame代替setTimeout
                 requestAnimationFrame(() => {
-                  for (
-                    let i = page * limit;
-                    i < page * limit + limit;
-                    i++
-                  ) {
+                  for (let i = page * limit; i < page * limit + limit; i++) {
                     let renderTable = [];
                     for (let key in list[i]) {
                       renderTable[key] = list[i][key];
