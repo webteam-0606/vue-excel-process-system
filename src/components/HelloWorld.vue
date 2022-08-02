@@ -164,7 +164,9 @@
                 ></el-pagination>
               </div>
             </el-main>
-            <el-footer></el-footer>
+            <el-footer>
+              <button @click="get()">获取refresh1表数据</button>
+            </el-footer>
           </el-container>
         </el-container>
       </div>
@@ -177,6 +179,7 @@ import XLSX from "xlsx";
 import dataPreview from "./dataPreview.vue";
 import ClickUpload from "./clickUpload.vue";
 import SearchFileBox from "./searchFileBox.vue";
+import axios from "axios";
 export default {
   name: "HelloWorld",
   components: {
@@ -239,6 +242,17 @@ export default {
   },
   // },
   methods: {
+    get() {
+      axios
+        .get("http://127.0.0.1/refresh1")
+        .then(res => {
+          
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log("获取数据失败" + err);
+        });
+    },
     //折叠面板
     handleChange(val) {
       console.log("handleChange-val--", val);

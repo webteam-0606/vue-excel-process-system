@@ -15,8 +15,12 @@
     "fix-memory-limit": "cross-env LIMIT=4096 increase-memory-limit"
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "cors": "^2.8.5",
     "element-ui": "^2.15.9",
+    "express": "^4.18.1",
     "file-saver": "^2.0.2",
+    "mysql": "^2.18.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "xlsx": "^0.16.0"
