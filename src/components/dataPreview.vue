@@ -29,7 +29,6 @@ export default {
         "submitdescription",
         "solution"
       ],
-      // loading: false
     }; 
   },
   props: {
