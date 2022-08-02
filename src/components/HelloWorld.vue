@@ -165,7 +165,8 @@
               </div>
             </el-main>
             <el-footer>
-              <button @click="get()">获取refresh1_no_solution表数据</button>
+              <button @click="getRefresh1()">获取refresh1_no_solution表数据</button>
+              <button @click="getRefresh2()">获取refresh2_solution表数据</button>              
             </el-footer>
           </el-container>
         </el-container>
@@ -242,7 +243,7 @@ export default {
   },
   // },
   methods: {
-    get() {
+    getRefresh1() {
       axios
         .get("http://127.0.0.1/refresh1_no_solution")
         .then(res => {
@@ -264,6 +265,36 @@ export default {
           }
           this.keyList = [];
           for (let item in refresh1Data[0]) {
+            this.keyList.push(item);
+          }
+          this.fileNameListValue = this.allFileData.length.toString();
+        })
+        .catch(err => {
+          console.log("获取数据失败" + err);
+        });
+    },
+    getRefresh2() {
+      axios
+        .get("http://127.0.0.1/refresh2_solution")
+        .then(res => {
+          console.log(res.data);
+
+          const _file = "refresh2_solution";
+          let refresh2Data = res.data;
+          this.listTable = [];
+          this.keyList = [];
+          this.refreshFileNameList.push(_file);
+          this.fileNameList.push(_file);
+          this.allFileData.push(refresh2Data);
+          this.listTable = refresh2Data;
+          for (let item in refresh2Data) {
+            let row1Table = {};
+            for (let key in refresh2Data[item]) {
+              row1Table[key] = refresh2Data[item][key];
+            }
+          }
+          this.keyList = [];
+          for (let item in refresh2Data[0]) {
             this.keyList.push(item);
           }
           this.fileNameListValue = this.allFileData.length.toString();
