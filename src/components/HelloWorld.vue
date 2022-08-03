@@ -165,8 +165,10 @@
               </div>
             </el-main>
             <el-footer>
-              <button @click="getRefresh1()">获取refresh1_no_solution表数据</button>
-              <button @click="getRefresh2()">获取refresh2_solution表数据</button>              
+              <button @click="getRefresh1()">获取refresh1_no_s表数据</button>
+              <button @click="getRefresh3()">获取refresh3_s表数据</button> 
+              <button @click="getRefresh2()">获取refresh2_n表数据</button>
+              <button @click="getRefresh4()">获取refresh4_s表数据</button>             
             </el-footer>
           </el-container>
         </el-container>
@@ -273,13 +275,73 @@ export default {
           console.log("获取数据失败" + err);
         });
     },
-    getRefresh2() {
+    getRefresh3() {
       axios
-        .get("http://127.0.0.1/refresh2_solution")
+        .get("http://127.0.0.1/refresh3_solution")
         .then(res => {
           console.log(res.data);
 
-          const _file = "refresh2_solution";
+          const _file = "refresh3_solution";
+          let refresh2Data = res.data;
+          this.listTable = [];
+          this.keyList = [];
+          this.refreshFileNameList.push(_file);
+          this.fileNameList.push(_file);
+          this.allFileData.push(refresh2Data);
+          this.listTable = refresh2Data;
+          for (let item in refresh2Data) {
+            let row1Table = {};
+            for (let key in refresh2Data[item]) {
+              row1Table[key] = refresh2Data[item][key];
+            }
+          }
+          this.keyList = [];
+          for (let item in refresh2Data[0]) {
+            this.keyList.push(item);
+          }
+          this.fileNameListValue = this.allFileData.length.toString();
+        })
+        .catch(err => {
+          console.log("获取数据失败" + err);
+        });
+    },
+    // getRefresh2() {
+    //   axios
+    //     .get("http://127.0.0.1/refresh2_no_solution")
+    //     .then(res => {
+    //       console.log(res.data);
+
+    //       const _file = "refresh2_no_solution";
+    //       let refresh1Data = res.data;
+    //       this.listTable = [];
+    //       this.keyList = [];
+    //       this.refreshFileNameList.push(_file);
+    //       this.fileNameList.push(_file);
+    //       this.allFileData.push(refresh1Data);
+    //       this.listTable = refresh1Data;
+    //       for (let item in refresh1Data) {
+    //         let row1Table = {};
+    //         for (let key in refresh1Data[item]) {
+    //           row1Table[key] = refresh1Data[item][key];
+    //         }
+    //       }
+    //       this.keyList = [];
+    //       for (let item in refresh1Data[0]) {
+    //         this.keyList.push(item);
+    //       }
+    //       this.fileNameListValue = this.allFileData.length.toString();
+    //     })
+    //     .catch(err => {
+    //       console.log("获取数据失败" + err);
+    //     });
+    // },
+    getRefresh4() {
+      axios
+        .get("http://127.0.0.1/refresh4_solution")
+        .then(res => {
+          console.log(res.data);
+
+          const _file = "refresh4_solution";
           let refresh2Data = res.data;
           this.listTable = [];
           this.keyList = [];
@@ -534,7 +596,7 @@ export default {
     },
     search() {
       // Search_List 存放搜索成功返回的数据
-      this.loading = true;
+      // this.loading = true;
       const Search_List = [];
       this.keyList = [];
       let res1 = this.inputVal;
@@ -577,11 +639,10 @@ export default {
           }
         }
         if (this.selectRadio == 1) {
-          //search框输入的搜索内容--全文搜索
+          // search框输入的搜索内容--全文搜索
           console.log("开始全文搜索--");
 
           searchArr.forEach(obj => {
-            // console.log("开始寻找");
             for (let key in obj) {
               if (obj[key].toString().includes(res)) {
                 if (Search_List.indexOf(obj) == "-1") {
@@ -593,8 +654,9 @@ export default {
           });
           //Search_List 搜索成功返回的内容，给listTable展示
           this.listTable = Search_List;
-          this.loading = false;
+          // this.loading = false;
         } else if (this.selectRadio == 2) {
+          console.log("开始搜索id--");
           searchArr.forEach(e => {
             //绑定的table prop
             let id = e.id;
@@ -605,10 +667,7 @@ export default {
             }
           });
           this.listTable = Search_List;
-          this.loading = false;
-          console.log("触发this.loading = false---");
-          console.log("搜索结果this.listTable-", this.listTable);
-          console.log("搜索结果this.keyList--", this.keyList);
+          // this.loading = false;
           this.currentPage = 1;
         } else {
           alert("搜索错误。");
