@@ -271,13 +271,13 @@ export default {
   },
   // },
   methods: {
+    // 实现下拉菜单，选择数据库的表
     handleCommand(command) {
-      this.$message("click on item " + command);
+      // this.$message("click on item " + command);
       axios
         .get("http://127.0.0.1/" + command)
         .then(res => {
           console.log(res.data);
-
           const _file = command;
           let refresh1Data = res.data;
           this.listTable = [];
@@ -302,36 +302,6 @@ export default {
           console.log("获取数据失败" + err);
         });
     },
-    // getSchemas(fName) {
-    //   axios
-    //     .get("http://127.0.0.1/"+fName)
-    //     .then(res => {
-    //       console.log(res.data);
-
-    //       const _file = "fName";
-    //       let refresh1Data = res.data;
-    //       this.listTable = [];
-    //       this.keyList = [];
-    //       this.refreshFileNameList.push(_file);
-    //       this.fileNameList.push(_file);
-    //       this.allFileData.push(refresh1Data);
-    //       this.listTable = refresh1Data;
-    //       for (let item in refresh1Data) {
-    //         let row1Table = {};
-    //         for (let key in refresh1Data[item]) {
-    //           row1Table[key] = refresh1Data[item][key];
-    //         }
-    //       }
-    //       this.keyList = [];
-    //       for (let item in refresh1Data[0]) {
-    //         this.keyList.push(item);
-    //       }
-    //       this.fileNameListValue = this.allFileData.length.toString();
-    //     })
-    //     .catch(err => {
-    //       console.log("获取数据失败" + err);
-    //     });
-    // },
     // getRefresh1() {
     //   axios
     //     .get("http://127.0.0.1/refresh1_no_solution")
@@ -354,216 +324,6 @@ export default {
     //       }
     //       this.keyList = [];
     //       for (let item in refresh1Data[0]) {
-    //         this.keyList.push(item);
-    //       }
-    //       this.fileNameListValue = this.allFileData.length.toString();
-    //     })
-    //     .catch(err => {
-    //       console.log("获取数据失败" + err);
-    //     });
-    // },
-    // getRefresh3() {
-    //   axios
-    //     .get("http://127.0.0.1/refresh3_solution")
-    //     .then(res => {
-    //       console.log(res.data);
-
-    //       const _file = "refresh3_solution";
-    //       let refresh2Data = res.data;
-    //       this.listTable = [];
-    //       this.keyList = [];
-    //       this.refreshFileNameList.push(_file);
-    //       this.fileNameList.push(_file);
-    //       this.allFileData.push(refresh2Data);
-    //       this.listTable = refresh2Data;
-    //       for (let item in refresh2Data) {
-    //         let row1Table = {};
-    //         for (let key in refresh2Data[item]) {
-    //           row1Table[key] = refresh2Data[item][key];
-    //         }
-    //       }
-    //       this.keyList = [];
-    //       for (let item in refresh2Data[0]) {
-    //         this.keyList.push(item);
-    //       }
-    //       this.fileNameListValue = this.allFileData.length.toString();
-    //     })
-    //     .catch(err => {
-    //       console.log("获取数据失败" + err);
-    //     });
-    // },
-    // getRefresh2() {
-    //   axios
-    //     .get("http://127.0.0.1/refresh2_no_solution")
-    //     .then(res => {
-    //       console.log(res.data);
-
-    //       const _file = "refresh2_no_solution";
-    //       let refresh1Data = res.data;
-    //       this.listTable = [];
-    //       this.keyList = [];
-    //       this.refreshFileNameList.push(_file);
-    //       this.fileNameList.push(_file);
-    //       this.allFileData.push(refresh1Data);
-    //       this.listTable = refresh1Data;
-    //       for (let item in refresh1Data) {
-    //         let row1Table = {};
-    //         for (let key in refresh1Data[item]) {
-    //           row1Table[key] = refresh1Data[item][key];
-    //         }
-    //       }
-    //       this.keyList = [];
-    //       for (let item in refresh1Data[0]) {
-    //         this.keyList.push(item);
-    //       }
-    //       this.fileNameListValue = this.allFileData.length.toString();
-    //     })
-    //     .catch(err => {
-    //       console.log("获取数据失败" + err);
-    //     });
-    // },
-    // getRefresh4() {
-    //   axios
-    //     .get("http://127.0.0.1/refresh4_solution")
-    //     .then(res => {
-    //       console.log(res.data);
-
-    //       const _file = "refresh4_solution";
-    //       let refresh2Data = res.data;
-    //       this.listTable = [];
-    //       this.keyList = [];
-    //       this.refreshFileNameList.push(_file);
-    //       this.fileNameList.push(_file);
-    //       this.allFileData.push(refresh2Data);
-    //       this.listTable = refresh2Data;
-    //       for (let item in refresh2Data) {
-    //         let row1Table = {};
-    //         for (let key in refresh2Data[item]) {
-    //           row1Table[key] = refresh2Data[item][key];
-    //         }
-    //       }
-    //       this.keyList = [];
-    //       for (let item in refresh2Data[0]) {
-    //         this.keyList.push(item);
-    //       }
-    //       this.fileNameListValue = this.allFileData.length.toString();
-    //     })
-    //     .catch(err => {
-    //       console.log("获取数据失败" + err);
-    //     });
-    // },
-    // getsheet0() {
-    //   axios
-    //     .get("http://127.0.0.1/refresh_no_solution")
-    //     .then(res => {
-    //       console.log(res.data);
-
-    //       const _file = "refresh_no_solution";
-    //       let refresh2Data = res.data;
-    //       this.listTable = [];
-    //       this.keyList = [];
-    //       this.refreshFileNameList.push(_file);
-    //       this.fileNameList.push(_file);
-    //       this.allFileData.push(refresh2Data);
-    //       this.listTable = refresh2Data;
-    //       for (let item in refresh2Data) {
-    //         let row1Table = {};
-    //         for (let key in refresh2Data[item]) {
-    //           row1Table[key] = refresh2Data[item][key];
-    //         }
-    //       }
-    //       this.keyList = [];
-    //       for (let item in refresh2Data[0]) {
-    //         this.keyList.push(item);
-    //       }
-    //       this.fileNameListValue = this.allFileData.length.toString();
-    //     })
-    //     .catch(err => {
-    //       console.log("获取数据失败" + err);
-    //     });
-    // },
-    // getsheet1() {
-    //   axios
-    //     .get("http://127.0.0.1/sheet1")
-    //     .then(res => {
-    //       console.log(res.data);
-
-    //       const _file = "sheet1";
-    //       let refresh2Data = res.data;
-    //       this.listTable = [];
-    //       this.keyList = [];
-    //       this.refreshFileNameList.push(_file);
-    //       this.fileNameList.push(_file);
-    //       this.allFileData.push(refresh2Data);
-    //       this.listTable = refresh2Data;
-    //       for (let item in refresh2Data) {
-    //         let row1Table = {};
-    //         for (let key in refresh2Data[item]) {
-    //           row1Table[key] = refresh2Data[item][key];
-    //         }
-    //       }
-    //       this.keyList = [];
-    //       for (let item in refresh2Data[0]) {
-    //         this.keyList.push(item);
-    //       }
-    //       this.fileNameListValue = this.allFileData.length.toString();
-    //     })
-    //     .catch(err => {
-    //       console.log("获取数据失败" + err);
-    //     });
-    // },
-    // getsheet2() {
-    //   axios
-    //     .get("http://127.0.0.1/sheet2")
-    //     .then(res => {
-    //       console.log(res.data);
-
-    //       const _file = "sheet2";
-    //       let refresh2Data = res.data;
-    //       this.listTable = [];
-    //       this.keyList = [];
-    //       this.refreshFileNameList.push(_file);
-    //       this.fileNameList.push(_file);
-    //       this.allFileData.push(refresh2Data);
-    //       this.listTable = refresh2Data;
-    //       for (let item in refresh2Data) {
-    //         let row1Table = {};
-    //         for (let key in refresh2Data[item]) {
-    //           row1Table[key] = refresh2Data[item][key];
-    //         }
-    //       }
-    //       this.keyList = [];
-    //       for (let item in refresh2Data[0]) {
-    //         this.keyList.push(item);
-    //       }
-    //       this.fileNameListValue = this.allFileData.length.toString();
-    //     })
-    //     .catch(err => {
-    //       console.log("获取数据失败" + err);
-    //     });
-    // },
-    // getsheet3() {
-    //   axios
-    //     .get("http://127.0.0.1/sheet3")
-    //     .then(res => {
-    //       console.log(res.data);
-
-    //       const _file = "sheet3";
-    //       let refresh2Data = res.data;
-    //       this.listTable = [];
-    //       this.keyList = [];
-    //       this.refreshFileNameList.push(_file);
-    //       this.fileNameList.push(_file);
-    //       this.allFileData.push(refresh2Data);
-    //       this.listTable = refresh2Data;
-    //       for (let item in refresh2Data) {
-    //         let row1Table = {};
-    //         for (let key in refresh2Data[item]) {
-    //           row1Table[key] = refresh2Data[item][key];
-    //         }
-    //       }
-    //       this.keyList = [];
-    //       for (let item in refresh2Data[0]) {
     //         this.keyList.push(item);
     //       }
     //       this.fileNameListValue = this.allFileData.length.toString();
