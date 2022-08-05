@@ -4,6 +4,9 @@
 ## Build Setup
 
 ``` bash
+
+node app.js
+
 # install dependencies
 npm install
 

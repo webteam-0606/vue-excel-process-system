@@ -168,7 +168,12 @@
               <button @click="getRefresh1()">获取refresh1_no_s表数据</button>
               <button @click="getRefresh3()">获取refresh3_s表数据</button> 
               <button @click="getRefresh2()">获取refresh2_n表数据</button>
-              <button @click="getRefresh4()">获取refresh4_s表数据</button>             
+              <button @click="getRefresh4()">获取refresh4_s表数据</button>
+
+              <button @click="getsheet0()">refresh_no_s表数据</button> 
+              <button @click="getsheet1()">sheet1表数据</button>
+              <button @click="getsheet2()">sheet2表数据</button>
+              <button @click="getsheet3()">sheet3表数据</button>            
             </el-footer>
           </el-container>
         </el-container>
@@ -342,6 +347,126 @@ export default {
           console.log(res.data);
 
           const _file = "refresh4_solution";
+          let refresh2Data = res.data;
+          this.listTable = [];
+          this.keyList = [];
+          this.refreshFileNameList.push(_file);
+          this.fileNameList.push(_file);
+          this.allFileData.push(refresh2Data);
+          this.listTable = refresh2Data;
+          for (let item in refresh2Data) {
+            let row1Table = {};
+            for (let key in refresh2Data[item]) {
+              row1Table[key] = refresh2Data[item][key];
+            }
+          }
+          this.keyList = [];
+          for (let item in refresh2Data[0]) {
+            this.keyList.push(item);
+          }
+          this.fileNameListValue = this.allFileData.length.toString();
+        })
+        .catch(err => {
+          console.log("获取数据失败" + err);
+        });
+    },
+    getsheet0() {
+      axios
+        .get("http://127.0.0.1/refresh_no_solution")
+        .then(res => {
+          console.log(res.data);
+
+          const _file = "refresh_no_solution";
+          let refresh2Data = res.data;
+          this.listTable = [];
+          this.keyList = [];
+          this.refreshFileNameList.push(_file);
+          this.fileNameList.push(_file);
+          this.allFileData.push(refresh2Data);
+          this.listTable = refresh2Data;
+          for (let item in refresh2Data) {
+            let row1Table = {};
+            for (let key in refresh2Data[item]) {
+              row1Table[key] = refresh2Data[item][key];
+            }
+          }
+          this.keyList = [];
+          for (let item in refresh2Data[0]) {
+            this.keyList.push(item);
+          }
+          this.fileNameListValue = this.allFileData.length.toString();
+        })
+        .catch(err => {
+          console.log("获取数据失败" + err);
+        });
+    },
+    getsheet1() {
+      axios
+        .get("http://127.0.0.1/sheet1")
+        .then(res => {
+          console.log(res.data);
+
+          const _file = "sheet1";
+          let refresh2Data = res.data;
+          this.listTable = [];
+          this.keyList = [];
+          this.refreshFileNameList.push(_file);
+          this.fileNameList.push(_file);
+          this.allFileData.push(refresh2Data);
+          this.listTable = refresh2Data;
+          for (let item in refresh2Data) {
+            let row1Table = {};
+            for (let key in refresh2Data[item]) {
+              row1Table[key] = refresh2Data[item][key];
+            }
+          }
+          this.keyList = [];
+          for (let item in refresh2Data[0]) {
+            this.keyList.push(item);
+          }
+          this.fileNameListValue = this.allFileData.length.toString();
+        })
+        .catch(err => {
+          console.log("获取数据失败" + err);
+        });
+    },
+    getsheet2() {
+      axios
+        .get("http://127.0.0.1/sheet2")
+        .then(res => {
+          console.log(res.data);
+
+          const _file = "sheet2";
+          let refresh2Data = res.data;
+          this.listTable = [];
+          this.keyList = [];
+          this.refreshFileNameList.push(_file);
+          this.fileNameList.push(_file);
+          this.allFileData.push(refresh2Data);
+          this.listTable = refresh2Data;
+          for (let item in refresh2Data) {
+            let row1Table = {};
+            for (let key in refresh2Data[item]) {
+              row1Table[key] = refresh2Data[item][key];
+            }
+          }
+          this.keyList = [];
+          for (let item in refresh2Data[0]) {
+            this.keyList.push(item);
+          }
+          this.fileNameListValue = this.allFileData.length.toString();
+        })
+        .catch(err => {
+          console.log("获取数据失败" + err);
+        });
+    },
+    getsheet3() {
+      axios
+        .get("http://127.0.0.1/sheet3")
+        .then(res => {
+          console.log(res.data);
+
+          const _file = "sheet3";
           let refresh2Data = res.data;
           this.listTable = [];
           this.keyList = [];
