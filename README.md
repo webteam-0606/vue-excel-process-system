@@ -4,7 +4,7 @@
 ## Build Setup
 
 ``` bash
-
+cd server
 node app.js
 
 # install dependencies
@@ -27,6 +27,8 @@ npm run e2e
 
 # run all tests
 npm test
+
+git push -f origin master
 ```
 ## 需解决
 + 上传大文件，页面崩溃问题。`：`切片上传+断点续传
