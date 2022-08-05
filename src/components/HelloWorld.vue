@@ -119,7 +119,7 @@
                 <el-dropdown-item command="sheet3">sheet3</el-dropdown-item>
                 <el-dropdown-item command="sheet2">sheet2</el-dropdown-item>
                 <el-dropdown-item command="sheet1">sheet1</el-dropdown-item>
-                <el-dropdown-item command="refresh_no_solution" disabled>refresh_no_solution</el-dropdown-item>
+                <el-dropdown-item command="refresh_no_solution" divided>refresh_no_solution</el-dropdown-item>
                 <el-dropdown-item command="禁掉" disabled>此选项被禁</el-dropdown-item>
                 <el-dropdown-item command="refresh1_no_solution" divided>refresh1_no_solution</el-dropdown-item>
                 <el-dropdown-item command="refresh2_no_solution" divided>refresh2_no_solution</el-dropdown-item>
