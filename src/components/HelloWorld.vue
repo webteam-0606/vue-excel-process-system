@@ -31,27 +31,7 @@
             <SearchFileBox
               @searchButtonClick="handleSearchButtonClick"
               @radioSelectChange="handleRadioSelectChange"
-            ></SearchFileBox>
-
-            <!--  从数据库获取表  -->
-            <el-dropdown @command="handleCommand">
-              <span class="el-dropdown-link">
-                下拉菜单
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="sheet3">sheet3</el-dropdown-item>
-                <el-dropdown-item command="sheet2">sheet2</el-dropdown-item>
-                <el-dropdown-item command="sheet1">sheet1</el-dropdown-item>
-                <el-dropdown-item command="refresh_no_solution" disabled>refresh_no_solution</el-dropdown-item>
-                <el-dropdown-item command="禁掉" disabled>此选项被禁</el-dropdown-item>
-                <el-dropdown-item command="refresh1_no_solution" divided>refresh1_no_solution</el-dropdown-item>
-                <el-dropdown-item command="refresh2_no_solution" divided>refresh2_no_solution</el-dropdown-item>
-                <el-dropdown-item command="refresh3_solution" divided>refresh3_solution</el-dropdown-item>
-                <el-dropdown-item command="refresh4_solution" divided>refresh4_solution</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-
+            ></SearchFileBox>          
             <!-- 当前上传文件列表 -->
             <div class="full-upload-file-box">
               <el-collapse v-model="activeNames" @change="handleChange">
@@ -129,7 +109,24 @@
                 </el-collapse-item>
               </el-collapse>
             </div>
-
+            <!--  从数据库获取表  -->
+            <el-dropdown @command="handleCommand">
+              <span class="el-dropdown-link">
+                下拉菜单，选择表
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="sheet3">sheet3</el-dropdown-item>
+                <el-dropdown-item command="sheet2">sheet2</el-dropdown-item>
+                <el-dropdown-item command="sheet1">sheet1</el-dropdown-item>
+                <el-dropdown-item command="refresh_no_solution" disabled>refresh_no_solution</el-dropdown-item>
+                <el-dropdown-item command="禁掉" disabled>此选项被禁</el-dropdown-item>
+                <el-dropdown-item command="refresh1_no_solution" divided>refresh1_no_solution</el-dropdown-item>
+                <el-dropdown-item command="refresh2_no_solution" divided>refresh2_no_solution</el-dropdown-item>
+                <el-dropdown-item command="refresh3_solution" divided>refresh3_solution</el-dropdown-item>
+                <el-dropdown-item command="refresh4_solution" divided>refresh4_solution</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
             <!--  excel表格上传  -->
             <ClickUpload
               :exceed="exceed"
@@ -184,16 +181,8 @@
                 ></el-pagination>
               </div>
             </el-main>
-            <el-footer>
-              <button @click="getRefresh1()">获取refresh1_no_s表数据</button>
-              <button @click="getRefresh3()">获取refresh3_s表数据</button>
-              <button @click="getRefresh2()">获取refresh2_n表数据</button>
-              <button @click="getRefresh4()">获取refresh4_s表数据</button>
-
-              <button @click="getsheet0()">refresh_no_s表数据</button>
-              <button @click="getsheet1()">sheet1表数据</button>
-              <button @click="getsheet2()">sheet2表数据</button>
-              <button @click="getsheet3()">sheet3表数据</button>
+            <el-footer>              
+              <button @click="getsheet1()">测试--获取sheet1表数据</button>              
             </el-footer>
           </el-container>
         </el-container>
@@ -873,12 +862,16 @@ a {
   white-space: nowrap;
   cursor: pointer;
 }
+/* 下拉菜单 */
 .el-dropdown-link {
   cursor: pointer;
   color: #409eff;
 }
 .el-icon-arrow-down {
   font-size: 12px;
+}
+.el-dropdown {
+    padding-top: 5px;
 }
 
 .el-main {
