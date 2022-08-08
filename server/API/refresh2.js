@@ -1,7 +1,7 @@
 let db = require('../db/index')
 
 exports.get = (req, res) => {
-    var sql = 'select * from sheet1'
+    var sql = 'select * from refresh2'
     db.query(sql, (err, data) => {
         if(err) {
             return res.send('错误：' + err.message)

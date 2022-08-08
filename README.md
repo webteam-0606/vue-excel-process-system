@@ -37,6 +37,43 @@ git push -f origin master
 现使用：
 后端一次给你10万条数据，如何优雅展示，到底考察我什么?
 https://juejin.cn/post/7031923575044964389
+async uploadFile(params) {          
+  ...
+  console.log("读取文件");
+  this.allFileData.push(sheetArray);
+            // ---begin-replace-------------------------------
+            // const renderList = async () => {
+            //   console.time("列表时间");
+            //   const list = sheetArray;
+            //   console.log("list", list);
+            //   const total = list.length;
+            //   console.log("total", total);
+            //   const page = 0;
+            //   const limit = 200;
+            //   const totalPage = Math.ceil(total / limit);
+            //   console.log("totalPage", totalPage);
+
+            //   const render = page => {
+            //     if (page >= totalPage) return;
+            //     // 使用requestAnimationFrame代替setTimeout
+            //     requestAnimationFrame(() => {
+            //       for (let i = page * limit; i < page * limit + limit; i++) {
+            //         let renderTable = [];
+            //         for (let key in list[i]) {
+            //           renderTable[key] = list[i][key];
+            //         }
+            //         this.listTable.push(renderTable);
+            //       }
+            //       render(page + 1);
+            //     });
+            //   };
+            //   render(page);
+            //   console.timeEnd("列表时间");
+            // };
+  // renderList();
+  this.listTable = sheetArray;
+   // ---end-replace-------------------------------
+}
 ```
 ```java
 Vue项目通过node连接MySQL数据库并实现增删改查操作

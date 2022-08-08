@@ -6,7 +6,7 @@ from xlrd import xldate_as_tuple
 #根据有多少个sheets去创建多少个表，path为excel表格的路径
 def createtable():
     # 读取excel
-    path='C:/Users/320200255/project/import-excel/test.xlsx'
+    path='C:/Users/320200255/project/vue-excel-process-system/import-excel/test.xlsx'
     data = xlrd.open_workbook(path)
     # 根据sheet索引获取sheet的内容
     sheet_names = data.sheet_names()

@@ -31,7 +31,7 @@
             <SearchFileBox
               @searchButtonClick="handleSearchButtonClick"
               @radioSelectChange="handleRadioSelectChange"
-            ></SearchFileBox>          
+            ></SearchFileBox>
             <!-- 当前上传文件列表 -->
             <div class="full-upload-file-box">
               <el-collapse v-model="activeNames" @change="handleChange">
@@ -112,22 +112,22 @@
             <!--  从数据库获取表  -->
             <div class="drop-select">
               <el-dropdown @command="handleCommand">
-              <span class="el-dropdown-link">
-                下拉菜单，选择表
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown" placement="top-end">
-                <el-dropdown-item command="sheet3">sheet3</el-dropdown-item>
-                <el-dropdown-item command="sheet2">sheet2</el-dropdown-item>
-                <el-dropdown-item command="sheet1">sheet1</el-dropdown-item>
-                <!-- <el-dropdown-item command="refresh_no_solution" divided>refresh_no_solution</el-dropdown-item>
-                <el-dropdown-item command="禁掉" disabled>此选项被禁</el-dropdown-item> -->
-                <!-- <el-dropdown-item command="refresh1_no_solution" divided>refresh1_no_solution</el-dropdown-item>
+                <span class="el-dropdown-link">
+                  下拉菜单，选择表
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown" placement="top-end">
+                  <el-dropdown-item command="sheet3">sheet3</el-dropdown-item>
+                  <el-dropdown-item command="brilliance1">brilliance1</el-dropdown-item>
+                  <el-dropdown-item command="refresh2">refresh2</el-dropdown-item>
+                  <el-dropdown-item command="refresh_no_solution" divided>refresh_no_solution</el-dropdown-item>
+                  <!-- <el-dropdown-item command="禁掉" disabled>此选项被禁</el-dropdown-item> -->
+                  <!-- <el-dropdown-item command="refresh1_no_solution" divided>refresh1_no_solution</el-dropdown-item>
                 <el-dropdown-item command="refresh2_no_solution" divided>refresh2_no_solution</el-dropdown-item>
                 <el-dropdown-item command="refresh3_solution" divided>refresh3_solution</el-dropdown-item>
-                <el-dropdown-item command="refresh4_solution" divided>refresh4_solution</el-dropdown-item> -->
-              </el-dropdown-menu>
-            </el-dropdown>
+                  <el-dropdown-item command="refresh4_solution" divided>refresh4_solution</el-dropdown-item>-->
+                </el-dropdown-menu>
+              </el-dropdown>
             </div>
             <!--  excel表格上传  -->
             <ClickUpload
@@ -183,7 +183,7 @@
                 ></el-pagination>
               </div>
             </el-main>
-            <el-footer>              
+            <el-footer>
               <!-- <button @click="getsheet1()">测试--获取sheet1表数据</button>               -->
             </el-footer>
           </el-container>
@@ -269,22 +269,43 @@ export default {
         .get("http://127.0.0.1/" + command)
         .then(res => {
           console.log(res.data);
-          const _file = command;
-          let refresh1Data = res.data;
           this.listTable = [];
           this.keyList = [];
-          this.refreshFileNameList.push(_file);
-          this.fileNameList.push(_file);
-          this.allFileData.push(refresh1Data);
-          this.listTable = refresh1Data;
-          for (let item in refresh1Data) {
+          const _fileName = command;
+          if (
+            this.refreshFileNameList.includes(_fileName) ||
+            this.brillianceFileNameList.includes(_fileName)
+          ) {
+            alert("文件名重复！请重新上传");
+            return true;
+          }
+
+          if (_fileName.toLowerCase().includes("refresh")) {
+            this.refreshFileNameList.push(_fileName);
+            this.fileNameList.push(_fileName);
+          } else if (_fileName.toLowerCase().includes("brilliance")) {
+            this.brillianceFileNameList.push(_fileName);
+            this.fileNameList.push(_fileName);
+          } else {
+            alert(
+              "上传文件名必须包含 refresh / brilliance, 请重新命名文件名并上传。"
+            );
+            return true;
+          }
+
+          let schemasData = res.data;
+          // this.refreshFileNameList.push(_fileName);
+          // this.fileNameList.push(_fileName);
+          this.allFileData.push(schemasData);
+          this.listTable = schemasData;
+          for (let item in schemasData) {
             let row1Table = {};
-            for (let key in refresh1Data[item]) {
-              row1Table[key] = refresh1Data[item][key];
+            for (let key in schemasData[item]) {
+              row1Table[key] = schemasData[item][key];
             }
           }
-          this.keyList = [];
-          for (let item in refresh1Data[0]) {
+          
+          for (let item in schemasData[0]) {
             this.keyList.push(item);
           }
           this.fileNameListValue = this.allFileData.length.toString();
@@ -293,7 +314,7 @@ export default {
           console.log("获取数据失败" + err);
         });
     },
-    
+
     //折叠面板
     handleChange(val) {
       console.log("handleChange-val--", val);
@@ -451,41 +472,7 @@ export default {
             //暂时的所有上传文件内容，用于在allFileData里边遍历，找到被选中的文件，如何传给临时内容搜索盒子
             this.allFileData.push(sheetArray);
             //初始时，仅展示最近上传的一个文件
-
-            // ---begin-replace-------------------------------
-            const renderList = async () => {
-              console.time("列表时间");
-              const list = sheetArray;
-              console.log("list", list);
-              const total = list.length;
-              console.log("total", total);
-              const page = 0;
-              const limit = 200;
-              const totalPage = Math.ceil(total / limit);
-              console.log("totalPage", totalPage);
-
-              const render = page => {
-                if (page >= totalPage) return;
-                // 使用requestAnimationFrame代替setTimeout
-                requestAnimationFrame(() => {
-                  for (let i = page * limit; i < page * limit + limit; i++) {
-                    let renderTable = [];
-                    for (let key in list[i]) {
-                      renderTable[key] = list[i][key];
-                    }
-                    this.listTable.push(renderTable);
-                  }
-                  render(page + 1);
-                });
-              };
-              render(page);
-              console.timeEnd("列表时间");
-            };
-            renderList();
-
-            // this.listTable = sheetArray;
-            // ---end-replace-------------------------------
-
+            this.listTable = sheetArray;
             this.loading = false;
             // this.allFileData=[...this.allFileData,...sheetArray]
 
@@ -844,7 +831,7 @@ a {
   font-size: 12px;
 }
 .el-dropdown {
-    padding-top: 5px;
+  padding-top: 5px;
 }
 .drop-select {
   height: 100px;
