@@ -9,8 +9,6 @@ def createtable():
     path='C:/Users/320200255/project/import-excel/test.xlsx'
     data = xlrd.open_workbook(path)
     # 根据sheet索引获取sheet的内容
-    # print("excel全部的sheet为:", data.sheet_names())
-    # print("all sheet in excel:", data.sheet_names())
     sheet_names = data.sheet_names()
     table_one = data.sheet_by_index(0)
     # print("all cols name of a single sheet:", table_one.row_values(0))

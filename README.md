@@ -37,10 +37,43 @@ git push -f origin master
 现使用：
 后端一次给你10万条数据，如何优雅展示，到底考察我什么?
 https://juejin.cn/post/7031923575044964389
-
+```
+```java
 Vue项目通过node连接MySQL数据库并实现增删改查操作
 https://blog.csdn.net/weixin_52580677/article/details/123204092
+getRefresh1() {
+      axios
+        .get("http://127.0.0.1/refresh1_no_solution")
+        .then(res => {
+          console.log(res.data);
 
+          const _file = "refresh1_no_solution";
+          let refresh1Data = res.data;
+          this.listTable = [];
+          this.keyList = [];
+          this.refreshFileNameList.push(_file);
+          this.fileNameList.push(_file);
+          this.allFileData.push(refresh1Data);
+          this.listTable = refresh1Data;
+          for (let item in refresh1Data) {
+            let row1Table = {};
+            for (let key in refresh1Data[item]) {
+              row1Table[key] = refresh1Data[item][key];
+            }
+          }
+          this.keyList = [];
+          for (let item in refresh1Data[0]) {
+            this.keyList.push(item);
+          }
+          this.fileNameListValue = this.allFileData.length.toString();
+        })
+        .catch(err => {
+          console.log("获取数据失败" + err);
+        });
+    },
+```
+
+```java
 数据量太大，DOM节点加载过多，怎么保证前端在渲染的时候页面不会卡（性能优化）
 https://blog.csdn.net/z1093541823/article/details/124724513
 

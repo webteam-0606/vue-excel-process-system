@@ -110,23 +110,25 @@
               </el-collapse>
             </div>
             <!--  从数据库获取表  -->
-            <el-dropdown @command="handleCommand">
+            <div class="drop-select">
+              <el-dropdown @command="handleCommand">
               <span class="el-dropdown-link">
                 下拉菜单，选择表
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" placement="top-end">
                 <el-dropdown-item command="sheet3">sheet3</el-dropdown-item>
                 <el-dropdown-item command="sheet2">sheet2</el-dropdown-item>
                 <el-dropdown-item command="sheet1">sheet1</el-dropdown-item>
-                <el-dropdown-item command="refresh_no_solution" divided>refresh_no_solution</el-dropdown-item>
-                <el-dropdown-item command="禁掉" disabled>此选项被禁</el-dropdown-item>
-                <el-dropdown-item command="refresh1_no_solution" divided>refresh1_no_solution</el-dropdown-item>
+                <!-- <el-dropdown-item command="refresh_no_solution" divided>refresh_no_solution</el-dropdown-item>
+                <el-dropdown-item command="禁掉" disabled>此选项被禁</el-dropdown-item> -->
+                <!-- <el-dropdown-item command="refresh1_no_solution" divided>refresh1_no_solution</el-dropdown-item>
                 <el-dropdown-item command="refresh2_no_solution" divided>refresh2_no_solution</el-dropdown-item>
                 <el-dropdown-item command="refresh3_solution" divided>refresh3_solution</el-dropdown-item>
-                <el-dropdown-item command="refresh4_solution" divided>refresh4_solution</el-dropdown-item>
+                <el-dropdown-item command="refresh4_solution" divided>refresh4_solution</el-dropdown-item> -->
               </el-dropdown-menu>
             </el-dropdown>
+            </div>
             <!--  excel表格上传  -->
             <ClickUpload
               :exceed="exceed"
@@ -182,7 +184,7 @@
               </div>
             </el-main>
             <el-footer>              
-              <button @click="getsheet1()">测试--获取sheet1表数据</button>              
+              <!-- <button @click="getsheet1()">测试--获取sheet1表数据</button>               -->
             </el-footer>
           </el-container>
         </el-container>
@@ -291,36 +293,7 @@ export default {
           console.log("获取数据失败" + err);
         });
     },
-    // getRefresh1() {
-    //   axios
-    //     .get("http://127.0.0.1/refresh1_no_solution")
-    //     .then(res => {
-    //       console.log(res.data);
-
-    //       const _file = "refresh1_no_solution";
-    //       let refresh1Data = res.data;
-    //       this.listTable = [];
-    //       this.keyList = [];
-    //       this.refreshFileNameList.push(_file);
-    //       this.fileNameList.push(_file);
-    //       this.allFileData.push(refresh1Data);
-    //       this.listTable = refresh1Data;
-    //       for (let item in refresh1Data) {
-    //         let row1Table = {};
-    //         for (let key in refresh1Data[item]) {
-    //           row1Table[key] = refresh1Data[item][key];
-    //         }
-    //       }
-    //       this.keyList = [];
-    //       for (let item in refresh1Data[0]) {
-    //         this.keyList.push(item);
-    //       }
-    //       this.fileNameListValue = this.allFileData.length.toString();
-    //     })
-    //     .catch(err => {
-    //       console.log("获取数据失败" + err);
-    //     });
-    // },
+    
     //折叠面板
     handleChange(val) {
       console.log("handleChange-val--", val);
@@ -872,6 +845,9 @@ a {
 }
 .el-dropdown {
     padding-top: 5px;
+}
+.drop-select {
+  height: 100px;
 }
 
 .el-main {
