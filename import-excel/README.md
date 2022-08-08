@@ -1,6 +1,8 @@
 ## excel 自动导入数据库步骤
 > 利用 Postgres 数据库，MySQL数据库，Navicat 16 工具，VScode工具。
 
+> excel 表格内容为空的情况，类型的问题。
+
 1、进入文件夹，打开对应项目。
 > 启动 `vscode`，文件 -> 打开文件夹 -> 选择 `vue-excel-process-system-master` 文件夹，打开项目。然后点击 `import-excel` -> `excelTodatabase.py`。
 
@@ -30,8 +32,70 @@ def createtable():
 1、进入文件夹，打开对应项目。
 > 启动 `vscode`，文件 -> 打开文件夹 -> 选择 `vue-excel-process-system-master` 文件夹。
 
-2、修改 server API。index.js。router.js。HelloWorld.vue样式。
-> ...
+2、修改 server文件夹下的： API。index.js。router.js。HelloWorld.vue样式。
+> 修改 API：在API文件夹下，新建 以需要导入的表名为名字的js文件，如 sheet1.js。
+```java
+// sheet1.js 示例
+let db = require('../db/index')
+
+exports.get = (req, res) => {
+    // 修改下边的语句，sheet1为代替换的表名
+    var sql = 'select * from sheet1'
+    db.query(sql, (err, data) => {
+        if(err) {
+            return res.send('错误：' + err.message)
+        }
+        res.send(data)
+    })
+}
+```
+> 若需要修改数据库名称时，进入 server/db/index.js，可修改相关配置。
+```java
+let mysql = require('mysql')
+
+let db = mysql.createPool({
+    host: '127.0.0.1',       //数据库IP地址
+    user: 'root',            //数据库登录账号
+    password: 'root',        //数据库登录密码
+    database: 'uploadsearch' //要操作的数据库
+})
+module.exports = db
+```
+> 修改 router.js。
+```java
+let express = require('express')
+let router = express.Router()
+
+// 以sheet1为例，新增下边代码
+let sheet1 = require('./API/sheet1')
+router.get('/sheet1', sheet1.get)
+
+module.exports = router
+```
+> 修改 src/components/HelloWorld.vue。
+
+```java
+<!--  从数据库获取表  -->
+            <div class="drop-select">
+              <el-dropdown @command="handleCommand">
+                <span class="el-dropdown-link">
+                  下拉菜单，选择表
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown" placement="top-end">
+                  <el-dropdown-item command="sheet3">sheet3</el-dropdown-item>
+                  <el-dropdown-item command="brilliance1">brilliance1</el-dropdown-item>
+                  <el-dropdown-item command="refresh2">refresh2</el-dropdown-item>
+                  <el-dropdown-item command="refresh_no_solution" divided>refresh_no_solution</el-dropdown-item>
+                  <!-- <el-dropdown-item command="禁掉" disabled>此选项被禁</el-dropdown-item> -->
+                  <!-- <el-dropdown-item command="refresh1_no_solution" divided>refresh1_no_solution</el-dropdown-item>
+                <el-dropdown-item command="refresh2_no_solution" divided>refresh2_no_solution</el-dropdown-item>
+                <el-dropdown-item command="refresh3_solution" divided>refresh3_solution</el-dropdown-item>
+                  <el-dropdown-item command="refresh4_solution" divided>refresh4_solution</el-dropdown-item>-->
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
+```
 
 3、启动服务器。
 > 终端输入 cd server。终端输入 node app.js。若显示 服务器启动成功 则ok。
