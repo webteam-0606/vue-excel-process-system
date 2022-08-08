@@ -24,13 +24,13 @@ def createtable():
 > 打开电脑应用程序 `postgreSQL 11` 中的 `pgAdmin 4` 应用，账户密码都为 `postgres`。依次点击 `postgres-uploadsearch` -> `postgres-uploadsearch` -> `public` -> 表。右键 `表`, 进行刷新，即可看到 `excel` 中的每个 `sheet` 表。
 
 5、将 `postgreSQL` 中的表复制到 `MySql`。
-> 将 `postgreSQL` 中的表复制到 `MySql`。本地 `excel` 导入 `postgreSQL` 数据库完成。
+> 通过 `Navicat` 工具，将 `postgres-uploadsearch` 中的`postgres-uploadsearch`数据库中的表复制到 `localhost_3306` 下边的 `uploadsearch` 数据库。完成本地 `excel` 导入 `postgreSQL` 数据库，并复制到mysql数据库。
 ---------------------------
 ## vue 实现多表查找搜索
 1、进入文件夹，打开对应项目。
 > 启动 `vscode`，文件 -> 打开文件夹 -> 选择 `vue-excel-process-system-master` 文件夹。
 
-2、修改 server API。index.js。router.js。
+2、修改 server API。index.js。router.js。HelloWorld.vue样式。
 > ...
 
 3、启动服务器。

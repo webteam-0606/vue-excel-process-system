@@ -87,7 +87,7 @@ export default {
 
 /* 上传列表多出时，滑页 */
 .upload-demo /deep/ .el-upload-list {
-  height: 60px;
+  height: 10px;
   overflow: auto;
   text-overflow: ellipsis;
   white-space: nowrap;
