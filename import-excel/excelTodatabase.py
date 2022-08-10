@@ -3,6 +3,7 @@ import psycopg2
 import sys
 import io
 import xlrd
+import base64
 # from datetime import datetime
 import datetime
 from xlrd import xldate_as_tuple
@@ -11,10 +12,11 @@ from xlrd import xldate_as_tuple
 
 def createtable():
     
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='utf8') 
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='gb18030') 
     # 读取excel
     path = 'C:/Users/320200255/project/vue-excel-process-system/import-excel/test.xlsx'
     data = xlrd.open_workbook(path)
+    # data = base64.b64encode(xlrd.open_workbook(path).decode())
     # 根据sheet索引获取sheet的内容
     sheet_names = data.sheet_names()
     table_one = data.sheet_by_index(0)
@@ -83,19 +85,24 @@ def createtable():
 
             # cur.execute("alter table  %s alter column id set default nextval('users_id_seq'); " % table_name)
             # conn.commit()
-            # for j in range(0, cols_num):
-            #     cur.execute("ALTER TABLE %s ADD COLUMN %s VARCHAR;" %(table_name, attrs[j]))
-            #     conn.commit()
+            for j in range(0, cols_num):                
+                cur.execute("ALTER TABLE %s ADD COLUMN %s VARCHAR;" %(table_name, attrs[j]))
+                conn.commit()
             # 将当前的sheet插入到数据库
             for k in range(1, rows_num):
                 row_vlaue = now_table.row_values(k)
                 # print('row_vlaue:',row_vlaue)
                 # print('join(attrs):', ','.join(attrs))
                 # 处理要插入的数据，把非字符串的数据转换成字符串类型，同事将字符串变成 sql语句需要的类型
-                for a in range(0, len(row_vlaue)):
+                for a in range(0, len(row_vlaue)):                                    
                     ctype = now_table.cell(k, a).ctype
                     # print('ctype', ctype)
                     # ctype： 0 empty,1 string, 2 number, 3 date, 4 boolean, 5 error
+                    # if ctype == 1:
+                    #     sw = bytes(row_vlaue[a],'utf-8')
+                    #     st = base64.b64encode(sw)
+                    #     sr=base64.b64decode(st)
+                    #     row_vlaue[a] = sr.decode()
                     if ctype == 2 and row_vlaue[a] % 1 == 0:
                         tmp = int(row_vlaue[a])
                         # row_vlaue[a] = str(tmp)
@@ -127,10 +134,14 @@ def createtable():
                     else:
                         c = row_vlaue[a]
                         row_vlaue[a] = "'" + str(c) + "'"
+                    # sw = bytes(row_vlaue[a],'utf-8')
+                    # st = base64.b64encode(sw)
+                    # sr=base64.b64decode(st)
+                    # row_vlaue[a] = sr.decode()
+                    # row_vlaue[a] = row_vlaue[a].replace('\'','_')
                     i=i+1
                     print('i=',i)
                     print('else row_vlaue[a]----',row_vlaue[a])
-                # print(','.join(row_vlaue))
                 sql = "INSERT INTO %s(%s) VALUES(%s)" % (table_name, ','.join(attrs), ','.join(row_vlaue))
                 print(sql)
                 cur.execute(sql)
