@@ -118,7 +118,8 @@
                 </span>
                 <el-dropdown-menu slot="dropdown" placement="top-end">
                   <el-dropdown-item command="sheet3">sheet3</el-dropdown-item>
-                  <el-dropdown-item command="brilliance1">brilliance1</el-dropdown-item>
+                  <el-dropdown-item command="brilliance1">brilliance1</el-dropdown-item>                  
+                  <el-dropdown-item command="refresh_field_issuese">refresh_field_issuese</el-dropdown-item>
                   <el-dropdown-item command="refresh2">refresh2</el-dropdown-item>
                   <el-dropdown-item command="refresh_no_solution" divided>refresh_no_solution</el-dropdown-item>
                   <!-- <el-dropdown-item command="禁掉" disabled>此选项被禁</el-dropdown-item> -->

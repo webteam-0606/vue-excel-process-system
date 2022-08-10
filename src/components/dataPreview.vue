@@ -27,7 +27,14 @@ export default {
         "resolutiondescription",
         "historydetails",
         "submitdescription",
-        "solution"
+        "solution",
+        "action",
+        "pa",
+      ],
+      middleLongWidthKey: [
+        "investigation_results",
+        "ca",
+        "status_comment",
       ],
     }; 
   },
@@ -58,8 +65,12 @@ export default {
       // } else 
       if (this.longWidthKey.includes(column.label.toLowerCase())) {
         column.minWidth = 800;
+      } else if(this.middleLongWidthKey.includes(column.label.toLowerCase())) {
+        column.minWidth = 300;
       } else if (labelLong > 0 && labelLong < 4) {
         column.minWidth = (labelLong + 4) * size; // 根据label长度计算该表头最终宽度
+      } else if (labelLong > 10) {
+        column.minWidth = (labelLong - 4) * size; // 根据label长度计算该表头最终宽度
       } else {
         column.minWidth = labelLong * size;
       }

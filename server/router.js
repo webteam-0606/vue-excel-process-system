@@ -9,11 +9,13 @@ let refresh_no_solution = require('./API/refresh_no_solution')
 let brilliance1 = require('./API/brilliance1')
 let refresh2 = require('./API/refresh2')
 let sheet3 = require('./API/sheet3')
+let refresh_field_issuese = require('./API/refresh_field_issuese')
 
 router.get('/refresh1_no_solution', refresh1_no_solution.get)
 router.get('/refresh3_solution', refresh3_solution.get)
 router.get('/refresh4_solution', refresh4_solution.get)
 
+router.get('/refresh_field_issuese', refresh_field_issuese.get)
 router.get('/refresh_no_solution', refresh_no_solution.get)
 router.get('/brilliance1', brilliance1.get)
 router.get('/refresh2', refresh2.get)
