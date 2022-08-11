@@ -9,18 +9,15 @@ import datetime
 from xlrd import xldate_as_tuple
 # 根据有多少个sheets去创建多少个表，path为excel表格的路径
 
-
 def createtable():
     
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='gb18030') 
     # 读取excel
-    path = 'C:/Users/320200255/project/vue-excel-process-system/import-excel/test.xlsx'
+    path = 'C:/Users/320200255/project/vue-excel-process-system/import-excel/REFRESH_Defect_Records_ALL_FIELDS_NO_SOLUTION.xlsx'
     data = xlrd.open_workbook(path)
-    # data = base64.b64encode(xlrd.open_workbook(path).decode())
     # 根据sheet索引获取sheet的内容
     sheet_names = data.sheet_names()
     table_one = data.sheet_by_index(0)
-    # print("all cols name of a single sheet:", table_one.row_values(0))
     conn = psycopg2.connect(database='postgres-uploadsearch', user='postgres', password='postgres', host='localhost')
     cur = conn.cursor()
     for i in range(0, len(sheet_names)):
@@ -85,7 +82,8 @@ def createtable():
 
             # cur.execute("alter table  %s alter column id set default nextval('users_id_seq'); " % table_name)
             # conn.commit()
-            for j in range(0, cols_num):                
+            for j in range(0, cols_num):   
+                             
                 cur.execute("ALTER TABLE %s ADD COLUMN %s VARCHAR;" %(table_name, attrs[j]))
                 conn.commit()
             # 将当前的sheet插入到数据库
@@ -103,10 +101,12 @@ def createtable():
                     #     st = base64.b64encode(sw)
                     #     sr=base64.b64decode(st)
                     #     row_vlaue[a] = sr.decode()
-                    if ctype == 2 and row_vlaue[a] % 1 == 0:
-                        tmp = int(row_vlaue[a])
-                        # row_vlaue[a] = str(tmp)
-                        row_vlaue[a] = "'" + str(tmp) + "'"
+                    # ----
+                    # if ctype == 2 and row_vlaue[a] % 1 == 0:
+                    #     tmp = int(row_vlaue[a])
+                    #     # row_vlaue[a] = str(tmp)
+                    #     row_vlaue[a] = "'" + str(tmp) + "'"
+                        # ----
 
                     # if ctype == 2 and row_vlaue[a] % 1 != 0:
                     #     print('row_vlaue[a]--',row_vlaue[a])
@@ -116,11 +116,13 @@ def createtable():
                     # if ctype == 3:
                     #     d = datetime(*xldate_as_tuple(row_vlaue[a], 0))
                     #     row_vlaue[a] = d.strftime('%Y-%m-%d')
-                    elif ctype == 3:
-                        # print('row_vlaue[a]--',row_vlaue[a])
-                        tmp = datetime.datetime(*xldate_as_tuple(row_vlaue[a], 0))
-                        # row_vlaue[a] = str(tmp)
-                        row_vlaue[a] = "'" + str(tmp) + "'"
+                    # ----
+                    # elif ctype == 3:
+                    #     # print('row_vlaue[a]--',row_vlaue[a])
+                    #     tmp = datetime.datetime(*xldate_as_tuple(row_vlaue[a], 0))
+                    #     # row_vlaue[a] = str(tmp)
+                    #     row_vlaue[a] = "'" + str(tmp) + "'"
+                        # ----
                         # print('tmp--',tmp)
                         # print('row_vlaue[a]----',row_vlaue[a])
                         # print('row_vlaue[a].type----',row_vlaue[a].type)
@@ -131,9 +133,15 @@ def createtable():
                     #     d = xldate_as_tuple(row_vlaue[a], 0)
                     #     d1 = datetime(*d)
                     #     row_vlaue[a] = d1.strftime('%Y/%m/%d %H:%M:%S')
-                    else:
-                        c = row_vlaue[a]
-                        row_vlaue[a] = "'" + str(c) + "'"
+                    # ----
+                    # else:                    
+                    c = row_vlaue[a]
+                    row_vlaue[a] = "'" + str(c) + "'"
+                    row_vlaue[a].replace("\"","_")
+                    row_vlaue[a].replace("'","_")
+                    row_vlaue[a].replace("==","_")
+                    row_vlaue[a].replace(";","_")
+                        # ----
                     # sw = bytes(row_vlaue[a],'utf-8')
                     # st = base64.b64encode(sw)
                     # sr=base64.b64decode(st)
