@@ -173,7 +173,7 @@ https://github.com/debug-null/vue-simple-upload
 + 2、浏览器自适应问题
 
 + 3、数据缓存问题
-
+列宽长的列名 中长
 ## 已完成
 > \\yy257728\CT System Engineering\90-Personal
 

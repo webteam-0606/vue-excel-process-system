@@ -6,7 +6,34 @@
 1、进入文件夹，打开对应项目。
 > 启动 `vscode`，文件 -> 打开文件夹 -> 选择 `vue-excel-process-system-master` 文件夹，打开项目。然后点击 `import-excel` -> `excelTodatabase.py`。
 
-+ 注意：如需上传的excel表名与数据库已有表重名，请到 步骤4，删除旧的重复的表。再进行一下操作。
++ 注意：如需上传的`excel`表名与数据库已有表重名，请到 步骤4，删除旧的重复的表。再进行一下操作。
++ 注意：导入的`excel`表需符合数据库表的规范。如下：
+
+`excel` 表的属性行（第一行）：
+
+（1）采用26个英文字母(区分大小写)和0-9的自然数加上下划线组成，多个单词用下划线分隔
+
+（2）全部小写命名，禁止出现大写
+
+（3）字段必须填写描述信息
+
+（4）禁止使用数据库关键字，如：name，time ，datetime password 等
+
+（5）字段名称一般采用名词或动宾短语
+
+（6）采用字段的名称必须是易于理解，一般不超过三个英文单词
+
+（7）在命名表的列时，不要重复表的名称
+
+`excel` 表内容：不含有 `'` 标识符。（可将 `'` 替换为 `_` ）
+
+  can't -> can not
+
+  what's -> what is
+
+  It's -> It is
+
+  We're -> We are
 
 2、修改 `excel` 路径，以及对应数据库名称。
 > 点击 `excelTodatabase.py`， 修改以下内容：
@@ -33,7 +60,7 @@ def createtable():
 > 启动 `vscode`，文件 -> 打开文件夹 -> 选择 `vue-excel-process-system-master` 文件夹。
 
 2、修改 server文件夹下的： API。index.js。router.js。HelloWorld.vue样式。
-> 修改 API：在API文件夹下，新建 以需要导入的表名为名字的js文件，如 sheet1.js。
+> （2.1）修改 API：在API文件夹下，新建 以需要导入的表名为名字的js文件，如 sheet1.js。
 ```java
 // sheet1.js 示例
 let db = require('../db/index')
@@ -49,7 +76,7 @@ exports.get = (req, res) => {
     })
 }
 ```
-> 若需要修改数据库名称时，进入 server/db/index.js，可修改相关配置。
+> （2.2）若需要修改数据库名称时，进入 server/db/index.js，可修改相关配置。
 ```java
 let mysql = require('mysql')
 
@@ -61,18 +88,18 @@ let db = mysql.createPool({
 })
 module.exports = db
 ```
-> 修改 router.js。
+> （2.3）修改 router.js。
 ```java
 let express = require('express')
 let router = express.Router()
 
-// 以sheet1为例，新增下边代码
+// 以sheet1为例，新增下边两行代码
 let sheet1 = require('./API/sheet1')
 router.get('/sheet1', sheet1.get)
 
 module.exports = router
 ```
-> 修改 src/components/HelloWorld.vue。
+> （2.4）修改 src/components/HelloWorld.vue。
 
 ```java
 <!--  从数据库获取表  -->
@@ -83,15 +110,13 @@ module.exports = router
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown" placement="top-end">
-                  <el-dropdown-item command="sheet3">sheet3</el-dropdown-item>
-                  <el-dropdown-item command="brilliance1">brilliance1</el-dropdown-item>
-                  <el-dropdown-item command="refresh2">refresh2</el-dropdown-item>
-                  <el-dropdown-item command="refresh_no_solution" divided>refresh_no_solution</el-dropdown-item>
-                  <!-- <el-dropdown-item command="禁掉" disabled>此选项被禁</el-dropdown-item> -->
-                  <!-- <el-dropdown-item command="refresh1_no_solution" divided>refresh1_no_solution</el-dropdown-item>
-                <el-dropdown-item command="refresh2_no_solution" divided>refresh2_no_solution</el-dropdown-item>
-                <el-dropdown-item command="refresh3_solution" divided>refresh3_solution</el-dropdown-item>
-                  <el-dropdown-item command="refresh4_solution" divided>refresh4_solution</el-dropdown-item>-->
+
+                // 在此处添加 开始添加-----
+                  <el-dropdown-item command="sheet1">sheet1<el-dropdown-item> 
+                // 添加结束------
+
+                  <el-dropdown-item command="refresh2">refresh2<el-dropdown-item>    
+
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
