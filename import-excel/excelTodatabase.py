@@ -137,16 +137,19 @@ def createtable():
                     # else:                    
                     c = row_vlaue[a]
                     row_vlaue[a] = "'" + str(c) + "'"
-                    row_vlaue[a].replace("\"","_")
-                    row_vlaue[a].replace("'","_")
-                    row_vlaue[a].replace("==","_")
-                    row_vlaue[a].replace(";","_")
+                    print(' row_vlaue[a]=', row_vlaue[a])
+                    row_vlaue[a]= row_vlaue[a].replace("\"","_")
+                    row_vlaue[a]= row_vlaue[a].replace("'","_")
+                    row_vlaue[a]= row_vlaue[a].replace("==","_")
+                    row_vlaue[a]= row_vlaue[a].replace(";","_")
+                    row_vlaue[a]= row_vlaue[a].replace(".","_")
+                    print(' row_vlaue[a]==', row_vlaue[a])
                         # ----
                     # sw = bytes(row_vlaue[a],'utf-8')
                     # st = base64.b64encode(sw)
-                    # sr=base64.b64decode(st)
+                    # sr=base64.b64decode(st)‘’“”
                     # row_vlaue[a] = sr.decode()
-                    # row_vlaue[a] = row_vlaue[a].replace('\'','_')
+                    # row_vlaue[a] = row_vlaue[a].replace('\'','_')，？
                     i=i+1
                     print('i=',i)
                     print('else row_vlaue[a]----',row_vlaue[a])

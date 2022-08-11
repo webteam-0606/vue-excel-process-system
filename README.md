@@ -47,7 +47,7 @@ git push -f origin master
 
 （7）在命名表的列时，不要重复表的名称
 
-+ 内容：不含有’标识符
++ 内容：不含有 `’` `'`标识符
 
   can't -> can not
 
